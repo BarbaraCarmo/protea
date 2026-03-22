@@ -81,6 +81,7 @@ export default function AppNavigator() {
           headerStyle: { backgroundColor: COLORS.primary },
           headerTintColor: COLORS.textWhite,
           headerTitleStyle: { fontWeight: 'bold' },
+          headerBackButtonDisplayMode: 'minimal',
         }}
       >
         {user ? (
