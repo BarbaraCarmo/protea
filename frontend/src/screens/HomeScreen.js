@@ -1,60 +1,42 @@
-import React from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { View, Text, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SIZES } from '../constants/colors';
 import { useAuth } from '../context/AuthContext';
 import GameCard from '../components/GameCard';
+import { jogosService } from '../services/api';
 
-const TOTAL_FASES = {
-  semaforoDoCorpo: 10,
-  toqueBomVsRuim: 11,
-  poderDoNao: 12,
-  adultoDeConfianca: 5,
+const IMAGEM_POR_KEY = {
+  semaforoIlustracao: require('../../assets/semaforoDoCorpoIlustracao.png'),
+  toqueBomToqueRuimIlustracao: require('../../assets/toqueBomToqueRuimIlustracao.png'),
+  poderDoNaoIlustracao: require('../../assets/poderDoNaoIlustracao.png'),
+  adultosDeConfiancaIlustracao: require('../../assets/adultosDeConfiancaIlustracao.png'),
 };
+const IMAGEM_PLACEHOLDER = require('../../assets/icon.png');
 
 export default function HomeScreen({ navigation }) {
   const { user } = useAuth();
-  const progresso = user?.progresso || {};
+  const [jogos, setJogos] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState(null);
 
-  function calcPorcentagem(jogo) {
-    const concluidos = progresso[jogo]?.concluidos?.length || 0;
-    return Math.round((concluidos / TOTAL_FASES[jogo]) * 100);
-  }
+  useEffect(() => {
+    jogosService
+      .getCatalogoJogos()
+      .then((res) => setJogos(res.data.jogos || []))
+      .catch(() => setErro('Não foi possível carregar os jogos agora.'))
+      .finally(() => setCarregando(false));
+  }, []);
 
-  const jogos = [
-    {
-      id: 'semaforoDoCorpo',
-      titulo: 'Semáforo do Corpo',
-      descricao: 'Classifique as partes do corpo como um semáforo!',
-      icone: 'ellipse',
-      cor: COLORS.verde,
-      tela: 'SemaforoDoCorpo',
-    },
-    {
-      id: 'toqueBomVsRuim',
-      titulo: 'Toque Bom vs Toque Ruim',
-      descricao: 'Aprenda a diferença entre toques seguros e perigosos!',
-      icone: 'hand-left-outline',
-      cor: COLORS.secondary,
-      tela: 'ToqueBomVsRuim',
-    },
-    {
-      id: 'poderDoNao',
-      titulo: 'O Poder do Não',
-      descricao: 'Aprenda a dizer NÃO de forma firme e segura!',
-      icone: 'hand-right-outline',
-      cor: COLORS.accent,
-      tela: 'PoderDoNao',
-    },
-    {
-      id: 'adultoDeConfianca',
-      titulo: 'Adultos de Confiança',
-      descricao: 'Identifique os adultos em quem você pode confiar!',
-      icone: 'people-outline',
-      cor: COLORS.warm,
-      tela: 'AdultosDeConfianca',
-    },
-  ];
+  const jogosComVisual = useMemo(
+    () =>
+      jogos.map((jogo) => ({
+        ...jogo,
+        cor: jogo.cor || COLORS.primary,
+        imagem: IMAGEM_POR_KEY[jogo.imagemKey] || IMAGEM_PLACEHOLDER,
+      })),
+    [jogos]
+  );
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -70,15 +52,15 @@ export default function HomeScreen({ navigation }) {
       </View>
 
       {/* Cards dos jogos */}
-      <Text style={styles.secaoTitulo}>Jogos</Text>
-      {jogos.map((jogo) => (
+      {carregando ? <ActivityIndicator size="large" color={COLORS.primary} style={styles.loader} /> : null}
+      {!carregando && erro ? <Text style={styles.erroTexto}>{erro}</Text> : null}
+      {!carregando && !erro && jogosComVisual.map((jogo) => (
         <GameCard
           key={jogo.id}
           titulo={jogo.titulo}
           descricao={jogo.descricao}
-          icone={jogo.icone}
+          imagem={jogo.imagem}
           cor={jogo.cor}
-          progresso={calcPorcentagem(jogo.id)}
           onPress={() => navigation.navigate(jogo.tela)}
         />
       ))}
@@ -100,7 +82,12 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary + '15',
     justifyContent: 'center', alignItems: 'center',
   },
-  secaoTitulo: {
-    fontSize: SIZES.xl, fontWeight: 'bold', color: COLORS.text, marginBottom: 14,
+  loader: {
+    marginTop: 16,
+  },
+  erroTexto: {
+    color: COLORS.warmDark,
+    fontSize: SIZES.md,
+    marginTop: 8,
   },
 });

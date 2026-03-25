@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react'; // Adicione useEffect
+import * as SplashScreen from 'expo-splash-screen'; // Importe isso!
 import { ActivityIndicator, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -45,14 +46,14 @@ function TabNavigator() {
         tabBarStyle: {
           backgroundColor: COLORS.surface,
           borderTopColor: COLORS.border,
-          height: 60,
+          height: 80,
           paddingBottom: 8,
-          paddingTop: 4,
+          paddingTop: 8,
         },
         tabBarLabelStyle: { fontSize: 11, fontWeight: '600' },
-        headerStyle: { backgroundColor: COLORS.primary },
+        headerStyle: { backgroundColor: COLORS.primary, height: 120 },
         headerTintColor: COLORS.textWhite,
-        headerTitleStyle: { fontWeight: 'bold' },
+        headerTitleStyle: { fontWeight: 'bold', fontSize: 24 },
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Início', headerTitle: 'Protea' }} />
@@ -66,13 +67,15 @@ function TabNavigator() {
 export default function AppNavigator() {
   const { user, loading } = useAuth();
 
-  if (loading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: COLORS.background }}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
-      </View>
-    );
-  }
+  useEffect(() => {
+    async function hideNativeSplash() {
+      if (!loading) {
+        await SplashScreen.hideAsync().catch(() => {
+        });
+      }
+    }
+    hideNativeSplash();
+  }, [loading]);
 
   return (
     <NavigationContainer>
@@ -80,7 +83,7 @@ export default function AppNavigator() {
         screenOptions={{
           headerStyle: { backgroundColor: COLORS.primary },
           headerTintColor: COLORS.textWhite,
-          headerTitleStyle: { fontWeight: 'bold' },
+          headerTitleStyle: { fontWeight: 'bold', fontSize: 18 },
           headerBackButtonDisplayMode: 'minimal',
         }}
       >

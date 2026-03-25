@@ -223,16 +223,13 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
       <ScrollView contentContainerStyle={adultosDeConfiancaScreenStyles.content}>
         {/* Progress bar */}
         <View style={adultosDeConfiancaScreenStyles.progressoContainer}>
+          <View style={adultosDeConfiancaScreenStyles.progressoBarra}>
+            <View style={[adultosDeConfiancaScreenStyles.progressoPreenchido, { width: `${progresso}%` }]} />
+          </View>
           <View style={adultosDeConfiancaScreenStyles.progressoInfo}>
             <Text style={adultosDeConfiancaScreenStyles.progressoTexto}>
               Fase {faseAtual + 1} de {totalFases}
             </Text>
-            <Text style={adultosDeConfiancaScreenStyles.progressoPorcentagem}>
-              {Math.round(progresso)}%
-            </Text>
-          </View>
-          <View style={adultosDeConfiancaScreenStyles.progressoBarra}>
-            <View style={[adultosDeConfiancaScreenStyles.progressoPreenchido, { width: `${progresso}%` }]} />
           </View>
         </View>
 

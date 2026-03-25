@@ -144,16 +144,13 @@ export default function PoderDoNaoScreen({ navigation }) {
       <ScrollView contentContainerStyle={styles.content}>
         {/* Progress bar */}
         <View style={styles.progressoContainer}>
+          <View style={styles.progressoBarra}>
+            <View style={[styles.progressoPreenchido, { width: `${progresso}%` }]} />
+          </View>
           <View style={styles.progressoInfo}>
             <Text style={styles.progressoTexto}>
               Fase {faseAtual + 1} de {totalFases}
             </Text>
-            <Text style={styles.progressoPorcentagem}>
-              {Math.round(progresso)}%
-            </Text>
-          </View>
-          <View style={styles.progressoBarra}>
-            <View style={[styles.progressoPreenchido, { width: `${progresso}%` }]} />
           </View>
         </View>
 

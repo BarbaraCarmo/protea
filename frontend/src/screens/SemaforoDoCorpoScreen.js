@@ -8,7 +8,10 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { SvgUri } from 'react-native-svg';
+import { Asset } from 'expo-asset';
 import { COLORS } from '../constants/colors';
+import { svgAssetsPorChave } from '../constants/svgAssets';
 import { semaforoDoCorpoScreenStyles } from '../styles/SemaforoDoCorpoScreen.styles';
 import { useAuth } from '../context/AuthContext';
 import FeedbackModal from '../components/FeedbackModal';
@@ -26,6 +29,7 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(null);
   const [faseAtual, setFaseAtual] = useState(0);
+  const [imagemUri, setImagemUri] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [acertou, setAcertou] = useState(false);
   const [mensagem, setMensagem] = useState('');
@@ -41,6 +45,22 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
   }, []);
 
   const fase = fases[faseAtual];
+
+  useEffect(() => {
+    const chave = fase?.imagem;
+    const moduleDoSvg = chave ? svgAssetsPorChave[chave] : undefined;
+
+    if (!moduleDoSvg) {
+      setImagemUri(null);
+      return;
+    }
+
+    const asset = Asset.fromModule(moduleDoSvg);
+    asset
+      .downloadAsync()
+      .then(() => setImagemUri(asset.localUri || asset.uri))
+      .catch(() => setImagemUri(null));
+  }, [fase?.imagem]);
 
   const animarCard = useCallback(() => {
     Animated.sequence([
@@ -154,7 +174,11 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
       <View style={semaforoDoCorpoScreenStyles.cardArea}>
         <Animated.View style={[semaforoDoCorpoScreenStyles.card, { transform: [{ scale: scaleAnim }] }]}>
           <View style={semaforoDoCorpoScreenStyles.cardIconeContainer}>
-            <Ionicons name={fase.icone} size={64} color={COLORS.primary} />
+            {imagemUri ? (
+              <SvgUri uri={imagemUri} width={72} height={72} />
+            ) : (
+              fase?.icone && <Ionicons name={fase.icone} size={64} color={COLORS.primary} />
+            )}
           </View>
           <Text style={semaforoDoCorpoScreenStyles.cardTexto}>{fase.parteDoCorpo}</Text>
         </Animated.View>
