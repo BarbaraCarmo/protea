@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SIZES } from '../constants/colors';
+import { View, Text, ScrollView, ActivityIndicator } from 'react-native';
+import { COLORS } from '../constants/colors';
 import { useAuth } from '../context/AuthContext';
 import GameCard from '../components/GameCard';
 import { jogosService } from '../services/api';
+import { appStyles } from '../styles/App.styles';
 
 const IMAGEM_POR_KEY = {
   semaforoIlustracao: require('../../assets/semaforoDoCorpoIlustracao.png'),
@@ -21,11 +21,30 @@ export default function HomeScreen({ navigation }) {
   const [erro, setErro] = useState(null);
 
   useEffect(() => {
+    let cancelado = false;
     jogosService
       .getCatalogoJogos()
-      .then((res) => setJogos(res.data.jogos || []))
-      .catch(() => setErro('Não foi possível carregar os jogos agora.'))
-      .finally(() => setCarregando(false));
+      .then((res) => {
+        const lista = res?.data?.jogos ?? res?.data;
+        const listaOk = Array.isArray(lista) ? lista : [];
+        if (!cancelado) setJogos(listaOk);
+      })
+      .catch((err) => {
+        if (__DEV__) {
+          console.warn(
+            '[Home] catálogo de jogos:',
+            err?.response?.status,
+            err?.message || err
+          );
+        }
+        if (!cancelado) setErro('Não foi possível carregar os jogos agora.');
+      })
+      .finally(() => {
+        if (!cancelado) setCarregando(false);
+      });
+    return () => {
+      cancelado = true;
+    };
   }, []);
 
   const jogosComVisual = useMemo(
@@ -39,21 +58,18 @@ export default function HomeScreen({ navigation }) {
   );
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <ScrollView style={appStyles.container} contentContainerStyle={appStyles.content}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={appStyles.header}>
         <View>
-          <Text style={styles.saudacao}>Olá, {user?.crianca?.nome || 'Amiguinho'}!</Text>
-          <Text style={styles.subtitulo}>Vamos aprender brincando?</Text>
-        </View>
-        <View style={styles.avatarContainer}>
-          <Ionicons name="happy-outline" size={36} color={COLORS.primary} />
+          <Text style={appStyles.saudacao}>Olá, {user?.crianca?.nome || 'Amiguinho'}!</Text>
+          <Text style={appStyles.subtitulo}>Vamos aprender brincando?</Text>
         </View>
       </View>
 
       {/* Cards dos jogos */}
-      {carregando ? <ActivityIndicator size="large" color={COLORS.primary} style={styles.loader} /> : null}
-      {!carregando && erro ? <Text style={styles.erroTexto}>{erro}</Text> : null}
+      {carregando ? <ActivityIndicator size="large" color={COLORS.primary} style={appStyles.loader} /> : null}
+      {!carregando && erro ? <Text style={appStyles.erroTexto}>{erro}</Text> : null}
       {!carregando && !erro && jogosComVisual.map((jogo) => (
         <GameCard
           key={jogo.id}
@@ -67,27 +83,3 @@ export default function HomeScreen({ navigation }) {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.background },
-  content: { padding: 20, paddingBottom: 30 },
-  header: {
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    marginBottom: 24, marginTop: 10,
-  },
-  saudacao: { fontSize: SIZES.xxl, fontWeight: 'bold', color: COLORS.text },
-  subtitulo: { fontSize: SIZES.md, color: COLORS.textLight, marginTop: 4 },
-  avatarContainer: {
-    width: 52, height: 52, borderRadius: 26,
-    backgroundColor: COLORS.primary + '15',
-    justifyContent: 'center', alignItems: 'center',
-  },
-  loader: {
-    marginTop: 16,
-  },
-  erroTexto: {
-    color: COLORS.warmDark,
-    fontSize: SIZES.md,
-    marginTop: 8,
-  },
-});

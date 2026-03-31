@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Linking, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Linking, Alert, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SIZES } from '../constants/colors';
+import { COLORS } from '../constants/colors';
+import { appStyles } from '../styles/App.styles';
 
 const FAQ = [
   {
@@ -39,119 +40,59 @@ export default function AjudaScreen() {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Text style={styles.titulo}>Ajuda e Informações</Text>
-
+    <ScrollView style={appStyles.container} contentContainerStyle={appStyles.content}>
       {/* Disque 100 - Destaque */}
-      <TouchableOpacity style={styles.disque100Card} onPress={ligarDisque100}>
-        <View style={styles.disque100Header}>
-          <View style={styles.disque100Icon}>
+      <TouchableOpacity style={appStyles.disque100Card} onPress={ligarDisque100}>
+        <View style={appStyles.disque100Header}>
+          <View style={appStyles.disque100Icone}>
             <Ionicons name="call-outline" size={32} color={COLORS.textWhite} />
           </View>
-          <View style={styles.disque100Info}>
-            <Text style={styles.disque100Titulo}>Disque 100</Text>
-            <Text style={styles.disque100Subtitulo}>Canal de denúncia de violência</Text>
+          <View style={appStyles.disque100Info}>
+            <Text style={appStyles.disque100Titulo}>Disque 100</Text>
+            <Text style={appStyles.disque100Subtitulo}>Canal de denúncia de violência</Text>
           </View>
         </View>
-        <Text style={styles.disque100Texto}>
+        <Text style={appStyles.disque100Texto}>
           Se você suspeita de alguma situação de risco para uma criança, ligue para o Disque 100.
           O serviço funciona 24 horas e a ligação é gratuita.
         </Text>
-        <View style={styles.disque100Botao}>
+        <View style={appStyles.disque100Botao}>
           <Ionicons name="call" size={18} color={COLORS.textWhite} />
-          <Text style={styles.disque100BotaoTexto}>Ligar para o Disque 100</Text>
+          <Text style={appStyles.disque100BotaoTexto}>Ligar para o Disque 100</Text>
         </View>
       </TouchableOpacity>
 
       {/* FAQ */}
-      <Text style={styles.secaoTitulo}>Perguntas Frequentes</Text>
+      <Text style={appStyles.secaoTitulo}>Perguntas Frequentes</Text>
       {FAQ.map((item, index) => (
-        <View key={index} style={styles.faqCard}>
-          <View style={styles.faqHeader}>
+        <View key={index} style={appStyles.faqCard}>
+          <View style={appStyles.faqHeader}>
             <Ionicons name="help-circle-outline" size={22} color={COLORS.primary} />
-            <Text style={styles.faqPergunta}>{item.pergunta}</Text>
+            <Text style={appStyles.faqPergunta}>{item.pergunta}</Text>
           </View>
-          <Text style={styles.faqResposta}>{item.resposta}</Text>
+          <Text style={appStyles.faqResposta}>{item.resposta}</Text>
         </View>
       ))}
 
       {/* Sobre o app */}
-      <Text style={styles.secaoTitulo}>Sobre o App</Text>
-      <View style={styles.sobreCard}>
-        <View style={styles.sobreIcone}>
-          <Ionicons name="shield-checkmark" size={40} color={COLORS.primary} />
+      <Text style={appStyles.secaoTitulo}>Sobre o App</Text>
+      <View style={appStyles.sobreCard}>
+        <View style={appStyles.sobreIcone}>
+          <Image source={require('../../assets/icon.png')} style={appStyles.sobreIcone} />
         </View>
-        <Text style={styles.sobreNome}>Protea</Text>
-        <Text style={styles.sobreVersao}>Versão 1.0.0</Text>
-        <Text style={styles.sobreDescricao}>
+        <Text style={appStyles.sobreNome}>Protea</Text>
+        <Text style={appStyles.sobreVersao}>Versão 1.0.0</Text>
+        <Text style={appStyles.sobreDescricao}>
           Aplicativo educativo que utiliza jogos para ensinar crianças com Transtorno do Espectro
           Autista (TEA) sobre educação sexual, limites corporais e identificação de situações de risco.
         </Text>
       </View>
 
       {/* Contato */}
-      <View style={styles.contatoCard}>
+      <View style={appStyles.contatoCard}>
         <Ionicons name="mail-outline" size={22} color={COLORS.primary} />
-        <Text style={styles.contatoTexto}>Suporte: contato@protea.app</Text>
+        <Text style={appStyles.contatoTexto}>Contato: babi.carmo@outlook.com</Text>
       </View>
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.background },
-  content: { padding: 20, paddingBottom: 40 },
-  titulo: { fontSize: SIZES.title, fontWeight: 'bold', color: COLORS.text, marginBottom: 20 },
-  secaoTitulo: {
-    fontSize: SIZES.xl, fontWeight: 'bold', color: COLORS.text, marginBottom: 14, marginTop: 10,
-  },
-  // Disque 100
-  disque100Card: {
-    backgroundColor: COLORS.warmDark, borderRadius: SIZES.radiusLg,
-    padding: 20, marginBottom: 24,
-  },
-  disque100Header: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-  disque100Icon: {
-    width: 52, height: 52, borderRadius: 26,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    justifyContent: 'center', alignItems: 'center', marginRight: 14,
-  },
-  disque100Info: { flex: 1 },
-  disque100Titulo: { fontSize: SIZES.xxl, fontWeight: 'bold', color: COLORS.textWhite },
-  disque100Subtitulo: { fontSize: SIZES.md, color: 'rgba(255,255,255,0.8)' },
-  disque100Texto: {
-    fontSize: SIZES.md, color: COLORS.textWhite, lineHeight: 22, marginBottom: 16,
-  },
-  disque100Botao: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.25)', borderRadius: SIZES.radius,
-    paddingVertical: 14,
-  },
-  disque100BotaoTexto: {
-    color: COLORS.textWhite, fontSize: SIZES.lg, fontWeight: 'bold', marginLeft: 8,
-  },
-  // FAQ
-  faqCard: {
-    backgroundColor: COLORS.surface, borderRadius: SIZES.radius,
-    padding: 16, marginBottom: 12,
-  },
-  faqHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
-  faqPergunta: { fontSize: SIZES.lg, fontWeight: 'bold', color: COLORS.text, marginLeft: 10, flex: 1 },
-  faqResposta: { fontSize: SIZES.md, color: COLORS.textLight, lineHeight: 22, paddingLeft: 32 },
-  // Sobre
-  sobreCard: {
-    backgroundColor: COLORS.surface, borderRadius: SIZES.radius,
-    padding: 24, alignItems: 'center', marginBottom: 16,
-  },
-  sobreIcone: { marginBottom: 10 },
-  sobreNome: { fontSize: SIZES.xxl, fontWeight: 'bold', color: COLORS.primary },
-  sobreVersao: { fontSize: SIZES.sm, color: COLORS.textLight, marginBottom: 12 },
-  sobreDescricao: { fontSize: SIZES.md, color: COLORS.text, textAlign: 'center', lineHeight: 22 },
-  // Contato
-  contatoCard: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    backgroundColor: COLORS.surface, borderRadius: SIZES.radius,
-    paddingVertical: 16, marginBottom: 20,
-  },
-  contatoTexto: { fontSize: SIZES.md, color: COLORS.text, marginLeft: 10 },
-});

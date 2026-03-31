@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react'; // Adicione useEffect
-import * as SplashScreen from 'expo-splash-screen'; // Importe isso!
-import { ActivityIndicator, View } from 'react-native';
+import React, { useEffect } from 'react';
+import * as SplashScreen from 'expo-splash-screen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -19,10 +18,10 @@ import PerfilScreen from '../screens/PerfilScreen';
 import AjudaScreen from '../screens/AjudaScreen';
 
 // Telas dos jogos
-import SemaforoDoCorpoScreen from '../screens/SemaforoDoCorpoScreen';
-import ToqueBomVsRuimScreen from '../screens/ToqueBomVsRuimScreen';
-import PoderDoNaoScreen from '../screens/PoderDoNaoScreen';
-import AdultosDeConfiancaScreen from '../screens/AdultosDeConfiancaScreen';
+import SemaforoDoCorpoScreen from '../screens/Jogos/SemaforoDoCorpoScreen';
+import ToqueBomVsRuimScreen from '../screens/Jogos/ToqueBomVsRuimScreen';
+import PoderDoNaoScreen from '../screens/Jogos/PoderDoNaoScreen';
+import AdultosDeConfiancaScreen from '../screens/Jogos/AdultosDeConfiancaScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, StyleSheet,
+  Text, TextInput, TouchableOpacity,
   KeyboardAvoidingView, Platform, ScrollView, Alert, ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SIZES } from '../constants/colors';
+import { COLORS } from '../constants/colors';
 import { useAuth } from '../context/AuthContext';
+import { authStyles } from '../styles/Auth.styles';
 
 export default function CadastroScreen({ navigation }) {
   const { cadastrar } = useAuth();
@@ -80,82 +81,59 @@ export default function CadastroScreen({ navigation }) {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-        <TouchableOpacity style={styles.voltar} onPress={() => navigation.goBack()}>
+    <KeyboardAvoidingView style={authStyles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <ScrollView contentContainerStyle={authStyles.scrollPadrao} keyboardShouldPersistTaps="handled">
+        <TouchableOpacity style={authStyles.voltar} onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color={COLORS.primary} />
         </TouchableOpacity>
 
-        <Text style={styles.titulo}>Criar Conta</Text>
-        <Text style={styles.subtitulo}>Preencha os dados do responsável e da criança</Text>
+        <Text style={authStyles.titulo}>Criar Conta</Text>
+        <Text style={authStyles.subtitulo}>Preencha os dados do responsável e da criança</Text>
 
         {/* Dados do Responsável */}
-        <Text style={styles.secao}>Dados do Responsável</Text>
+        <Text style={authStyles.secao}>Dados do Responsável</Text>
 
-        <TextInput style={styles.input} placeholder="Nome completo" placeholderTextColor={COLORS.textLight}
+        <TextInput style={authStyles.inputSimples} placeholder="Nome completo" placeholderTextColor={COLORS.textLight}
           value={form.nomeResponsavel} onChangeText={(v) => updateForm('nomeResponsavel', v)} />
 
-        <TextInput style={styles.input} placeholder="Email" placeholderTextColor={COLORS.textLight}
+        <TextInput style={authStyles.inputSimples} placeholder="Email" placeholderTextColor={COLORS.textLight}
           value={form.email} onChangeText={(v) => updateForm('email', v)}
           keyboardType="email-address" autoCapitalize="none" />
 
-        <TextInput style={styles.input} placeholder="Telefone" placeholderTextColor={COLORS.textLight}
+        <TextInput style={authStyles.inputSimples} placeholder="Telefone" placeholderTextColor={COLORS.textLight}
           value={form.telefone} onChangeText={(v) => updateForm('telefone', v)}
           keyboardType="phone-pad" />
 
-        <TextInput style={styles.input} placeholder="Grau de parentesco (ex: Mãe, Pai, Avó)"
+        <TextInput style={authStyles.inputSimples} placeholder="Grau de parentesco (ex: Mãe, Pai, Avó)"
           placeholderTextColor={COLORS.textLight}
           value={form.grauParentesco} onChangeText={(v) => updateForm('grauParentesco', v)} />
 
-        <TextInput style={styles.input} placeholder="Senha (mínimo 6 caracteres)" placeholderTextColor={COLORS.textLight}
+        <TextInput style={authStyles.inputSimples} placeholder="Senha (mínimo 6 caracteres)" placeholderTextColor={COLORS.textLight}
           value={form.senha} onChangeText={(v) => updateForm('senha', v)} secureTextEntry />
 
-        <TextInput style={styles.input} placeholder="Confirmar senha" placeholderTextColor={COLORS.textLight}
+        <TextInput style={authStyles.inputSimples} placeholder="Confirmar senha" placeholderTextColor={COLORS.textLight}
           value={form.confirmarSenha} onChangeText={(v) => updateForm('confirmarSenha', v)} secureTextEntry />
 
         {/* Dados da Criança */}
-        <Text style={styles.secao}>Dados da Criança</Text>
+        <Text style={authStyles.secao}>Dados da Criança</Text>
 
-        <TextInput style={styles.input} placeholder="Nome da criança" placeholderTextColor={COLORS.textLight}
+        <TextInput style={authStyles.inputSimples} placeholder="Nome da criança" placeholderTextColor={COLORS.textLight}
           value={form.nomeCrianca} onChangeText={(v) => updateForm('nomeCrianca', v)} />
 
-        <TextInput style={styles.input} placeholder="Data de nascimento (DD/MM/AAAA)"
+        <TextInput style={authStyles.inputSimples} placeholder="Data de nascimento (DD/MM/AAAA)"
           placeholderTextColor={COLORS.textLight}
           value={form.dataNascimento}
           onChangeText={(v) => updateForm('dataNascimento', formatarData(v))}
           keyboardType="numeric" maxLength={10} />
 
-        <TouchableOpacity style={styles.botao} onPress={handleCadastro} disabled={loading}>
+        <TouchableOpacity style={authStyles.botao} onPress={handleCadastro} disabled={loading}>
           {loading ? (
             <ActivityIndicator color={COLORS.textWhite} />
           ) : (
-            <Text style={styles.botaoTexto}>Cadastrar</Text>
+            <Text style={authStyles.botaoPrimarioTexto}>Cadastrar</Text>
           )}
         </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.background },
-  scroll: { padding: 24, paddingBottom: 40 },
-  voltar: { marginBottom: 10 },
-  titulo: { fontSize: SIZES.title, fontWeight: 'bold', color: COLORS.text, marginBottom: 6 },
-  subtitulo: { fontSize: SIZES.md, color: COLORS.textLight, marginBottom: 24 },
-  secao: {
-    fontSize: SIZES.lg, fontWeight: 'bold', color: COLORS.primary,
-    marginTop: 16, marginBottom: 10,
-  },
-  input: {
-    backgroundColor: COLORS.surface, borderRadius: SIZES.radius,
-    paddingHorizontal: 16, paddingVertical: 14, fontSize: SIZES.lg,
-    color: COLORS.text, marginBottom: 12,
-    borderWidth: 1, borderColor: COLORS.border,
-  },
-  botao: {
-    backgroundColor: COLORS.primary, borderRadius: SIZES.radius,
-    paddingVertical: 16, alignItems: 'center', marginTop: 20,
-  },
-  botaoTexto: { color: COLORS.textWhite, fontSize: SIZES.xl, fontWeight: 'bold' },
-});

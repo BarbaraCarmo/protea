@@ -9,7 +9,8 @@ const {
   getAdultosDeConfianca,
 } = require('../controllers/jogosController');
 
-router.get('/', auth, getCatalogoJogos);
+// Catálogo é público (sem dados sensíveis); fases dos jogos continuam protegidas.
+router.get('/', getCatalogoJogos);
 router.get('/semaforo', auth, getSemaforoDoCorpo);
 router.get('/toque', auth, getToqueBomVsRuim);
 router.get('/poder-do-nao', auth, getPoderDoNao);

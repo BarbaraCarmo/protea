@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, StyleSheet,
+  View, Text, TextInput, TouchableOpacity, Image,
   KeyboardAvoidingView, Platform, ScrollView, Alert, ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SIZES } from '../constants/colors';
+import { COLORS } from '../constants/colors';
 import { useAuth } from '../context/AuthContext';
+import { authStyles } from '../styles/Auth.styles';
 
 export default function LoginScreen({ navigation }) {
   const { login } = useAuth();
@@ -32,25 +33,25 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={authStyles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
+      <ScrollView contentContainerStyle={authStyles.scrollCentralizado} keyboardShouldPersistTaps="handled">
         {/* Logo */}
-        <View style={styles.logoContainer}>
-          <View style={styles.logoCircle}>
-            <Ionicons name="shield-checkmark" size={60} color={COLORS.primary} />
+        <View style={authStyles.logoContainer}>
+          <View style={authStyles.logoIcone}>
+          <Image source={require('../../assets/icon.png')} style={authStyles.logoIcone} />
           </View>
-          <Text style={styles.appName}>Protea</Text>
-          <Text style={styles.subtitle}>Aprender brincando, proteger amando</Text>
+          <Text style={authStyles.appName}>Protea</Text>
+          <Text style={authStyles.subtitle}>Aprender brincando, proteger amando</Text>
         </View>
 
         {/* Formulário */}
-        <View style={styles.form}>
-          <View style={styles.inputContainer}>
-            <Ionicons name="mail-outline" size={20} color={COLORS.textLight} style={styles.inputIcon} />
+        <View style={authStyles.form}>
+          <View style={authStyles.inputContainer}>
+            <Ionicons name="mail-outline" size={20} color={COLORS.textLight} style={authStyles.inputIcone} />
             <TextInput
-              style={styles.input}
+              style={authStyles.input}
               placeholder="Email do responsável"
               placeholderTextColor={COLORS.textLight}
               value={email}
@@ -60,10 +61,10 @@ export default function LoginScreen({ navigation }) {
             />
           </View>
 
-          <View style={styles.inputContainer}>
-            <Ionicons name="lock-closed-outline" size={20} color={COLORS.textLight} style={styles.inputIcon} />
+          <View style={authStyles.inputContainer}>
+            <Ionicons name="lock-closed-outline" size={20} color={COLORS.textLight} style={authStyles.inputIcone} />
             <TextInput
-              style={styles.input}
+              style={authStyles.input}
               placeholder="Senha"
               placeholderTextColor={COLORS.textLight}
               value={senha}
@@ -75,17 +76,17 @@ export default function LoginScreen({ navigation }) {
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity style={styles.botao} onPress={handleLogin} disabled={loading}>
+          <TouchableOpacity style={authStyles.botao} onPress={handleLogin} disabled={loading}>
             {loading ? (
               <ActivityIndicator color={COLORS.textWhite} />
             ) : (
-              <Text style={styles.botaoTexto}>Entrar</Text>
+              <Text style={authStyles.botaoPrimarioTexto}>Entrar</Text>
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate('Cadastro')} style={styles.link}>
-            <Text style={styles.linkTexto}>
-              Não tem conta? <Text style={styles.linkDestaque}>Cadastre-se</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Cadastro')} style={authStyles.link}>
+            <Text style={authStyles.linkTexto}>
+              Não tem conta? <Text style={authStyles.linkDestaque}>Cadastre-se</Text>
             </Text>
           </TouchableOpacity>
         </View>
@@ -93,33 +94,3 @@ export default function LoginScreen({ navigation }) {
     </KeyboardAvoidingView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.background },
-  scroll: { flexGrow: 1, justifyContent: 'center', padding: 24 },
-  logoContainer: { alignItems: 'center', marginBottom: 40 },
-  logoCircle: {
-    width: 110, height: 110, borderRadius: 55,
-    backgroundColor: COLORS.primary + '15',
-    justifyContent: 'center', alignItems: 'center', marginBottom: 16,
-  },
-  appName: { fontSize: 36, fontWeight: 'bold', color: COLORS.primary },
-  subtitle: { fontSize: SIZES.md, color: COLORS.textLight, marginTop: 6 },
-  form: { width: '100%' },
-  inputContainer: {
-    flexDirection: 'row', alignItems: 'center',
-    backgroundColor: COLORS.surface, borderRadius: SIZES.radius,
-    paddingHorizontal: 16, marginBottom: 14,
-    borderWidth: 1, borderColor: COLORS.border,
-  },
-  inputIcon: { marginRight: 10 },
-  input: { flex: 1, paddingVertical: 16, fontSize: SIZES.lg, color: COLORS.text },
-  botao: {
-    backgroundColor: COLORS.primary, borderRadius: SIZES.radius,
-    paddingVertical: 16, alignItems: 'center', marginTop: 10,
-  },
-  botaoTexto: { color: COLORS.textWhite, fontSize: SIZES.xl, fontWeight: 'bold' },
-  link: { alignItems: 'center', marginTop: 20 },
-  linkTexto: { fontSize: SIZES.md, color: COLORS.textLight },
-  linkDestaque: { color: COLORS.primary, fontWeight: 'bold' },
-});
