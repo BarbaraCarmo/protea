@@ -3,6 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Linking, Alert, I
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/colors';
 import { appStyles } from '../styles/App.styles';
+import { imagemApp } from '../constants/imagemAssets';
 
 const FAQ = [
   {
@@ -78,7 +79,7 @@ export default function AjudaScreen() {
       <Text style={appStyles.secaoTitulo}>Sobre o App</Text>
       <View style={appStyles.sobreCard}>
         <View style={appStyles.sobreIcone}>
-          <Image source={require('../../assets/icon.png')} style={appStyles.sobreIcone} />
+          <Image source={imagemApp.logo} style={appStyles.sobreIcone} />
         </View>
         <Text style={appStyles.sobreNome}>Protea</Text>
         <Text style={appStyles.sobreVersao}>Versão 1.0.0</Text>

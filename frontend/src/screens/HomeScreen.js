@@ -5,14 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import GameCard from '../components/GameCard';
 import { jogosService } from '../services/api';
 import { appStyles } from '../styles/App.styles';
-
-const IMAGEM_POR_KEY = {
-  semaforoIlustracao: require('../../assets/semaforoDoCorpoIlustracao.png'),
-  toqueBomToqueRuimIlustracao: require('../../assets/toqueBomToqueRuimIlustracao.png'),
-  poderDoNaoIlustracao: require('../../assets/poderDoNaoIlustracao.png'),
-  adultosDeConfiancaIlustracao: require('../../assets/adultosDeConfiancaIlustracao.png'),
-};
-const IMAGEM_PLACEHOLDER = require('../../assets/icon.png');
+import { imagemCard, imagemApp } from '../constants/imagemAssets';
 
 export default function HomeScreen({ navigation }) {
   const { user } = useAuth();
@@ -52,7 +45,7 @@ export default function HomeScreen({ navigation }) {
       jogos.map((jogo) => ({
         ...jogo,
         cor: jogo.cor || COLORS.primary,
-        imagem: IMAGEM_POR_KEY[jogo.imagemKey] || IMAGEM_PLACEHOLDER,
+        imagem: imagemCard[jogo.imagemKey] || imagemApp.logo,
       })),
     [jogos]
   );

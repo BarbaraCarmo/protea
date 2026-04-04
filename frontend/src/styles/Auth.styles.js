@@ -51,11 +51,13 @@ export const authStyles = {
             fontWeight: 'bold',
             color: COLORS.text,
             marginBottom: 8,
+            textAlign: 'center',
         },
         subtitulo: {
             fontSize: SIZES.md,
             color: COLORS.textLight,
             marginBottom: 24,
+            textAlign: 'center',
         },
         secao: {
             fontSize: SIZES.lg,

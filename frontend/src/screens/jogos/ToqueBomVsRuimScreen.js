@@ -10,10 +10,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import { imagemPorChave } from '../../constants/imagemAssets';
-import { toqueBomVsRuimScreenStyles as styles } from '../../styles/Jogos/JogosTemas.styles';
+import { toqueBomVsRuimScreenStyles as styles } from '../../styles/jogos/JogosTemas.styles';
 import { useAuth } from '../../context/AuthContext';
 import CardImagem from '../../components/CardImagem';
 import FeedbackModal from '../../components/FeedbackModal';
+import MedalhaModal from '../../components/MedalhaModal';
 import { jogosService } from '../../services/api';
 
 export default function ToqueBomVsRuimScreen({ navigation }) {
@@ -27,7 +28,9 @@ export default function ToqueBomVsRuimScreen({ navigation }) {
   const [acertou, setAcertou] = useState(false);
   const [mensagem, setMensagem] = useState('');
   const [concluido, setConcluido] = useState(false);
+  const [medalhaConquistada, setMedalhaConquistada] = useState(null);
   const slideAnim = useRef(new Animated.Value(0)).current;
+  const novasMedalhasRef = useRef([]);
 
   useEffect(() => {
     jogosService
@@ -52,11 +55,14 @@ export default function ToqueBomVsRuimScreen({ navigation }) {
   const handleResposta = useCallback(
     (tipoEscolhido) => {
       if (!fase) return;
+      novasMedalhasRef.current = [];
       const correto = tipoEscolhido === fase.respostaCorreta;
       if (correto) {
         setAcertou(true);
         setMensagem(fase.feedbackCorreto);
-        atualizarProgresso('toqueBomVsRuim', fase.id);
+        atualizarProgresso('toqueBomVsRuim', fase.id).then((resultado) => {
+          novasMedalhasRef.current = resultado?.novasMedalhas || [];
+        });
       } else {
         setAcertou(false);
         setMensagem(fase.feedbackIncorreto);
@@ -66,17 +72,33 @@ export default function ToqueBomVsRuimScreen({ navigation }) {
     [fase, atualizarProgresso]
   );
 
+  const avancar = useCallback(() => {
+    if (faseAtual < fases.length - 1) {
+      setFaseAtual((prev) => prev + 1);
+      animarEntrada();
+    } else {
+      setConcluido(true);
+    }
+  }, [faseAtual, fases.length, animarEntrada]);
+
   const handleFecharModal = useCallback(() => {
     setModalVisible(false);
     if (acertou) {
-      if (faseAtual < fases.length - 1) {
-        setFaseAtual((prev) => prev + 1);
-        animarEntrada();
-      } else {
-        setConcluido(true);
+      const prata = novasMedalhasRef.current.includes('toqueBomVsRuim_prata');
+      const ouro  = novasMedalhasRef.current.includes('toqueBomVsRuim_ouro');
+      if (prata || ouro) {
+        novasMedalhasRef.current = [];
+        setMedalhaConquistada(prata ? 'prata' : 'ouro');
+        return;
       }
+      avancar();
     }
-  }, [acertou, faseAtual, fases.length, animarEntrada]);
+  }, [acertou, avancar]);
+
+  const handleFecharMedalhaModal = useCallback(() => {
+    setMedalhaConquistada(null);
+    avancar();
+  }, [avancar]);
 
   if (carregando) {
     return (
@@ -184,6 +206,12 @@ export default function ToqueBomVsRuimScreen({ navigation }) {
         acertou={acertou}
         mensagem={mensagem}
         onClose={handleFecharModal}
+      />
+      <MedalhaModal
+        visible={medalhaConquistada !== null}
+        tipo={medalhaConquistada}
+        jogoTitulo="Toque Bom vs Toque Ruim"
+        onClose={handleFecharMedalhaModal}
       />
     </SafeAreaView>
   );

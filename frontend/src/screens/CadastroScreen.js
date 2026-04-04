@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import {
-  Text, TextInput, TouchableOpacity,
+  View, Text, TextInput, TouchableOpacity, Image,
   KeyboardAvoidingView, Platform, ScrollView, Alert, ActivityIndicator,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/colors';
 import { useAuth } from '../context/AuthContext';
 import { authStyles } from '../styles/Auth.styles';
+import { imagemApp } from '../constants/imagemAssets';
 
 export default function CadastroScreen({ navigation }) {
   const { cadastrar } = useAuth();
@@ -81,6 +83,7 @@ export default function CadastroScreen({ navigation }) {
   }
 
   return (
+    <SafeAreaView style={authStyles.container}>
     <KeyboardAvoidingView style={authStyles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ScrollView contentContainerStyle={authStyles.scrollPadrao} keyboardShouldPersistTaps="handled">
         <TouchableOpacity style={authStyles.voltar} onPress={() => navigation.goBack()}>
@@ -93,35 +96,35 @@ export default function CadastroScreen({ navigation }) {
         {/* Dados do Responsável */}
         <Text style={authStyles.secao}>Dados do Responsável</Text>
 
-        <TextInput style={authStyles.inputSimples} placeholder="Nome completo" placeholderTextColor={COLORS.textLight}
+        <TextInput style={authStyles.inputSimples} placeholder="Nome completo" placeholderTextColor={COLORS.textLightest}
           value={form.nomeResponsavel} onChangeText={(v) => updateForm('nomeResponsavel', v)} />
 
-        <TextInput style={authStyles.inputSimples} placeholder="Email" placeholderTextColor={COLORS.textLight}
+        <TextInput style={authStyles.inputSimples} placeholder="Email" placeholderTextColor={COLORS.textLightest}
           value={form.email} onChangeText={(v) => updateForm('email', v)}
           keyboardType="email-address" autoCapitalize="none" />
 
-        <TextInput style={authStyles.inputSimples} placeholder="Telefone" placeholderTextColor={COLORS.textLight}
+        <TextInput style={authStyles.inputSimples} placeholder="Telefone" placeholderTextColor={COLORS.textLightest}
           value={form.telefone} onChangeText={(v) => updateForm('telefone', v)}
           keyboardType="phone-pad" />
 
         <TextInput style={authStyles.inputSimples} placeholder="Grau de parentesco (ex: Mãe, Pai, Avó)"
-          placeholderTextColor={COLORS.textLight}
+          placeholderTextColor={COLORS.textLightest}
           value={form.grauParentesco} onChangeText={(v) => updateForm('grauParentesco', v)} />
 
-        <TextInput style={authStyles.inputSimples} placeholder="Senha (mínimo 6 caracteres)" placeholderTextColor={COLORS.textLight}
+        <TextInput style={authStyles.inputSimples} placeholder="Senha (mínimo 6 caracteres)" placeholderTextColor={COLORS.textLightest}
           value={form.senha} onChangeText={(v) => updateForm('senha', v)} secureTextEntry />
 
-        <TextInput style={authStyles.inputSimples} placeholder="Confirmar senha" placeholderTextColor={COLORS.textLight}
+        <TextInput style={authStyles.inputSimples} placeholder="Confirmar senha" placeholderTextColor={COLORS.textLightest}
           value={form.confirmarSenha} onChangeText={(v) => updateForm('confirmarSenha', v)} secureTextEntry />
 
         {/* Dados da Criança */}
         <Text style={authStyles.secao}>Dados da Criança</Text>
 
-        <TextInput style={authStyles.inputSimples} placeholder="Nome da criança" placeholderTextColor={COLORS.textLight}
+        <TextInput style={authStyles.inputSimples} placeholder="Nome da criança" placeholderTextColor={COLORS.textLightest}
           value={form.nomeCrianca} onChangeText={(v) => updateForm('nomeCrianca', v)} />
 
         <TextInput style={authStyles.inputSimples} placeholder="Data de nascimento (DD/MM/AAAA)"
-          placeholderTextColor={COLORS.textLight}
+          placeholderTextColor={COLORS.textLightest}
           value={form.dataNascimento}
           onChangeText={(v) => updateForm('dataNascimento', formatarData(v))}
           keyboardType="numeric" maxLength={10} />
@@ -133,7 +136,14 @@ export default function CadastroScreen({ navigation }) {
             <Text style={authStyles.botaoPrimarioTexto}>Cadastrar</Text>
           )}
         </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.goBack()} style={authStyles.link}>
+          <Text style={authStyles.linkTexto}>
+            Já tem uma conta? <Text style={authStyles.linkDestaque}>Entre aqui</Text>
+          </Text>
+        </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }

@@ -19,6 +19,7 @@ export const COLORS = {
   surface: '#FFFFFF',
   text: '#3A3A3A',
   textLight: '#7A7A7A',
+  textLightest: '#C7C7C7',
   textWhite: '#FFFFFF',
   border: '#E0DDD8',
   shadow: '#00000015',

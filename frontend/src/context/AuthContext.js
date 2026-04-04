@@ -51,13 +51,18 @@ export function AuthProvider({ children }) {
 
   async function atualizarProgresso(jogo, faseConcluida) {
     try {
+      const medalhasAntes = user?.medalhas || [];
       const response = await progressoService.atualizarProgresso(jogo, faseConcluida);
+      const novasMedalhas = (response.data.medalhas || []).filter(
+        (m) => !medalhasAntes.includes(m)
+      );
       const updatedUser = { ...user, progresso: response.data.progresso, medalhas: response.data.medalhas };
       await AsyncStorage.setItem('user', JSON.stringify(updatedUser));
       setUser(updatedUser);
-      return response.data;
+      return { ...response.data, novasMedalhas };
     } catch (error) {
       console.log('Erro ao atualizar progresso:', error);
+      return { novasMedalhas: [] };
     }
   }
 

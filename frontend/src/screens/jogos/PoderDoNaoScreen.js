@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -10,10 +10,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import { imagemPorChave } from '../../constants/imagemAssets';
-import { poderDoNaoScreenStyles as styles } from '../../styles/Jogos/JogosTemas.styles';
+import { poderDoNaoScreenStyles as styles } from '../../styles/jogos/JogosTemas.styles';
 import { useAuth } from '../../context/AuthContext';
 import CardImagem from '../../components/CardImagem';
 import FeedbackModal from '../../components/FeedbackModal';
+import MedalhaModal from '../../components/MedalhaModal';
 import { jogosService } from '../../services/api';
 
 export default function PoderDoNaoScreen({ navigation }) {
@@ -28,6 +29,8 @@ export default function PoderDoNaoScreen({ navigation }) {
   const [mensagemFeedback, setMensagemFeedback] = useState('');
   const [opcaoSelecionada, setOpcaoSelecionada] = useState(null);
   const [concluido, setConcluido] = useState(false);
+  const [medalhaConquistada, setMedalhaConquistada] = useState(null);
+  const novasMedalhasRef = useRef([]);
 
   useEffect(() => {
     jogosService
@@ -57,7 +60,18 @@ export default function PoderDoNaoScreen({ navigation }) {
     setModalVisible(true);
 
     if (correto) {
-      atualizarProgresso('poderDoNao', fase.id);
+      novasMedalhasRef.current = [];
+      atualizarProgresso('poderDoNao', fase.id).then((resultado) => {
+        novasMedalhasRef.current = resultado?.novasMedalhas || [];
+      });
+    }
+  }
+
+  function avancar() {
+    if (faseAtual < totalFases - 1) {
+      setFaseAtual(faseAtual + 1);
+    } else {
+      setConcluido(true);
     }
   }
 
@@ -66,12 +80,20 @@ export default function PoderDoNaoScreen({ navigation }) {
     setOpcaoSelecionada(null);
 
     if (acertou) {
-      if (faseAtual < totalFases - 1) {
-        setFaseAtual(faseAtual + 1);
-      } else {
-        setConcluido(true);
+      const prata = novasMedalhasRef.current.includes('poderDoNao_prata');
+      const ouro  = novasMedalhasRef.current.includes('poderDoNao_ouro');
+      if (prata || ouro) {
+        novasMedalhasRef.current = [];
+        setMedalhaConquistada(prata ? 'prata' : 'ouro');
+        return;
       }
+      avancar();
     }
+  }
+
+  function fecharMedalhaModal() {
+    setMedalhaConquistada(null);
+    avancar();
   }
 
   if (carregando) {
@@ -196,6 +218,12 @@ export default function PoderDoNaoScreen({ navigation }) {
         acertou={acertou}
         mensagem={mensagemFeedback}
         onClose={fecharModal}
+      />
+      <MedalhaModal
+        visible={medalhaConquistada !== null}
+        tipo={medalhaConquistada}
+        jogoTitulo="O Poder do Não"
+        onClose={fecharMedalhaModal}
       />
     </SafeAreaView>
   );

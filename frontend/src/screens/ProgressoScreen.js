@@ -4,39 +4,25 @@ import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/colors';
 import { useAuth } from '../context/AuthContext';
 import { appStyles } from '../styles/App.styles';
-
-const TOTAL_FASES = {
-  semaforoDoCorpo: 10,
-  toqueBomVsRuim: 11,
-  poderDoNao: 12,
-  adultoDeConfianca: 5,
-};
-
-const JOGOS = [
-  { id: 'semaforoDoCorpo', titulo: 'Semáforo do Corpo', icone: 'ellipse', cor: COLORS.verde, medalha: 'Mestre do Semáforo' },
-  { id: 'toqueBomVsRuim', titulo: 'Toque Bom vs Toque Ruim', icone: 'hand-left-outline', cor: COLORS.secondary, medalha: 'Guardião dos Toques' },
-  { id: 'poderDoNao', titulo: 'O Poder do Não', icone: 'hand-right-outline', cor: COLORS.accent, medalha: 'Poder do Não' },
-  { id: 'adultoDeConfianca', titulo: 'Adultos de Confiança', icone: 'people-outline', cor: COLORS.warm, medalha: 'Rede de Confiança' },
-];
+import { JOGOS_CONFIG, COR_PRATA, COR_OURO, normalizarMedalhas } from '../constants/jogos';
 
 export default function ProgressoScreen() {
   const { user } = useAuth();
   const progresso = user?.progresso || {};
-  const medalhas = user?.medalhas || [];
+  const medalhas  = normalizarMedalhas(user?.medalhas);
 
-  function calcPorcentagem(jogoId) {
-    const concluidos = progresso[jogoId]?.concluidos?.length || 0;
-    return Math.round((concluidos / TOTAL_FASES[jogoId]) * 100);
+  function calcPorcentagem(jogo) {
+    const concluidos = progresso[jogo.id]?.concluidos?.length || 0;
+    return Math.round((concluidos / jogo.totalFases) * 100);
   }
 
   return (
     <ScrollView style={appStyles.container} contentContainerStyle={appStyles.content}>
-      <Text style={appStyles.progressoSubtitulo}>Responda as perguntas para conquistar as medalhas!</Text>
-      {JOGOS.map((jogo) => {
-        const pct = calcPorcentagem(jogo.id);
+      {JOGOS_CONFIG.map((jogo) => {
+        const pct        = calcPorcentagem(jogo);
         const concluidos = progresso[jogo.id]?.concluidos?.length || 0;
-        const total = TOTAL_FASES[jogo.id];
-        const temMedalha = medalhas.includes(jogo.medalha);
+        const temPrata   = medalhas.includes(jogo.medalha_prata);
+        const temOuro    = medalhas.includes(jogo.medalha_ouro);
 
         return (
           <View key={jogo.id} style={appStyles.card}>
@@ -46,21 +32,40 @@ export default function ProgressoScreen() {
               </View>
               <View style={appStyles.progressoCardInfo}>
                 <Text style={appStyles.progressoJogoTitulo}>{jogo.titulo}</Text>
-                <Text style={appStyles.progressoJogoFases}>{concluidos} de {total} fases concluídas</Text>
+                <Text style={appStyles.progressoJogoFases}>{concluidos} de {jogo.totalFases} fases concluídas</Text>
               </View>
             </View>
 
             <View style={appStyles.progressoBarra}>
               <View style={[appStyles.progressoPreenchido, { width: `${pct}%`, backgroundColor: jogo.cor }]} />
+              {/* Marcador de 50% */}
+              <View style={appStyles.progressoMarcador50} />
             </View>
             <Text style={[appStyles.progressoTexto, { color: jogo.cor }]}>{pct}%</Text>
 
-            {temMedalha && (
-              <View style={[appStyles.progressoMedalhaTag, { backgroundColor: jogo.cor + '15' }]}>
-                <Ionicons name="ribbon-outline" size={16} color={jogo.cor} />
-                <Text style={[appStyles.progressoMedalhaTexto, { color: jogo.cor }]}>{jogo.medalha}</Text>
-              </View>
-            )}
+            <View style={appStyles.progressoMedalhasRow}>
+              {[
+                { conquistada: temPrata, cor: COR_PRATA, icone: 'medal-outline', label: 'Prata — 50%' },
+                { conquistada: temOuro,  cor: COR_OURO,  icone: 'trophy',        label: 'Ouro — 100%' },
+              ].map(({ conquistada, cor, icone, label }) => (
+                <View
+                  key={label}
+                  style={[
+                    appStyles.progressoMedalhaBadge,
+                    { backgroundColor: conquistada ? cor + '18' : COLORS.border + '50' },
+                  ]}
+                >
+                  <Ionicons
+                    name={conquistada ? icone : 'lock-closed-outline'}
+                    size={14}
+                    color={conquistada ? cor : COLORS.textLightest}
+                  />
+                  <Text style={[appStyles.progressoMedalhaTexto, { color: conquistada ? cor : COLORS.textLightest }]}>
+                    {label}
+                  </Text>
+                </View>
+              ))}
+            </View>
           </View>
         );
       })}

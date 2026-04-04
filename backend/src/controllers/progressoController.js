@@ -26,19 +26,20 @@ exports.atualizarProgresso = async (req, res) => {
       user.progresso[jogo].concluidos.push(faseConcluida);
     }
 
-    // Verificar medalhas
+    // Verificar medalhas (prata = 50%, ouro = 100%)
     const totalFases = { semaforoDoCorpo: 10, toqueBomVsRuim: 11, poderDoNao: 12, adultoDeConfianca: 5 };
-    const nomeMedalha = {
-      semaforoDoCorpo: 'Mestre do Semáforo',
-      toqueBomVsRuim: 'Guardião dos Toques',
-      poderDoNao: 'Poder do Não',
-      adultoDeConfianca: 'Rede de Confiança',
-    };
+    const concluidos = user.progresso[jogo].concluidos.length;
+    const total      = totalFases[jogo];
 
-    if (user.progresso[jogo].concluidos.length >= totalFases[jogo]) {
-      if (!user.medalhas.includes(nomeMedalha[jogo])) {
-        user.medalhas.push(nomeMedalha[jogo]);
-      }
+    const medalha_prata = `${jogo}_prata`;
+    const medalha_ouro  = `${jogo}_ouro`;
+
+    if (concluidos >= Math.ceil(total * 0.5) && !user.medalhas.includes(medalha_prata)) {
+      user.medalhas.push(medalha_prata);
+    }
+    if (concluidos >= total) {
+      if (!user.medalhas.includes(medalha_prata)) user.medalhas.push(medalha_prata);
+      if (!user.medalhas.includes(medalha_ouro))  user.medalhas.push(medalha_ouro);
     }
 
     await user.save();

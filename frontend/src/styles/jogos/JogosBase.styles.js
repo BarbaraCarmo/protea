@@ -66,7 +66,7 @@ export const jogosBaseStyles = {
     // ou com aspectRatio. Garante espaço visual mesmo antes da imagem chegar.
     cardImagemArea: {
       width: '100%',
-      minHeight: 150,
+      minHeight: 200,
       alignItems: 'center',
       justifyContent: 'center',
       marginBottom: 8,
@@ -83,13 +83,13 @@ export const jogosBaseStyles = {
 
     // ── Texto de situação / pergunta — fica ABAIXO do card ────────────────────
     situacaoDescricao: {
-      fontSize: SIZES.xl,
+      fontSize: SIZES.lg,
       color: COLORS.text,
       textAlign: 'center',
       lineHeight: 30,
       fontWeight: '300',
       marginTop: 16,
-      marginBottom: 8,
+      marginBottom: 16,
       paddingHorizontal: 4,
     },
 

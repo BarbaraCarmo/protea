@@ -18,10 +18,10 @@ import PerfilScreen from '../screens/PerfilScreen';
 import AjudaScreen from '../screens/AjudaScreen';
 
 // Telas dos jogos
-import SemaforoDoCorpoScreen from '../screens/Jogos/SemaforoDoCorpoScreen';
-import ToqueBomVsRuimScreen from '../screens/Jogos/ToqueBomVsRuimScreen';
-import PoderDoNaoScreen from '../screens/Jogos/PoderDoNaoScreen';
-import AdultosDeConfiancaScreen from '../screens/Jogos/AdultosDeConfiancaScreen';
+import SemaforoDoCorpoScreen from '../screens/jogos/SemaforoDoCorpoScreen';
+import ToqueBomVsRuimScreen from '../screens/jogos/ToqueBomVsRuimScreen';
+import PoderDoNaoScreen from '../screens/jogos/PoderDoNaoScreen';
+import AdultosDeConfiancaScreen from '../screens/jogos/AdultosDeConfiancaScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();

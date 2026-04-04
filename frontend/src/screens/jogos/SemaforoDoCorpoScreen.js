@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -10,10 +10,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import { imagemJogo } from '../../constants/imagemAssets';
-import { semaforoDoCorpoScreenStyles as styles } from '../../styles/Jogos/JogosTemas.styles';
+import { semaforoDoCorpoScreenStyles as styles } from '../../styles/jogos/JogosTemas.styles';
 import { useAuth } from '../../context/AuthContext';
 import CardImagem from '../../components/CardImagem';
 import FeedbackModal from '../../components/FeedbackModal';
+import MedalhaModal from '../../components/MedalhaModal';
 import { jogosService } from '../../services/api';
 
 const getMensagemErro = (fase, corEscolhida) => {
@@ -33,6 +34,8 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
   const [mensagem, setMensagem] = useState('');
   const [concluido, setConcluido] = useState(false);
   const [scaleAnim] = useState(new Animated.Value(1));
+  const [medalhaConquistada, setMedalhaConquistada] = useState(null);
+  const novasMedalhasRef = useRef([]);
 
   useEffect(() => {
     jogosService
@@ -55,11 +58,14 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
     (corEscolhida) => {
       if (!fase) return;
       animarCard();
+      novasMedalhasRef.current = [];
       const correto = corEscolhida === fase.respostaCorreta;
       if (correto) {
         setAcertou(true);
         setMensagem(fase.feedbacks.correto);
-        atualizarProgresso('semaforoDoCorpo', fase.id);
+        atualizarProgresso('semaforoDoCorpo', fase.id).then((resultado) => {
+          novasMedalhasRef.current = resultado?.novasMedalhas || [];
+        });
       } else {
         setAcertou(false);
         setMensagem(getMensagemErro(fase, corEscolhida));
@@ -69,16 +75,32 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
     [fase, animarCard, atualizarProgresso]
   );
 
+  const avancar = useCallback(() => {
+    if (faseAtual < fases.length - 1) {
+      setFaseAtual((prev) => prev + 1);
+    } else {
+      setConcluido(true);
+    }
+  }, [faseAtual, fases.length]);
+
   const handleFecharModal = useCallback(() => {
     setModalVisible(false);
     if (acertou) {
-      if (faseAtual < fases.length - 1) {
-        setFaseAtual((prev) => prev + 1);
-      } else {
-        setConcluido(true);
+      const prata = novasMedalhasRef.current.includes('semaforoDoCorpo_prata');
+      const ouro  = novasMedalhasRef.current.includes('semaforoDoCorpo_ouro');
+      if (prata || ouro) {
+        novasMedalhasRef.current = [];
+        setMedalhaConquistada(prata ? 'prata' : 'ouro');
+        return;
       }
+      avancar();
     }
-  }, [acertou, faseAtual, fases.length]);
+  }, [acertou, avancar]);
+
+  const handleFecharMedalhaModal = useCallback(() => {
+    setMedalhaConquistada(null);
+    avancar();
+  }, [avancar]);
 
   if (carregando) {
     return (
@@ -142,19 +164,20 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
         </Text>
       </View>
 
+
+
       {/* Área central: card + instrução abaixo */}
       <View style={styles.cardArea}>
+        {/* Instrução acima do card */}
+        <Text style={styles.situacaoDescricao}>
+          Qual cor combina com essa parte do corpo?
+        </Text>
         <Animated.View style={[styles.card, { transform: [{ scale: scaleAnim }] }]}>
           <View style={styles.cardImagemArea}>
-            <CardImagem source={imagemJogo.semaforoDoCorpo} width={150} height={150} />
+            <CardImagem source={imagemJogo.semaforoDoCorpo} width={250} height={250} />
           </View>
           <Text style={styles.cardLabel}>{fase.parteDoCorpo}</Text>
         </Animated.View>
-
-        {/* Instrução abaixo do card */}
-        <Text style={styles.situacaoDescricao}>
-          Qual a cor do semáforo para essa parte do corpo?
-        </Text>
       </View>
 
       {/* Legenda */}
@@ -208,6 +231,12 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
         acertou={acertou}
         mensagem={mensagem}
         onClose={handleFecharModal}
+      />
+      <MedalhaModal
+        visible={medalhaConquistada !== null}
+        tipo={medalhaConquistada}
+        jogoTitulo="Semáforo do Corpo"
+        onClose={handleFecharMedalhaModal}
       />
     </SafeAreaView>
   );

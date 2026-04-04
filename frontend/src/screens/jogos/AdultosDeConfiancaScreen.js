@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -10,10 +10,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import { imagemJogo } from '../../constants/imagemAssets';
-import { adultosDeConfiancaScreenStyles as styles } from '../../styles/Jogos/JogosTemas.styles';
+import { adultosDeConfiancaScreenStyles as styles } from '../../styles/jogos/JogosTemas.styles';
 import { useAuth } from '../../context/AuthContext';
 import CardImagem from '../../components/CardImagem';
 import FeedbackModal from '../../components/FeedbackModal';
+import MedalhaModal from '../../components/MedalhaModal';
 import { jogosService } from '../../services/api';
 
 export default function AdultosDeConfiancaScreen({ navigation }) {
@@ -29,6 +30,8 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
   const [selecionados, setSelecionados] = useState([]);
   const [respondido, setRespondido] = useState(false);
   const [concluido, setConcluido] = useState(false);
+  const [medalhaConquistada, setMedalhaConquistada] = useState(null);
+  const novasMedalhasRef = useRef([]);
 
   useEffect(() => {
     jogosService
@@ -75,24 +78,43 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
     setModalVisible(true);
 
     if (correto) {
-      atualizarProgresso('adultoDeConfianca', fase.id);
+      novasMedalhasRef.current = [];
+      atualizarProgresso('adultoDeConfianca', fase.id).then((resultado) => {
+        novasMedalhasRef.current = resultado?.novasMedalhas || [];
+      });
+    }
+  }
+
+  function avancar() {
+    setSelecionados([]);
+    setRespondido(false);
+    if (faseAtual < totalFases - 1) {
+      setFaseAtual(faseAtual + 1);
+    } else {
+      setConcluido(true);
     }
   }
 
   function fecharModal() {
     setModalVisible(false);
     if (acertou) {
-      if (faseAtual < totalFases - 1) {
-        setFaseAtual(faseAtual + 1);
-        setSelecionados([]);
-        setRespondido(false);
-      } else {
-        setConcluido(true);
+      const prata = novasMedalhasRef.current.includes('adultoDeConfianca_prata');
+      const ouro  = novasMedalhasRef.current.includes('adultoDeConfianca_ouro');
+      if (prata || ouro) {
+        novasMedalhasRef.current = [];
+        setMedalhaConquistada(prata ? 'prata' : 'ouro');
+        return;
       }
+      avancar();
     } else {
       setSelecionados([]);
       setRespondido(false);
     }
+  }
+
+  function fecharMedalhaModal() {
+    setMedalhaConquistada(null);
+    avancar();
   }
 
   function getOpcaoEstilo(index) {
@@ -266,6 +288,12 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
         acertou={acertou}
         mensagem={mensagemFeedback}
         onClose={fecharModal}
+      />
+      <MedalhaModal
+        visible={medalhaConquistada !== null}
+        tipo={medalhaConquistada}
+        jogoTitulo="Adultos de Confiança"
+        onClose={fecharMedalhaModal}
       />
     </SafeAreaView>
   );

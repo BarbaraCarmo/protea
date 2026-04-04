@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/colors';
 import { useAuth } from '../context/AuthContext';
 import { authStyles } from '../styles/Auth.styles';
+import { imagemApp } from '../constants/imagemAssets';
 
 export default function LoginScreen({ navigation }) {
   const { login } = useAuth();
@@ -40,7 +41,7 @@ export default function LoginScreen({ navigation }) {
         {/* Logo */}
         <View style={authStyles.logoContainer}>
           <View style={authStyles.logoIcone}>
-          <Image source={require('../../assets/icon.png')} style={authStyles.logoIcone} />
+          <Image source={imagemApp.logo} style={authStyles.logoIcone} />
           </View>
           <Text style={authStyles.appName}>Protea</Text>
           <Text style={authStyles.subtitle}>Aprender brincando, proteger amando</Text>
