@@ -1,4 +1,7 @@
-# Protea
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/558ffbba-8e9d-4071-bf0e-2c5e4cb17848" alt="Logo Protea"  width="163" height="238">
+</p>
+<h1 align="center">Protea</h1>
 
 Este trabalho apresenta o desenvolvimento do Protea, um aplicativo mobile educativo que utiliza jogos interativos para ensinar educação sexual a crianças de 6 a 11 anos com Transtorno do Espectro Autista (TEA). O aplicativo aborda temas como limites corporais, identificação de toques seguros e inseguros, assertividade e reconhecimento de adultos de confiança, utilizando linguagem acessível, recursos de áudio humanizado e uma interface visual de baixo estímulo. Desenvolvido com React Native, Node.js e MongoDB, o app foi projetado para ser utilizado via Expo Go, dispensando a publicação em lojas de aplicativos. A proposta visa preencher uma lacuna na disponibilidade de ferramentas tecnológicas adaptadas ao público com TEA no contexto da prevenção de violência sexual infantil.
 
@@ -14,9 +17,9 @@ O sistema adota uma arquitetura cliente-servidor com:
 - **Autenticação**: JSON Web Tokens (JWT) para gerenciamento de sessões;
 - **Acessibilidade Auditiva**: Integração planejada com Eleven Labs para geração de áudios humanizados.
 
-# Como rodar
+## Como rodar
 
-## Pré-requisitos
+### Pré-requisitos
 
 1. **Node.js** (versão 18 ou superior): https://nodejs.org/
 2. **MongoDB** (local ou MongoDB Atlas): https://www.mongodb.com/
@@ -25,7 +28,7 @@ O sistema adota uma arquitetura cliente-servidor com:
    - iOS: https://apps.apple.com/app/expo-go/id982107779
 4. **Computador e celular na mesma rede Wi-Fi**
 
-## Passo 1: Instalar Node.js
+### Passo 1: Instalar Node.js
 
 Baixe e instale o Node.js em https://nodejs.org/ (versão LTS recomendada).
 
@@ -35,7 +38,7 @@ node --version
 npm --version
 ```
 
-## Passo 2: Configurar o MongoDB
+### Passo 2: Configurar o MongoDB
 
 Garantir que o ip atual está adicionado na Network Access List no MongoDB Atlas.
 
@@ -45,7 +48,7 @@ Rodar
 mongosh "mongodb+srv://cluster50150.9wqlals.mongodb.net/" --apiVersion 1 --username Cluster50150
 ```
 
-## Passo 3: Iniciar o Backend
+### Passo 3: Iniciar o Backend
 
 ```bash
 cd backend
@@ -61,7 +64,7 @@ Servidor rodando na porta 3000
 
 ---
 
-## Passo 4: Configurar o IP no Frontend
+### Passo 4: Configurar o IP no Frontend
 
 1. Descubra o IP do seu computador na rede local:
    - **Mac**: Abra o Terminal e digite `ifconfig | grep "inet "` (procure o IP que começa com 192.168.x.x)
@@ -75,7 +78,7 @@ Servidor rodando na porta 3000
 
 ---
 
-## Passo 5: Iniciar o Frontend
+### Passo 5: Iniciar o Frontend
 
 ```bash
 cd frontend
@@ -87,7 +90,7 @@ Um QR Code aparecerá no terminal.
 
 ---
 
-## Passo 6: Abrir no Celular
+### Passo 6: Abrir no Celular
 
 1. Abra o app **Expo Go** no celular
 2. Escaneie o QR Code exibido no terminal
