@@ -1,4 +1,7 @@
-# Protea
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/558ffbba-8e9d-4071-bf0e-2c5e4cb17848" alt="Logo Protea" width="163" height="238">
+</p>
+<h1 align="center">Protea</h1>
 
 Este trabalho apresenta o desenvolvimento do Protea, um aplicativo mobile educativo que utiliza jogos interativos para ensinar educação sexual a crianças de 6 a 11 anos com Transtorno do Espectro Autista (TEA). O aplicativo aborda temas como limites corporais, identificação de toques seguros e inseguros, assertividade e reconhecimento de adultos de confiança, utilizando linguagem acessível, recursos de áudio humanizado e uma interface visual de baixo estímulo. Desenvolvido com React Native, Node.js e MongoDB, o app foi projetado para ser utilizado via Expo Go. A proposta visa preencher uma lacuna na disponibilidade de ferramentas tecnológicas adaptadas ao público com TEA no contexto da prevenção de violência sexual infantil.
 
