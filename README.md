@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/558ffbba-8e9d-4071-bf0e-2c5e4cb17848" alt="Logo Protea" width="163" height="238">
+  <img src="https://github.com/user-attachments/assets/558ffbba-8e9d-4071-bf0e-2c5e4cb17848" alt="Logo Protea"  width="163" height="238">
 </p>
 <h1 align="center">Protea</h1>
 
@@ -18,9 +18,7 @@ O sistema adota uma arquitetura cliente-servidor com:
 - **Banco de Dados**: MongoDB Atlas (cloud) — banco de dados NoSQL orientado a documentos
 - **Autenticação**: JSON Web Tokens (JWT) para gerenciamento de sessões
 
----
-
-## Como rodar o app
+## Como rodar
 
 ### Pré-requisitos
 
@@ -124,14 +122,3 @@ cd frontend
 npm install
 npx expo start
 ```
-
----
-
-## Documentação complementar
-
-| Arquivo | Conteúdo |
-|---|---|
-| `DEPLOY_RAILWAY.md` | Passo a passo completo do deploy no Railway (já realizado) |
-| `EXPO_COMPARTILHAR_APP.md` | Como compartilhar o app sem precisar da mesma rede Wi-Fi |
-| `ARTIGO_PROTEA.md` | Artigo científico do TCC |
-| `QUESTOES_DOS_JOGOS.md` | Questões e dinâmicas dos jogos educativos |
