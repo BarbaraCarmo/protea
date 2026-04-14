@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '../constants/colors';
+import { colors } from '../constants/colors';
 import { useAuth } from '../context/AuthContext';
 import { appStyles } from '../styles/App.styles';
 import { imagemAvatar } from '../constants/imagemAssets';
-import { JOGOS_CONFIG, COR_PRATA, COR_OURO, normalizarMedalhas } from '../constants/jogos';
+import { jogosUI, corPrata, corOuro, normalizarMedalhas } from '../constants/jogos';
+import { strings } from '../constants/strings';
 
 const AVATARES = Object.entries(imagemAvatar).map(([id, imagem]) => ({ id, imagem }));
 
 export default function PerfilScreen() {
-  const { user, atualizarAvatar, logout } = useAuth();
+  const { user, catalogo, atualizarAvatar, logout } = useAuth();
   const avatarSalvo = user?.crianca?.avatar;
   const avatarInicial = AVATARES.find((a) => a.id === avatarSalvo) ? avatarSalvo : null;
   const [avatarSelecionado, setAvatarSelecionado] = useState(avatarInicial);
-  const medalhas = normalizarMedalhas(user?.medalhas);
+  const medalhas = normalizarMedalhas(user?.medalhas, catalogo);
 
   function calcularIdade() {
     if (!user?.crianca?.dataNascimento) return '';
@@ -36,9 +37,9 @@ export default function PerfilScreen() {
   }
 
   function handleLogout() {
-    Alert.alert('Sair', 'Deseja realmente sair?', [
-      { text: 'Cancelar', style: 'cancel' },
-      { text: 'Sair', style: 'destructive', onPress: logout },
+    Alert.alert(strings.perfil.alertaSairTitulo, strings.perfil.alertaSairMensagem, [
+      { text: strings.perfil.alertaSairCancelar, style: 'cancel' },
+      { text: strings.perfil.alertaSairConfirmar, style: 'destructive', onPress: logout },
     ]);
   }
 
@@ -51,23 +52,23 @@ export default function PerfilScreen() {
         {avatarAtual ? (
           <Image source={avatarAtual.imagem} style={appStyles.avatarGrande} resizeMode="contain" />
         ) : (
-          <View style={[appStyles.avatarGrande, { backgroundColor: COLORS.primary + '20', justifyContent: 'center', alignItems: 'center' }]}>
-            <Ionicons name="happy-outline" size={60} color={COLORS.primary} />
+          <View style={[appStyles.avatarGrande, { backgroundColor: colors.primary + '20', justifyContent: 'center', alignItems: 'center' }]}>
+            <Ionicons name="happy-outline" size={60} color={colors.primary} />
           </View>
         )}
-        <Text style={appStyles.nome}>{user?.crianca?.nome || 'Amiguinho'}</Text>
+        <Text style={appStyles.nome}>{user?.crianca?.nome || strings.perfil.nomePadrao}</Text>
         <Text style={appStyles.idade}>{calcularIdade()}</Text>
       </View>
 
       {/* Escolher Avatar */}
-      <Text style={appStyles.secaoTitulo}>Escolha seu avatar</Text>
+      <Text style={appStyles.secaoTitulo}>{strings.perfil.escolherAvatar}</Text>
       <View style={appStyles.grid2Col}>
         {AVATARES.map((avatar) => (
           <TouchableOpacity
             key={avatar.id}
             style={[
               appStyles.avatarItem,
-              avatarSelecionado === avatar.id && { borderColor: COLORS.primary, borderWidth: 3 },
+              avatarSelecionado === avatar.id && { borderColor: colors.primary, borderWidth: 3 },
             ]}
             onPress={() => selecionarAvatar(avatar.id)}
           >
@@ -77,34 +78,35 @@ export default function PerfilScreen() {
       </View>
 
       {/* Medalhas */}
-      <Text style={appStyles.secaoTitulo}>Medalhas conquistadas</Text>
+      <Text style={appStyles.secaoTitulo}>{strings.perfil.medalhas}</Text>
       <View style={appStyles.grid2Col}>
-        {JOGOS_CONFIG.map((jogo) => {
-          const temPrata = medalhas.includes(jogo.medalha_prata);
-          const temOuro  = medalhas.includes(jogo.medalha_ouro);
+        {catalogo.map((jogo) => {
+          const ui     = jogosUI[jogo.id] || {};
+          const temPrata = medalhas.includes(jogo.medalhaPrata);
+          const temOuro  = medalhas.includes(jogo.medalhaOuro);
 
           return (
             <View key={jogo.id} style={[appStyles.medalhaJogoCard, { borderLeftColor: jogo.cor }]}>
-              <Text style={appStyles.medalhaJogoTitulo}>{jogo.tituloMedalha}</Text>
+              <Text style={appStyles.medalhaJogoTitulo}>{ui.tituloMedalha}</Text>
 
               <View style={appStyles.medalhaSlots}>
                 {[
-                  { conquistada: temPrata, cor: COR_PRATA, icone: 'medal-outline' },
-                  { conquistada: temOuro,  cor: COR_OURO,  icone: 'trophy' },
+                  { conquistada: temPrata, cor: corPrata, icone: 'medal-outline' },
+                  { conquistada: temOuro,  cor: corOuro,  icone: 'trophy' },
                 ].map(({ conquistada, cor, icone }, i) => (
                   <View
                     key={i}
                     style={[
                       appStyles.medalhaCirculo,
                       {
-                        backgroundColor: conquistada ? jogo.cor + '30' : COLORS.border + '60'
+                        backgroundColor: conquistada ? jogo.cor + '30' : colors.border + '60'
                       },
                     ]}
                   >
                     <Ionicons
                       name={conquistada ? icone : 'lock-closed'}
                       size={24}
-                      color={conquistada ? cor : COLORS.textLightest}
+                      color={conquistada ? cor : colors.textLightest}
                     />
                   </View>
                 ))}
@@ -116,7 +118,7 @@ export default function PerfilScreen() {
 
       {/* Botão Sair */}
       <TouchableOpacity style={appStyles.botaoSair} onPress={handleLogout}>
-        <Text style={appStyles.botaoSairTexto}>Sair</Text>
+        <Text style={appStyles.botaoSairTexto}>{strings.perfil.botaoSair}</Text>
       </TouchableOpacity>
     </ScrollView>
   );

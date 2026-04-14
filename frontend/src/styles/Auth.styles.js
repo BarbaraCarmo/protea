@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLORS, SIZES } from '../constants/colors';
+import { colors, sizes } from '../constants/colors';
 import { baseStyles, shadow } from './Base.styles';
 
 // Exporta os styles de Auth já mesclados com a base.
@@ -37,40 +37,40 @@ export const authStyles = {
         appName: {
             fontSize: 36,
             fontWeight: 'bold',
-            color: COLORS.primary,
+            color: colors.primary,
         },
         subtitle: {
-            fontSize: SIZES.md,
-            color: COLORS.textLight,
+            fontSize: sizes.md,
+            color: colors.textLight,
             marginTop: 6,
         },
 
         // ── Cadastro: títulos ────────────────────────────────────────────────────
         titulo: {
-            fontSize: SIZES.title,
+            fontSize: sizes.title,
             fontWeight: 'bold',
-            color: COLORS.text,
+            color: colors.text,
             marginBottom: 8,
             textAlign: 'center',
         },
         subtitulo: {
-            fontSize: SIZES.md,
-            color: COLORS.textLight,
+            fontSize: sizes.md,
+            color: colors.textLight,
             marginBottom: 24,
             textAlign: 'center',
         },
         secao: {
-            fontSize: SIZES.lg,
+            fontSize: sizes.lg,
             fontWeight: 'bold',
-            color: COLORS.primary,
+            color: colors.primary,
             marginTop: 16,
             marginBottom: 10,
         },
 
         // ── Botão principal (Login / Cadastro) ───────────────────────────────────
         botao: {
-            backgroundColor: COLORS.primary,
-            borderRadius: SIZES.radius,
+            backgroundColor: colors.primary,
+            borderRadius: sizes.radius,
             paddingVertical: 16,
             alignItems: 'center',
             justifyContent: 'center',
@@ -88,11 +88,11 @@ export const authStyles = {
             marginTop: 20,
         },
         linkTexto: {
-            fontSize: SIZES.md,
-            color: COLORS.textLight,
+            fontSize: sizes.md,
+            color: colors.textLight,
         },
         linkDestaque: {
-            color: COLORS.primary,
+            color: colors.primary,
             fontWeight: 'bold',
         },
     }),

@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, View, StyleSheet, Image } from 'react-native';
-import { COLORS, SIZES } from '../constants/colors';
+import { colors, sizes } from '../constants/colors';
 
 export default function GameCard({ titulo, descricao, imagem, cor, onPress }) {
   return (
@@ -20,8 +20,8 @@ export default function GameCard({ titulo, descricao, imagem, cor, onPress }) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: COLORS.surface,
-    borderRadius: SIZES.radius,
+    backgroundColor: colors.surface,
+    borderRadius: sizes.radius,
     padding: 16,
     marginBottom: 14,
     borderLeftWidth: 5,
@@ -33,8 +33,8 @@ const styles = StyleSheet.create({
   },
   header: { flexDirection: 'row', alignItems: 'center' },
   info: { flex: 1, marginRight: 12 },
-  titulo: { fontSize: SIZES.xl, fontWeight: 'bold', color: COLORS.text, flexShrink: 1, marginBottom: 6 },
-  descricao: { fontSize: SIZES.md, color: COLORS.textLight, lineHeight: 20 },
+  titulo: { fontSize: sizes.xl, fontWeight: 'bold', color: colors.text, flexShrink: 1, marginBottom: 6 },
+  descricao: { fontSize: sizes.md, color: colors.textLight, lineHeight: 20 },
   imagemJogo: {
     width: 88,
     height: 88,

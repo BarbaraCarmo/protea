@@ -1,9 +1,11 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// IMPORTANTE: Altere para o IP da sua máquina na rede local
-// Para encontrar: abra o terminal e digite "ipconfig" (Windows) ou "ifconfig" (Mac/Linux)
-const API_URL = 'http://192.168.0.103:3000/api';
+// Em produção: EXPO_PUBLIC_API_URL é definida em frontend/.env apontando para o Railway.
+// Em desenvolvimento local: substitua pelo IP da sua máquina na rede Wi-Fi.
+const API_URL =
+  process.env.EXPO_PUBLIC_API_URL ??
+  'http://192.168.0.103:3000/api';
 
 const api = axios.create({
   baseURL: API_URL,

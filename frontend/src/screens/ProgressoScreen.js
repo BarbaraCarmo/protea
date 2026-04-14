@@ -1,38 +1,48 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, Text, ScrollView } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '../constants/colors';
+import { colors } from '../constants/colors';
 import { useAuth } from '../context/AuthContext';
 import { appStyles } from '../styles/App.styles';
-import { JOGOS_CONFIG, COR_PRATA, COR_OURO, normalizarMedalhas } from '../constants/jogos';
+import { jogosUI, corPrata, corOuro, normalizarMedalhas } from '../constants/jogos';
+import { strings } from '../constants/strings';
 
 export default function ProgressoScreen() {
-  const { user } = useAuth();
+  const { user, catalogo, recarregarProgresso } = useAuth();
+
+  useFocusEffect(
+    useCallback(() => {
+      recarregarProgresso();
+    }, [])
+  );
   const progresso = user?.progresso || {};
-  const medalhas  = normalizarMedalhas(user?.medalhas);
+  const medalhas  = normalizarMedalhas(user?.medalhas, catalogo);
 
   function calcPorcentagem(jogo) {
+    if (!jogo.totalFases) return 0;
     const concluidos = progresso[jogo.id]?.concluidos?.length || 0;
     return Math.round((concluidos / jogo.totalFases) * 100);
   }
 
   return (
     <ScrollView style={appStyles.container} contentContainerStyle={appStyles.content}>
-      {JOGOS_CONFIG.map((jogo) => {
+      {catalogo.map((jogo) => {
+        const ui         = jogosUI[jogo.id] || {};
         const pct        = calcPorcentagem(jogo);
         const concluidos = progresso[jogo.id]?.concluidos?.length || 0;
-        const temPrata   = medalhas.includes(jogo.medalha_prata);
-        const temOuro    = medalhas.includes(jogo.medalha_ouro);
+        const temPrata   = medalhas.includes(jogo.medalhaPrata);
+        const temOuro    = medalhas.includes(jogo.medalhaOuro);
 
         return (
           <View key={jogo.id} style={appStyles.card}>
             <View style={appStyles.progressoCardHeader}>
               <View style={[appStyles.progressoIconContainer, { backgroundColor: jogo.cor + '20' }]}>
-                <Ionicons name={jogo.icone} size={28} color={jogo.cor} />
+                <Ionicons name={ui.icone} size={28} color={jogo.cor} />
               </View>
               <View style={appStyles.progressoCardInfo}>
                 <Text style={appStyles.progressoJogoTitulo}>{jogo.titulo}</Text>
-                <Text style={appStyles.progressoJogoFases}>{concluidos} de {jogo.totalFases} fases concluídas</Text>
+                <Text style={appStyles.progressoJogoFases}>{strings.progresso.fasesConcluidas(concluidos, jogo.totalFases)}</Text>
               </View>
             </View>
 
@@ -45,22 +55,22 @@ export default function ProgressoScreen() {
 
             <View style={appStyles.progressoMedalhasRow}>
               {[
-                { conquistada: temPrata, cor: COR_PRATA, icone: 'medal-outline', label: 'Prata — 50%' },
-                { conquistada: temOuro,  cor: COR_OURO,  icone: 'trophy',        label: 'Ouro — 100%' },
+                { conquistada: temPrata, cor: corPrata, icone: 'medal-outline', label: strings.progresso.medalhaPrata },
+                { conquistada: temOuro,  cor: corOuro,  icone: 'trophy',        label: strings.progresso.medalhaOuro },
               ].map(({ conquistada, cor, icone, label }) => (
                 <View
                   key={label}
                   style={[
                     appStyles.progressoMedalhaBadge,
-                    { backgroundColor: conquistada ? cor + '18' : COLORS.border + '50' },
+                    { backgroundColor: conquistada ? cor + '18' : colors.border + '50' },
                   ]}
                 >
                   <Ionicons
                     name={conquistada ? icone : 'lock-closed-outline'}
                     size={14}
-                    color={conquistada ? cor : COLORS.textLightest}
+                    color={conquistada ? cor : colors.textLightest}
                   />
-                  <Text style={[appStyles.progressoMedalhaTexto, { color: conquistada ? cor : COLORS.textLightest }]}>
+                  <Text style={[appStyles.progressoMedalhaTexto, { color: conquistada ? cor : colors.textLightest }]}>
                     {label}
                   </Text>
                 </View>

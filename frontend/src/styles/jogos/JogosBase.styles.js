@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLORS, SIZES } from '../../constants/colors';
+import { colors, sizes } from '../../constants/colors';
 import { baseStyles, shadow } from '../Base.styles';
 
 export { shadow };
@@ -22,13 +22,13 @@ export const jogosBaseStyles = {
     progressoBarra: {
       width: '100%',
       height: 12,
-      backgroundColor: COLORS.border,
+      backgroundColor: colors.border,
       borderRadius: 6,
       overflow: 'hidden',
     },
     progressoPreenchido: {
       height: '100%',
-      backgroundColor: COLORS.primary,
+      backgroundColor: colors.primary,
       borderRadius: 6,
     },
     progressoInfo: {
@@ -36,8 +36,8 @@ export const jogosBaseStyles = {
       alignItems: 'center',
     },
     progressoTexto: {
-      fontSize: SIZES.sm,
-      color: COLORS.textLight,
+      fontSize: sizes.sm,
+      color: colors.textLight,
       marginTop: 6,
     },
 
@@ -52,8 +52,8 @@ export const jogosBaseStyles = {
     // ── Card base com sombra ───────────────────────────────────────────────────
     // Pode conter imagem e texto. Sem ícones — todas as fases usam imagens ilustrativas.
     card: {
-      backgroundColor: COLORS.surface,
-      borderRadius: SIZES.radiusLg,
+      backgroundColor: colors.surface,
+      borderRadius: sizes.radiusLg,
       paddingHorizontal: 24,
       paddingTop: 24,
       paddingBottom: 16,
@@ -74,17 +74,17 @@ export const jogosBaseStyles = {
 
     // Label opcional dentro do card (ex: nome da parte do corpo no Semáforo)
     cardLabel: {
-      fontSize: SIZES.xl,
+      fontSize: sizes.xl,
       fontWeight: '600',
-      color: COLORS.text,
+      color: colors.text,
       textAlign: 'center',
       marginTop: 4,
     },
 
     // ── Texto de situação / pergunta — fica ABAIXO do card ────────────────────
     situacaoDescricao: {
-      fontSize: SIZES.lg,
-      color: COLORS.text,
+      fontSize: sizes.lg,
+      color: colors.text,
       textAlign: 'center',
       lineHeight: 30,
       fontWeight: '300',
@@ -95,8 +95,8 @@ export const jogosBaseStyles = {
 
     // Instrução secundária — abaixo da descrição (ex: "Escolha a melhor opção:")
     instrucaoSecundaria: {
-      fontSize: SIZES.lg,
-      color: COLORS.textLight,
+      fontSize: sizes.lg,
+      color: colors.textLight,
       textAlign: 'center',
       fontWeight: '500',
       marginBottom: 16,
@@ -108,16 +108,16 @@ export const jogosBaseStyles = {
       flexDirection: 'row',
       alignItems: 'center',
       alignSelf: 'center',
-      backgroundColor: COLORS.primary + '15',
+      backgroundColor: colors.primary + '15',
       paddingHorizontal: 14,
       paddingVertical: 6,
-      borderRadius: SIZES.radiusSm,
+      borderRadius: sizes.radiusSm,
       marginBottom: 16,
       gap: 6,
     },
     multiplaTagTexto: {
-      fontSize: SIZES.sm,
-      color: COLORS.primary,
+      fontSize: sizes.sm,
+      color: colors.primary,
       fontWeight: '600',
     },
 
@@ -135,16 +135,16 @@ export const jogosBaseStyles = {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: COLORS.primary,
+      backgroundColor: colors.primary,
       paddingVertical: 16,
       paddingHorizontal: 32,
-      borderRadius: SIZES.radius,
+      borderRadius: sizes.radius,
       gap: 10,
       ...shadow.md,
     },
     jogoBotaoPrimarioTexto: {
-      color: COLORS.textWhite,
-      fontSize: SIZES.lg,
+      color: colors.textWhite,
+      fontSize: sizes.lg,
       fontWeight: 'bold',
     },
     // @deprecated — use jogoBotaoPrimario
@@ -152,16 +152,16 @@ export const jogosBaseStyles = {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: COLORS.primary,
+      backgroundColor: colors.primary,
       paddingVertical: 16,
       paddingHorizontal: 32,
-      borderRadius: SIZES.radius,
+      borderRadius: sizes.radius,
       gap: 10,
       ...shadow.md,
     },
     botaoAcaoTexto: {
-      color: COLORS.textWhite,
-      fontSize: SIZES.lg,
+      color: colors.textWhite,
+      fontSize: sizes.lg,
       fontWeight: 'bold',
     },
 
@@ -176,7 +176,7 @@ export const jogosBaseStyles = {
       width: 140,
       height: 140,
       borderRadius: 70,
-      backgroundColor: COLORS.primary + '20',
+      backgroundColor: colors.primary + '20',
       justifyContent: 'center',
       alignItems: 'center',
       marginBottom: 24,
@@ -192,12 +192,12 @@ export const jogosBaseStyles = {
     concluidoTitulo: {
       fontSize: 32,
       fontWeight: 'bold',
-      color: COLORS.text,
+      color: colors.text,
       marginBottom: 12,
     },
     concluidoTexto: {
-      fontSize: SIZES.lg,
-      color: COLORS.textLight,
+      fontSize: sizes.lg,
+      color: colors.textLight,
       textAlign: 'center',
       lineHeight: 24,
       marginBottom: 32,
@@ -206,26 +206,26 @@ export const jogosBaseStyles = {
       flexDirection: 'row',
       paddingVertical: 16,
       paddingHorizontal: 32,
-      borderRadius: SIZES.radius,
+      borderRadius: sizes.radius,
       alignItems: 'center',
       justifyContent: 'center',
       gap: 10,
       ...shadow.md,
     },
     botaoConclusaoTexto: {
-      color: COLORS.textWhite,
-      fontSize: SIZES.lg,
+      color: colors.textWhite,
+      fontSize: sizes.lg,
       fontWeight: 'bold',
     },
 
     // ── Opções de resposta ───────────────────────────────────────────────────
     opcaoBotao: {
-      backgroundColor: COLORS.surface,
-      borderRadius: SIZES.radius,
+      backgroundColor: colors.surface,
+      borderRadius: sizes.radius,
       padding: 18,
       marginBottom: 12,
       borderWidth: 2,
-      borderColor: COLORS.border,
+      borderColor: colors.border,
       ...shadow.sm,
     },
     opcaoConteudo: {
@@ -233,8 +233,8 @@ export const jogosBaseStyles = {
       alignItems: 'center',
     },
     opcaoTexto: {
-      fontSize: SIZES.lg,
-      color: COLORS.text,
+      fontSize: sizes.lg,
+      color: colors.text,
       flex: 1,
       lineHeight: 24,
     },
@@ -243,13 +243,13 @@ export const jogosBaseStyles = {
     dicaContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      borderRadius: SIZES.radius,
+      borderRadius: sizes.radius,
       padding: 14,
       marginTop: 8,
     },
     dicaTexto: {
-      fontSize: SIZES.md,
-      color: COLORS.text,
+      fontSize: sizes.md,
+      color: colors.text,
       marginLeft: 10,
       flex: 1,
       lineHeight: 20,

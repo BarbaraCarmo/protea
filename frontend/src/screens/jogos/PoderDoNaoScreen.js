@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '../../constants/colors';
+import { colors } from '../../constants/colors';
 import { imagemPorChave } from '../../constants/imagemAssets';
 import { poderDoNaoScreenStyles as styles } from '../../styles/jogos/JogosTemas.styles';
 import { useAuth } from '../../context/AuthContext';
@@ -17,8 +17,10 @@ import FeedbackModal from '../../components/FeedbackModal';
 import MedalhaModal from '../../components/MedalhaModal';
 import { jogosService } from '../../services/api';
 
+const jogoId = 'poderDoNao';
+
 export default function PoderDoNaoScreen({ navigation }) {
-  const { atualizarProgresso } = useAuth();
+  const { atualizarProgresso, user } = useAuth();
 
   const [fases, setFases] = useState([]);
   const [carregando, setCarregando] = useState(true);
@@ -39,6 +41,19 @@ export default function PoderDoNaoScreen({ navigation }) {
       .catch(() => setErro('Não foi possível carregar o jogo. Tente novamente.'))
       .finally(() => setCarregando(false));
   }, []);
+
+  // Retoma da primeira fase ainda não concluída
+  useEffect(() => {
+    if (fases.length === 0) return;
+    const concluidos = user?.progresso?.[jogoId]?.concluidos || [];
+    if (concluidos.length === 0) return;
+    const primeiraFasePendente = fases.findIndex(f => !concluidos.includes(f.id));
+    if (primeiraFasePendente === -1) {
+      setConcluido(true);
+    } else {
+      setFaseAtual(primeiraFasePendente);
+    }
+  }, [fases]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fase = fases[faseAtual];
   const totalFases = fases.length;
@@ -61,7 +76,7 @@ export default function PoderDoNaoScreen({ navigation }) {
 
     if (correto) {
       novasMedalhasRef.current = [];
-      atualizarProgresso('poderDoNao', fase.id).then((resultado) => {
+      atualizarProgresso(jogoId, fase.id).then((resultado) => {
         novasMedalhasRef.current = resultado?.novasMedalhas || [];
       });
     }
@@ -80,8 +95,8 @@ export default function PoderDoNaoScreen({ navigation }) {
     setOpcaoSelecionada(null);
 
     if (acertou) {
-      const prata = novasMedalhasRef.current.includes('poderDoNao_prata');
-      const ouro  = novasMedalhasRef.current.includes('poderDoNao_ouro');
+      const prata = novasMedalhasRef.current.includes(`${jogoId}_prata`);
+      const ouro  = novasMedalhasRef.current.includes(`${jogoId}_ouro`);
       if (prata || ouro) {
         novasMedalhasRef.current = [];
         setMedalhaConquistada(prata ? 'prata' : 'ouro');
@@ -99,7 +114,7 @@ export default function PoderDoNaoScreen({ navigation }) {
   if (carregando) {
     return (
       <SafeAreaView style={styles.container}>
-        <ActivityIndicator size="large" color={COLORS.primary} style={{ flex: 1 }} />
+        <ActivityIndicator size="large" color={colors.primary} style={{ flex: 1 }} />
       </SafeAreaView>
     );
   }
@@ -108,13 +123,13 @@ export default function PoderDoNaoScreen({ navigation }) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.concluidoContainer}>
-          <Ionicons name="cloud-offline-outline" size={64} color={COLORS.textLight} />
+          <Ionicons name="cloud-offline-outline" size={64} color={colors.textLight} />
           <Text style={styles.concluidoTexto}>{erro}</Text>
           <TouchableOpacity
-            style={[styles.botaoConclusao, { backgroundColor: COLORS.accent }]}
+            style={[styles.botaoConclusao, { backgroundColor: colors.accent }]}
             onPress={() => navigation.goBack()}
           >
-            <Ionicons name="arrow-back" size={22} color={COLORS.textWhite} />
+            <Ionicons name="arrow-back" size={22} color={colors.textWhite} />
             <Text style={styles.botaoConclusaoTexto}>Voltar</Text>
           </TouchableOpacity>
         </View>
@@ -127,9 +142,9 @@ export default function PoderDoNaoScreen({ navigation }) {
       <SafeAreaView style={styles.container}>
         <View style={styles.concluidoContainer}>
           <View
-            style={[styles.concluidoIconContainer, { backgroundColor: COLORS.accent + '20' }]}
+            style={[styles.concluidoIconContainer, { backgroundColor: colors.accent + '20' }]}
           >
-            <Ionicons name="trophy-outline" size={80} color={COLORS.accent} />
+            <Ionicons name="trophy-outline" size={80} color={colors.accent} />
           </View>
           <Text style={styles.concluidoTitulo}>Parabéns!</Text>
           <Text style={styles.concluidoTexto}>
@@ -137,10 +152,10 @@ export default function PoderDoNaoScreen({ navigation }) {
             dizer NÃO de forma firme e respeitosa.
           </Text>
           <TouchableOpacity
-            style={[styles.botaoConclusao, { backgroundColor: COLORS.accent }]}
+            style={[styles.botaoConclusao, { backgroundColor: colors.accent }]}
             onPress={() => navigation.goBack()}
           >
-            <Ionicons name="home-outline" size={20} color={COLORS.textWhite} />
+            <Ionicons name="home-outline" size={20} color={colors.textWhite} />
             <Text style={styles.botaoConclusaoTexto}>Voltar ao Início</Text>
           </TouchableOpacity>
         </View>
@@ -170,7 +185,7 @@ export default function PoderDoNaoScreen({ navigation }) {
               source={imagemPorChave[fase.ilustracao]}
               width={150}
               height={150}
-              cor={COLORS.accent}
+              cor={colors.accent}
             />
           </View>
         </View>
@@ -205,8 +220,8 @@ export default function PoderDoNaoScreen({ navigation }) {
         ))}
 
         {/* Dica */}
-        <View style={[styles.dicaContainer, { backgroundColor: COLORS.accent + '15' }]}>
-          <Ionicons name="bulb-outline" size={20} color={COLORS.accent} />
+        <View style={[styles.dicaContainer, { backgroundColor: colors.accent + '15' }]}>
+          <Ionicons name="bulb-outline" size={20} color={colors.accent} />
           <Text style={styles.dicaTexto}>
             Lembre-se: você pode dizer NÃO de forma firme e educada!
           </Text>

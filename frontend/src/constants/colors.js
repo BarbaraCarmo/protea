@@ -1,5 +1,5 @@
 // Paleta baseada nas cores do símbolo do TEA (tons suaves, baixo estímulo visual)
-export const COLORS = {
+export const colors = {
   primary: '#7BB3A0',       // Verde suave (principal)
   primaryDark: '#5A9A84',   // Verde mais escuro
   secondary: '#A8D4E6',     // Azul claro suave
@@ -34,12 +34,12 @@ export const COLORS = {
   toqueRuim: '#E88E8E',
 };
 
-export const FONTS = {
+export const fonts = {
   regular: 'System',
   bold: 'System',
 };
 
-export const SIZES = {
+export const sizes = {
   xs: 10,
   sm: 12,
   md: 14,

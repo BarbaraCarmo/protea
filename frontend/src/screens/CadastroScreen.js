@@ -5,7 +5,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '../constants/colors';
+import { colors } from '../constants/colors';
+import { strings } from '../constants/strings';
 import { useAuth } from '../context/AuthContext';
 import { authStyles } from '../styles/Auth.styles';
 import { imagemApp } from '../constants/imagemAssets';
@@ -39,22 +40,22 @@ export default function CadastroScreen({ navigation }) {
     const { nomeResponsavel, email, telefone, grauParentesco, senha, confirmarSenha, nomeCrianca, dataNascimento } = form;
 
     if (!nomeResponsavel || !email || !telefone || !grauParentesco || !senha || !nomeCrianca || !dataNascimento) {
-      Alert.alert('Atenção', 'Preencha todos os campos.');
+      Alert.alert(strings.auth.alertas.tituloAtencao, strings.auth.alertas.camposObrigatorios);
       return;
     }
     if (senha !== confirmarSenha) {
-      Alert.alert('Atenção', 'As senhas não coincidem.');
+      Alert.alert(strings.auth.alertas.tituloAtencao, strings.auth.alertas.senhasDiferentes);
       return;
     }
     if (senha.length < 6) {
-      Alert.alert('Atenção', 'A senha deve ter pelo menos 6 caracteres.');
+      Alert.alert(strings.auth.alertas.tituloAtencao, strings.auth.alertas.senhaCurta);
       return;
     }
 
     // Converter data DD/MM/AAAA para Date
     const partes = dataNascimento.split('/');
     if (partes.length !== 3) {
-      Alert.alert('Atenção', 'Data de nascimento inválida. Use DD/MM/AAAA.');
+      Alert.alert(strings.auth.alertas.tituloAtencao, strings.auth.alertas.dataInvalida);
       return;
     }
     const dataISO = new Date(`${partes[2]}-${partes[1]}-${partes[0]}`);
@@ -75,8 +76,8 @@ export default function CadastroScreen({ navigation }) {
         },
       });
     } catch (error) {
-      const msg = error.response?.data?.mensagem || 'Erro ao cadastrar. Tente novamente.';
-      Alert.alert('Erro', msg);
+      const msg = error.response?.data?.mensagem || strings.auth.alertas.erroCadastro;
+      Alert.alert(strings.auth.alertas.tituloErro, msg);
     } finally {
       setLoading(false);
     }
@@ -87,59 +88,59 @@ export default function CadastroScreen({ navigation }) {
     <KeyboardAvoidingView style={authStyles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ScrollView contentContainerStyle={authStyles.scrollPadrao} keyboardShouldPersistTaps="handled">
         <TouchableOpacity style={authStyles.voltar} onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color={COLORS.primary} />
+          <Ionicons name="arrow-back" size={24} color={colors.primary} />
         </TouchableOpacity>
 
-        <Text style={authStyles.titulo}>Criar Conta</Text>
-        <Text style={authStyles.subtitulo}>Preencha os dados do responsável e da criança</Text>
+        <Text style={authStyles.titulo}>{strings.auth.cadastro.titulo}</Text>
+        <Text style={authStyles.subtitulo}>{strings.auth.cadastro.subtitulo}</Text>
 
         {/* Dados do Responsável */}
-        <Text style={authStyles.secao}>Dados do Responsável</Text>
+        <Text style={authStyles.secao}>{strings.auth.cadastro.secaoResponsavel}</Text>
 
-        <TextInput style={authStyles.inputSimples} placeholder="Nome completo" placeholderTextColor={COLORS.textLightest}
+        <TextInput style={authStyles.inputSimples} placeholder={strings.auth.cadastro.placeholderNomeResponsavel} placeholderTextColor={colors.textLightest}
           value={form.nomeResponsavel} onChangeText={(v) => updateForm('nomeResponsavel', v)} />
 
-        <TextInput style={authStyles.inputSimples} placeholder="Email" placeholderTextColor={COLORS.textLightest}
+        <TextInput style={authStyles.inputSimples} placeholder={strings.auth.cadastro.placeholderEmail} placeholderTextColor={colors.textLightest}
           value={form.email} onChangeText={(v) => updateForm('email', v)}
           keyboardType="email-address" autoCapitalize="none" />
 
-        <TextInput style={authStyles.inputSimples} placeholder="Telefone" placeholderTextColor={COLORS.textLightest}
+        <TextInput style={authStyles.inputSimples} placeholder={strings.auth.cadastro.placeholderTelefone} placeholderTextColor={colors.textLightest}
           value={form.telefone} onChangeText={(v) => updateForm('telefone', v)}
           keyboardType="phone-pad" />
 
-        <TextInput style={authStyles.inputSimples} placeholder="Grau de parentesco (ex: Mãe, Pai, Avó)"
-          placeholderTextColor={COLORS.textLightest}
+        <TextInput style={authStyles.inputSimples} placeholder={strings.auth.cadastro.placeholderParentesco}
+          placeholderTextColor={colors.textLightest}
           value={form.grauParentesco} onChangeText={(v) => updateForm('grauParentesco', v)} />
 
-        <TextInput style={authStyles.inputSimples} placeholder="Senha (mínimo 6 caracteres)" placeholderTextColor={COLORS.textLightest}
+        <TextInput style={authStyles.inputSimples} placeholder={strings.auth.cadastro.placeholderSenha} placeholderTextColor={colors.textLightest}
           value={form.senha} onChangeText={(v) => updateForm('senha', v)} secureTextEntry />
 
-        <TextInput style={authStyles.inputSimples} placeholder="Confirmar senha" placeholderTextColor={COLORS.textLightest}
+        <TextInput style={authStyles.inputSimples} placeholder={strings.auth.cadastro.placeholderConfirmarSenha} placeholderTextColor={colors.textLightest}
           value={form.confirmarSenha} onChangeText={(v) => updateForm('confirmarSenha', v)} secureTextEntry />
 
         {/* Dados da Criança */}
-        <Text style={authStyles.secao}>Dados da Criança</Text>
+        <Text style={authStyles.secao}>{strings.auth.cadastro.secaoCrianca}</Text>
 
-        <TextInput style={authStyles.inputSimples} placeholder="Nome da criança" placeholderTextColor={COLORS.textLightest}
+        <TextInput style={authStyles.inputSimples} placeholder={strings.auth.cadastro.placeholderNomeCrianca} placeholderTextColor={colors.textLightest}
           value={form.nomeCrianca} onChangeText={(v) => updateForm('nomeCrianca', v)} />
 
-        <TextInput style={authStyles.inputSimples} placeholder="Data de nascimento (DD/MM/AAAA)"
-          placeholderTextColor={COLORS.textLightest}
+        <TextInput style={authStyles.inputSimples} placeholder={strings.auth.cadastro.placeholderDataNascimento}
+          placeholderTextColor={colors.textLightest}
           value={form.dataNascimento}
           onChangeText={(v) => updateForm('dataNascimento', formatarData(v))}
           keyboardType="numeric" maxLength={10} />
 
         <TouchableOpacity style={authStyles.botao} onPress={handleCadastro} disabled={loading}>
           {loading ? (
-            <ActivityIndicator color={COLORS.textWhite} />
+            <ActivityIndicator color={colors.textWhite} />
           ) : (
-            <Text style={authStyles.botaoPrimarioTexto}>Cadastrar</Text>
+            <Text style={authStyles.botaoPrimarioTexto}>{strings.auth.cadastro.botaoCadastrar}</Text>
           )}
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => navigation.goBack()} style={authStyles.link}>
           <Text style={authStyles.linkTexto}>
-            Já tem uma conta? <Text style={authStyles.linkDestaque}>Entre aqui</Text>
+            {strings.auth.cadastro.linkLogin} <Text style={authStyles.linkDestaque}>{strings.auth.cadastro.linkLoginDestaque}</Text>
           </Text>
         </TouchableOpacity>
       </ScrollView>

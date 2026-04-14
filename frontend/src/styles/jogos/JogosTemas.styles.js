@@ -3,7 +3,7 @@
  * Tudo compartilhado (card, imagem, textos, opções, conclusão) está em JogosBase.
  */
 import { StyleSheet } from 'react-native';
-import { COLORS, SIZES } from '../../constants/colors';
+import { colors, sizes } from '../../constants/colors';
 import { jogosBaseStyles, shadow } from './JogosBase.styles';
 
 // ─── O Poder do Não ───────────────────────────────────────────────────────────
@@ -20,15 +20,15 @@ export const poderDoNaoScreenStyles = {
       width: 32,
       height: 32,
       borderRadius: 16,
-      backgroundColor: COLORS.accent + '25',
+      backgroundColor: colors.accent + '25',
       justifyContent: 'center',
       alignItems: 'center',
       marginRight: 14,
     },
     opcaoNumeroTexto: {
-      fontSize: SIZES.md,
+      fontSize: sizes.md,
       fontWeight: 'bold',
-      color: COLORS.accent,
+      color: colors.accent,
     },
   }),
 };
@@ -40,7 +40,7 @@ export const adultosDeConfiancaScreenStyles = {
     // Barra de progresso na cor warm
     progressoPreenchidoWarm: {
       height: '100%',
-      backgroundColor: COLORS.warm,
+      backgroundColor: colors.warm,
       borderRadius: 6,
     },
     // Checkbox / radio ao lado de cada opção
@@ -52,18 +52,18 @@ export const adultosDeConfiancaScreenStyles = {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: COLORS.primary,
+      backgroundColor: colors.primary,
       paddingVertical: 16,
-      borderRadius: SIZES.radius,
+      borderRadius: sizes.radius,
       marginTop: 4,
       marginBottom: 12,
       gap: 10,
       ...shadow.md,
     },
     confirmarBotaoTexto: {
-      fontSize: SIZES.lg,
+      fontSize: sizes.lg,
       fontWeight: 'bold',
-      color: COLORS.textWhite,
+      color: colors.textWhite,
     },
   }),
 };
@@ -84,15 +84,15 @@ export const semaforoDoCorpoScreenStyles = {
     botaoCor: {
       flex: 1,
       paddingVertical: 18,
-      borderRadius: SIZES.radius,
+      borderRadius: sizes.radius,
       alignItems: 'center',
       justifyContent: 'center',
       gap: 4,
       ...shadow.md,
     },
     botaoCorTexto: {
-      color: COLORS.textWhite,
-      fontSize: SIZES.md,
+      color: colors.textWhite,
+      fontSize: sizes.md,
       fontWeight: 'bold',
     },
     // Legenda verde / amarelo / vermelho
@@ -114,23 +114,23 @@ export const semaforoDoCorpoScreenStyles = {
       borderRadius: 7,
     },
     legendaTexto: {
-      fontSize: SIZES.sm,
-      color: COLORS.textLight,
+      fontSize: sizes.sm,
+      color: colors.textLight,
     },
     // Botão de voltar (conclusão / erro)
     botaoVoltar: {
       flexDirection: 'row',
-      backgroundColor: COLORS.primary,
+      backgroundColor: colors.primary,
       paddingVertical: 16,
       paddingHorizontal: 32,
-      borderRadius: SIZES.radius,
+      borderRadius: sizes.radius,
       alignItems: 'center',
       gap: 10,
       ...shadow.md,
     },
     botaoVoltarTexto: {
-      color: COLORS.textWhite,
-      fontSize: SIZES.lg,
+      color: colors.textWhite,
+      fontSize: sizes.lg,
       fontWeight: 'bold',
     },
   }),
@@ -151,37 +151,37 @@ export const toqueBomVsRuimScreenStyles = {
     botaoResposta: {
       flex: 1,
       paddingVertical: 22,
-      borderRadius: SIZES.radius,
+      borderRadius: sizes.radius,
       alignItems: 'center',
       justifyContent: 'center',
       gap: 8,
       ...shadow.md,
     },
     botaoBom: {
-      backgroundColor: COLORS.toqueBom,
+      backgroundColor: colors.toqueBom,
     },
     botaoRuim: {
-      backgroundColor: COLORS.toqueRuim,
+      backgroundColor: colors.toqueRuim,
     },
     botaoRespostaTexto: {
-      color: COLORS.textWhite,
-      fontSize: SIZES.md,
+      color: colors.textWhite,
+      fontSize: sizes.md,
       fontWeight: 'bold',
     },
     // Botão de voltar ao início (conclusão)
     botaoVoltarInicio: {
       flexDirection: 'row',
-      backgroundColor: COLORS.primary,
+      backgroundColor: colors.primary,
       paddingVertical: 16,
       paddingHorizontal: 32,
-      borderRadius: SIZES.radius,
+      borderRadius: sizes.radius,
       alignItems: 'center',
       gap: 10,
       ...shadow.md,
     },
     botaoVoltarTexto: {
-      color: COLORS.textWhite,
-      fontSize: SIZES.lg,
+      color: colors.textWhite,
+      fontSize: sizes.lg,
       fontWeight: 'bold',
     },
   }),

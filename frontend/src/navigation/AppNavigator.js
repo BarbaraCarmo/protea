@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
-import { COLORS } from '../constants/colors';
+import { colors } from '../constants/colors';
 
 // Telas de autenticação
 import LoginScreen from '../screens/LoginScreen';
@@ -40,18 +40,18 @@ function TabNavigator() {
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: COLORS.primary,
-        tabBarInactiveTintColor: COLORS.textLight,
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.textLight,
         tabBarStyle: {
-          backgroundColor: COLORS.surface,
-          borderTopColor: COLORS.border,
+          backgroundColor: colors.surface,
+          borderTopColor: colors.border,
           height: 80,
           paddingBottom: 8,
           paddingTop: 8,
         },
         tabBarLabelStyle: { fontSize: 11, fontWeight: '600' },
-        headerStyle: { backgroundColor: COLORS.primary, height: 120 },
-        headerTintColor: COLORS.textWhite,
+        headerStyle: { backgroundColor: colors.primary, height: 120 },
+        headerTintColor: colors.textWhite,
         headerTitleStyle: { fontWeight: 'bold', fontSize: 24 },
       })}
     >
@@ -80,8 +80,8 @@ export default function AppNavigator() {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
-          headerStyle: { backgroundColor: COLORS.primary },
-          headerTintColor: COLORS.textWhite,
+          headerStyle: { backgroundColor: colors.primary },
+          headerTintColor: colors.textWhite,
           headerTitleStyle: { fontWeight: 'bold', fontSize: 18 },
           headerBackButtonDisplayMode: 'minimal',
         }}

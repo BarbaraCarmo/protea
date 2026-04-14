@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { Modal, View, Text, TouchableOpacity, Animated, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SIZES } from '../constants/colors';
-import { COR_PRATA, COR_OURO } from '../constants/jogos';
+import { colors, sizes } from '../constants/colors';
+import { corPrata, corOuro } from '../constants/jogos';
 
 export default function MedalhaModal({ visible, tipo, jogoTitulo, onClose }) {
   const scaleAnim = useRef(new Animated.Value(0)).current;
@@ -29,7 +29,7 @@ export default function MedalhaModal({ visible, tipo, jogoTitulo, onClose }) {
   }, [visible, scaleAnim, starAnim]);
 
   const isPrata = tipo === 'prata';
-  const cor     = isPrata ? COR_PRATA : COR_OURO;
+  const cor     = isPrata ? corPrata : corOuro;
   const titulo  = isPrata ? 'Medalha de Prata!' : 'Medalha de Ouro!';
   const icone   = isPrata ? 'medal-outline' : 'trophy';
   const mensagem = isPrata
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   card: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: colors.surface,
     borderRadius: 24,
     padding: 24,
     alignItems: 'center',
@@ -93,20 +93,20 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   titulo: {
-    fontSize: SIZES.xxl,
+    fontSize: sizes.xxl,
     fontWeight: 'bold',
     marginBottom: 4,
     textAlign: 'center',
   },
   jogoNome: {
-    fontSize: SIZES.md,
-    color: COLORS.textLight,
+    fontSize: sizes.md,
+    color: colors.textLight,
     marginBottom: 12,
     textAlign: 'center',
   },
   mensagem: {
-    fontSize: SIZES.md,
-    color: COLORS.text,
+    fontSize: sizes.md,
+    color: colors.text,
     textAlign: 'center',
     lineHeight: 24,
     marginTop: 24,
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   },
   botaoTexto: {
     color: '#fff',
-    fontSize: SIZES.lg,
+    fontSize: sizes.lg,
     fontWeight: 'bold',
   },
 });

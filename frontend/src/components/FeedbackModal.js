@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, Modal, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SIZES } from '../constants/colors';
+import { colors, sizes } from '../constants/colors';
+import { strings } from '../constants/strings';
 
 export default function FeedbackModal({ visible, acertou, mensagem, onClose }) {
   return (
@@ -12,16 +13,16 @@ export default function FeedbackModal({ visible, acertou, mensagem, onClose }) {
             <Ionicons
               name={acertou ? 'happy-outline' : 'sad-outline'}
               size={60}
-              color={acertou ? COLORS.success : COLORS.error}
+              color={acertou ? colors.success : colors.error}
             />
           </View>
-          <Text style={styles.titulo}>{acertou ? 'Muito bem!' : 'Ops!'}</Text>
+          <Text style={styles.titulo}>{acertou ? strings.feedback.tituloAcerto : strings.feedback.tituloErro}</Text>
           <Text style={styles.mensagem}>{mensagem}</Text>
           <TouchableOpacity
-            style={[styles.botao, { backgroundColor: acertou ? COLORS.success : COLORS.warm }]}
+            style={[styles.botao, { backgroundColor: acertou ? colors.success : colors.warm }]}
             onPress={onClose}
           >
-            <Text style={styles.botaoTexto}>{acertou ? 'Continuar' : 'Tentar de novo'}</Text>
+            <Text style={styles.botaoTexto}>{acertou ? strings.feedback.botaoContinuar : strings.feedback.botaoTentarNovamente}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -38,8 +39,8 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   container: {
-    backgroundColor: COLORS.surface,
-    borderRadius: SIZES.radiusLg,
+    backgroundColor: colors.surface,
+    borderRadius: sizes.radiusLg,
     padding: 30,
     alignItems: 'center',
     width: '100%',
@@ -50,18 +51,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
   },
-  sucesso: { borderTopWidth: 4, borderTopColor: COLORS.success },
-  erro: { borderTopWidth: 4, borderTopColor: COLORS.error },
+  sucesso: { borderTopWidth: 4, borderTopColor: colors.success },
+  erro: { borderTopWidth: 4, borderTopColor: colors.error },
   iconContainer: { marginBottom: 15 },
   titulo: {
-    fontSize: SIZES.xxl,
+    fontSize: sizes.xxl,
     fontWeight: 'bold',
-    color: COLORS.text,
+    color: colors.text,
     marginBottom: 10,
   },
   mensagem: {
-    fontSize: SIZES.lg,
-    color: COLORS.text,
+    fontSize: sizes.lg,
+    color: colors.text,
     textAlign: 'center',
     lineHeight: 24,
     marginBottom: 20,
@@ -69,11 +70,11 @@ const styles = StyleSheet.create({
   botao: {
     paddingVertical: 14,
     paddingHorizontal: 40,
-    borderRadius: SIZES.radius,
+    borderRadius: sizes.radius,
   },
   botaoTexto: {
-    color: COLORS.textWhite,
-    fontSize: SIZES.lg,
+    color: colors.textWhite,
+    fontSize: sizes.lg,
     fontWeight: 'bold',
   },
 });

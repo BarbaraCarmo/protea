@@ -4,7 +4,8 @@ import {
   KeyboardAvoidingView, Platform, ScrollView, Alert, ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '../constants/colors';
+import { colors } from '../constants/colors';
+import { strings } from '../constants/strings';
 import { useAuth } from '../context/AuthContext';
 import { authStyles } from '../styles/Auth.styles';
 import { imagemApp } from '../constants/imagemAssets';
@@ -18,15 +19,15 @@ export default function LoginScreen({ navigation }) {
 
   async function handleLogin() {
     if (!email.trim() || !senha.trim()) {
-      Alert.alert('Atenção', 'Preencha todos os campos.');
+      Alert.alert(strings.auth.alertas.tituloAtencao, strings.auth.alertas.camposObrigatorios);
       return;
     }
     setLoading(true);
     try {
       await login(email.trim().toLowerCase(), senha);
     } catch (error) {
-      const msg = error.response?.data?.mensagem || 'Erro ao fazer login. Verifique suas credenciais.';
-      Alert.alert('Erro', msg);
+      const msg = error.response?.data?.mensagem || strings.auth.alertas.erroLogin;
+      Alert.alert(strings.auth.alertas.tituloErro, msg);
     } finally {
       setLoading(false);
     }
@@ -43,18 +44,18 @@ export default function LoginScreen({ navigation }) {
           <View style={authStyles.logoIcone}>
           <Image source={imagemApp.logo} style={authStyles.logoIcone} />
           </View>
-          <Text style={authStyles.appName}>Protea</Text>
-          <Text style={authStyles.subtitle}>Aprender brincando, proteger amando</Text>
+          <Text style={authStyles.appName}>{strings.app.nome}</Text>
+          <Text style={authStyles.subtitle}>{strings.app.tagline}</Text>
         </View>
 
         {/* Formulário */}
         <View style={authStyles.form}>
           <View style={authStyles.inputContainer}>
-            <Ionicons name="mail-outline" size={20} color={COLORS.textLight} style={authStyles.inputIcone} />
+            <Ionicons name="mail-outline" size={20} color={colors.textLight} style={authStyles.inputIcone} />
             <TextInput
               style={authStyles.input}
-              placeholder="Email do responsável"
-              placeholderTextColor={COLORS.textLight}
+              placeholder={strings.auth.login.placeholderEmail}
+              placeholderTextColor={colors.textLight}
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
@@ -63,31 +64,31 @@ export default function LoginScreen({ navigation }) {
           </View>
 
           <View style={authStyles.inputContainer}>
-            <Ionicons name="lock-closed-outline" size={20} color={COLORS.textLight} style={authStyles.inputIcone} />
+            <Ionicons name="lock-closed-outline" size={20} color={colors.textLight} style={authStyles.inputIcone} />
             <TextInput
               style={authStyles.input}
-              placeholder="Senha"
-              placeholderTextColor={COLORS.textLight}
+              placeholder={strings.auth.login.placeholderSenha}
+              placeholderTextColor={colors.textLight}
               value={senha}
               onChangeText={setSenha}
               secureTextEntry={!mostrarSenha}
             />
             <TouchableOpacity onPress={() => setMostrarSenha(!mostrarSenha)}>
-              <Ionicons name={mostrarSenha ? 'eye-off-outline' : 'eye-outline'} size={20} color={COLORS.textLight} />
+              <Ionicons name={mostrarSenha ? 'eye-off-outline' : 'eye-outline'} size={20} color={colors.textLight} />
             </TouchableOpacity>
           </View>
 
           <TouchableOpacity style={authStyles.botao} onPress={handleLogin} disabled={loading}>
             {loading ? (
-              <ActivityIndicator color={COLORS.textWhite} />
+              <ActivityIndicator color={colors.textWhite} />
             ) : (
-              <Text style={authStyles.botaoPrimarioTexto}>Entrar</Text>
+              <Text style={authStyles.botaoPrimarioTexto}>{strings.auth.login.botaoEntrar}</Text>
             )}
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => navigation.navigate('Cadastro')} style={authStyles.link}>
             <Text style={authStyles.linkTexto}>
-              Não tem conta? <Text style={authStyles.linkDestaque}>Cadastre-se</Text>
+              {strings.auth.login.linkCadastro} <Text style={authStyles.linkDestaque}>{strings.auth.login.linkCadastroDestaque}</Text>
             </Text>
           </TouchableOpacity>
         </View>

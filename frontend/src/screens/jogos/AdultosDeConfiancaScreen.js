@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '../../constants/colors';
+import { colors } from '../../constants/colors';
 import { imagemJogo } from '../../constants/imagemAssets';
 import { adultosDeConfiancaScreenStyles as styles } from '../../styles/jogos/JogosTemas.styles';
 import { useAuth } from '../../context/AuthContext';
@@ -17,8 +17,10 @@ import FeedbackModal from '../../components/FeedbackModal';
 import MedalhaModal from '../../components/MedalhaModal';
 import { jogosService } from '../../services/api';
 
+const jogoId = 'adultoDeConfianca';
+
 export default function AdultosDeConfiancaScreen({ navigation }) {
-  const { atualizarProgresso } = useAuth();
+  const { atualizarProgresso, user } = useAuth();
 
   const [fases, setFases] = useState([]);
   const [carregando, setCarregando] = useState(true);
@@ -40,6 +42,19 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
       .catch(() => setErro('Não foi possível carregar o jogo. Tente novamente.'))
       .finally(() => setCarregando(false));
   }, []);
+
+  // Retoma da primeira fase ainda não concluída
+  useEffect(() => {
+    if (fases.length === 0) return;
+    const concluidos = user?.progresso?.[jogoId]?.concluidos || [];
+    if (concluidos.length === 0) return;
+    const primeiraFasePendente = fases.findIndex(f => !concluidos.includes(f.id));
+    if (primeiraFasePendente === -1) {
+      setConcluido(true);
+    } else {
+      setFaseAtual(primeiraFasePendente);
+    }
+  }, [fases]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fase = fases[faseAtual];
   const totalFases = fases.length;
@@ -79,7 +94,7 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
 
     if (correto) {
       novasMedalhasRef.current = [];
-      atualizarProgresso('adultoDeConfianca', fase.id).then((resultado) => {
+      atualizarProgresso(jogoId, fase.id).then((resultado) => {
         novasMedalhasRef.current = resultado?.novasMedalhas || [];
       });
     }
@@ -98,8 +113,8 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
   function fecharModal() {
     setModalVisible(false);
     if (acertou) {
-      const prata = novasMedalhasRef.current.includes('adultoDeConfianca_prata');
-      const ouro  = novasMedalhasRef.current.includes('adultoDeConfianca_ouro');
+      const prata = novasMedalhasRef.current.includes(`${jogoId}_prata`);
+      const ouro  = novasMedalhasRef.current.includes(`${jogoId}_ouro`);
       if (prata || ouro) {
         novasMedalhasRef.current = [];
         setMedalhaConquistada(prata ? 'prata' : 'ouro');
@@ -120,16 +135,16 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
   function getOpcaoEstilo(index) {
     if (!respondido) {
       if (selecionados.includes(index)) {
-        return { borderColor: COLORS.primary, borderWidth: 3, backgroundColor: COLORS.primary + '10' };
+        return { borderColor: colors.primary, borderWidth: 3, backgroundColor: colors.primary + '10' };
       }
       return {};
     }
     const opcao = fase.opcoes[index];
     if (opcao.correto) {
-      return { borderColor: COLORS.success, borderWidth: 3, backgroundColor: COLORS.success + '10' };
+      return { borderColor: colors.success, borderWidth: 3, backgroundColor: colors.success + '10' };
     }
     if (selecionados.includes(index) && !opcao.correto) {
-      return { borderColor: COLORS.error, borderWidth: 3, backgroundColor: COLORS.error + '10' };
+      return { borderColor: colors.error, borderWidth: 3, backgroundColor: colors.error + '10' };
     }
     return {};
   }
@@ -138,24 +153,24 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
     const isMultipla = fase.tipo === 'selecao_multipla';
     if (!respondido) {
       if (selecionados.includes(index)) {
-        return <Ionicons name={isMultipla ? 'checkbox' : 'radio-button-on'} size={24} color={COLORS.primary} />;
+        return <Ionicons name={isMultipla ? 'checkbox' : 'radio-button-on'} size={24} color={colors.primary} />;
       }
-      return <Ionicons name={isMultipla ? 'square-outline' : 'radio-button-off'} size={24} color={COLORS.border} />;
+      return <Ionicons name={isMultipla ? 'square-outline' : 'radio-button-off'} size={24} color={colors.border} />;
     }
     const opcao = fase.opcoes[index];
     if (opcao.correto) {
-      return <Ionicons name={isMultipla ? 'checkbox' : 'radio-button-on'} size={24} color={COLORS.success} />;
+      return <Ionicons name={isMultipla ? 'checkbox' : 'radio-button-on'} size={24} color={colors.success} />;
     }
     if (selecionados.includes(index)) {
-      return <Ionicons name={isMultipla ? 'checkbox-outline' : 'radio-button-on'} size={24} color={COLORS.error} />;
+      return <Ionicons name={isMultipla ? 'checkbox-outline' : 'radio-button-on'} size={24} color={colors.error} />;
     }
-    return <Ionicons name={isMultipla ? 'square-outline' : 'radio-button-off'} size={24} color={COLORS.border} />;
+    return <Ionicons name={isMultipla ? 'square-outline' : 'radio-button-off'} size={24} color={colors.border} />;
   }
 
   if (carregando) {
     return (
       <SafeAreaView style={styles.container}>
-        <ActivityIndicator size="large" color={COLORS.primary} style={{ flex: 1 }} />
+        <ActivityIndicator size="large" color={colors.primary} style={{ flex: 1 }} />
       </SafeAreaView>
     );
   }
@@ -164,13 +179,13 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.concluidoContainer}>
-          <Ionicons name="cloud-offline-outline" size={64} color={COLORS.textLight} />
+          <Ionicons name="cloud-offline-outline" size={64} color={colors.textLight} />
           <Text style={styles.concluidoTexto}>{erro}</Text>
           <TouchableOpacity
-            style={[styles.botaoConclusao, { backgroundColor: COLORS.warm }]}
+            style={[styles.botaoConclusao, { backgroundColor: colors.warm }]}
             onPress={() => navigation.goBack()}
           >
-            <Ionicons name="arrow-back" size={22} color={COLORS.textWhite} />
+            <Ionicons name="arrow-back" size={22} color={colors.textWhite} />
             <Text style={styles.botaoConclusaoTexto}>Voltar</Text>
           </TouchableOpacity>
         </View>
@@ -183,9 +198,9 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
       <SafeAreaView style={styles.container}>
         <View style={styles.concluidoContainer}>
           <View
-            style={[styles.concluidoIconContainer, { backgroundColor: COLORS.warm + '20' }]}
+            style={[styles.concluidoIconContainer, { backgroundColor: colors.warm + '20' }]}
           >
-            <Ionicons name="people-outline" size={80} color={COLORS.warm} />
+            <Ionicons name="people-outline" size={80} color={colors.warm} />
           </View>
           <Text style={styles.concluidoTitulo}>Parabéns!</Text>
           <Text style={styles.concluidoTexto}>
@@ -193,10 +208,10 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
             adultos de confiança e como pedir ajuda quando precisar.
           </Text>
           <TouchableOpacity
-            style={[styles.botaoConclusao, { backgroundColor: COLORS.warm }]}
+            style={[styles.botaoConclusao, { backgroundColor: colors.warm }]}
             onPress={() => navigation.goBack()}
           >
-            <Ionicons name="home-outline" size={20} color={COLORS.textWhite} />
+            <Ionicons name="home-outline" size={20} color={colors.textWhite} />
             <Text style={styles.botaoConclusaoTexto}>Voltar ao Início</Text>
           </TouchableOpacity>
         </View>
@@ -228,7 +243,7 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
               source={imagemJogo.adultoDeConfianca}
               width={150}
               height={150}
-              cor={COLORS.warm}
+              cor={colors.warm}
             />
           </View>
         </View>
@@ -239,7 +254,7 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
         {/* Tag de seleção múltipla — abaixo do texto */}
         {fase.tipo === 'selecao_multipla' && (
           <View style={styles.multiplaTag}>
-            <Ionicons name="layers-outline" size={16} color={COLORS.primary} />
+            <Ionicons name="layers-outline" size={16} color={colors.primary} />
             <Text style={styles.multiplaTagTexto}>Selecione todas as corretas</Text>
           </View>
         )}
@@ -269,14 +284,14 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
             onPress={() => verificarResposta()}
             activeOpacity={0.7}
           >
-            <Ionicons name="checkmark-done-outline" size={22} color={COLORS.textWhite} />
+            <Ionicons name="checkmark-done-outline" size={22} color={colors.textWhite} />
             <Text style={styles.confirmarBotaoTexto}>Confirmar Resposta</Text>
           </TouchableOpacity>
         )}
 
         {/* Dica */}
-        <View style={[styles.dicaContainer, { backgroundColor: COLORS.warm + '15' }]}>
-          <Ionicons name="shield-checkmark-outline" size={20} color={COLORS.warm} />
+        <View style={[styles.dicaContainer, { backgroundColor: colors.warm + '15' }]}>
+          <Ionicons name="shield-checkmark-outline" size={20} color={colors.warm} />
           <Text style={styles.dicaTexto}>
             Adultos de confiança são pessoas que cuidam de você, te ouvem e te protegem!
           </Text>

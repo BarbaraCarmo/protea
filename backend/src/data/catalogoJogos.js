@@ -6,6 +6,9 @@ module.exports = [
     tela: 'SemaforoDoCorpo',
     imagemKey: 'semaforoIlustracao',
     cor: '#7BC88E',
+    totalFases: 10,
+    medalhaPrata: 'semaforoDoCorpo_prata',
+    medalhaOuro: 'semaforoDoCorpo_ouro',
   },
   {
     id: 'toqueBomVsRuim',
@@ -14,6 +17,9 @@ module.exports = [
     tela: 'ToqueBomVsRuim',
     imagemKey: 'toqueBomToqueRuimIlustracao',
     cor: '#A8D4E6',
+    totalFases: 11,
+    medalhaPrata: 'toqueBomVsRuim_prata',
+    medalhaOuro: 'toqueBomVsRuim_ouro',
   },
   {
     id: 'poderDoNao',
@@ -22,6 +28,9 @@ module.exports = [
     tela: 'PoderDoNao',
     imagemKey: 'poderDoNaoIlustracao',
     cor: '#E8C87A',
+    totalFases: 12,
+    medalhaPrata: 'poderDoNao_prata',
+    medalhaOuro: 'poderDoNao_ouro',
   },
   {
     id: 'adultoDeConfianca',
@@ -30,6 +39,9 @@ module.exports = [
     tela: 'AdultosDeConfianca',
     imagemKey: 'adultosDeConfiancaIlustracao',
     cor: '#E6A8A8',
+    totalFases: 5,
+    medalhaPrata: 'adultoDeConfianca_prata',
+    medalhaOuro: 'adultoDeConfianca_ouro',
   },
 ];
 

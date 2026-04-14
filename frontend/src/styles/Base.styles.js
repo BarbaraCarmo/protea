@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLORS, SIZES } from '../constants/colors';
+import { colors, sizes } from '../constants/colors';
 
 // ─── Tokens de sombra ────────────────────────────────────────────────────────
 export const shadow = {
@@ -32,21 +32,21 @@ export const baseStyles = StyleSheet.create({
     // ── Layout ──────────────────────────────────────────────────────────────────
     container: {
         flex: 1,
-        backgroundColor: COLORS.background,
+        backgroundColor: colors.background,
     },
 
     // ── Tipografia ───────────────────────────────────────────────────────────────
     secaoTitulo: {
-        fontSize: SIZES.xl,
+        fontSize: sizes.xl,
         fontWeight: 'bold',
-        color: COLORS.text,
+        color: colors.text,
         marginBottom: 14,
     },
 
     // ── Card genérico (surface + sombra + radius) ────────────────────────────────
     card: {
-        backgroundColor: COLORS.surface,
-        borderRadius: SIZES.radius,
+        backgroundColor: colors.surface,
+        borderRadius: sizes.radius,
         padding: 18,
         marginBottom: 16,
         ...shadow.sm,
@@ -54,8 +54,8 @@ export const baseStyles = StyleSheet.create({
 
     // ── Botão primário texto ─────────────────────────────────────────────────────
     botaoPrimarioTexto: {
-        color: COLORS.textWhite,
-        fontSize: SIZES.xl,
+        color: colors.textWhite,
+        fontSize: sizes.xl,
         fontWeight: 'bold',
     },
 
@@ -63,12 +63,12 @@ export const baseStyles = StyleSheet.create({
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: COLORS.surface,
-        borderRadius: SIZES.radius,
+        backgroundColor: colors.surface,
+        borderRadius: sizes.radius,
         paddingHorizontal: 16,
         marginBottom: 14,
         borderWidth: 1,
-        borderColor: COLORS.border,
+        borderColor: colors.border,
     },
     inputIcone: {
         marginRight: 10,
@@ -76,25 +76,25 @@ export const baseStyles = StyleSheet.create({
     input: {
         flex: 1,
         paddingVertical: 16,
-        fontSize: SIZES.lg,
-        color: COLORS.text,
+        fontSize: sizes.lg,
+        color: colors.text,
     },
     inputSimples: {
-        backgroundColor: COLORS.surface,
-        borderRadius: SIZES.radius,
+        backgroundColor: colors.surface,
+        borderRadius: sizes.radius,
         paddingHorizontal: 16,
         paddingVertical: 14,
-        fontSize: SIZES.lg,
-        color: COLORS.text,
+        fontSize: sizes.lg,
+        color: colors.text,
         marginBottom: 12,
         borderWidth: 1,
-        borderColor: COLORS.border,
+        borderColor: colors.border,
     },
 
     // ── Barra de progresso ───────────────────────────────────────────────────────
     progressoBarra: {
         height: 10,
-        backgroundColor: COLORS.border,
+        backgroundColor: colors.border,
         borderRadius: 5,
         overflow: 'hidden',
         marginBottom: 6,
@@ -104,7 +104,7 @@ export const baseStyles = StyleSheet.create({
         borderRadius: 5,
     },
     progressoTexto: {
-        fontSize: SIZES.sm,
+        fontSize: sizes.sm,
         fontWeight: 'bold',
         textAlign: 'right',
     },

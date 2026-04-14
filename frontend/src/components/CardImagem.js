@@ -5,7 +5,7 @@ import {
   ActivityIndicator,
   StyleSheet,
 } from 'react-native';
-import { COLORS } from '../constants/colors';
+import { colors } from '../constants/colors';
 
 /**
  * Exibe uma imagem com ActivityIndicator enquanto carrega e
@@ -16,7 +16,7 @@ import { COLORS } from '../constants/colors';
  *   source   — require(...) ou { uri: '...' }
  *   width    — largura da imagem (padrão 150)
  *   height   — altura da imagem (padrão 150)
- *   cor      — cor do indicador (padrão COLORS.primary)
+ *   cor      — cor do indicador (padrão colors.primary)
  */
 export default function CardImagem({ source, width = 150, height = 150, cor }) {
   const [carregando, setCarregando] = useState(true);
@@ -46,7 +46,7 @@ export default function CardImagem({ source, width = 150, height = 150, cor }) {
       {carregando && (
         <ActivityIndicator
           style={StyleSheet.absoluteFill}
-          color={cor ?? COLORS.primary}
+          color={cor ?? colors.primary}
           size="large"
         />
       )}

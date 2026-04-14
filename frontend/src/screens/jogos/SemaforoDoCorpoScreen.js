@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '../../constants/colors';
+import { colors } from '../../constants/colors';
 import { imagemJogo } from '../../constants/imagemAssets';
 import { semaforoDoCorpoScreenStyles as styles } from '../../styles/jogos/JogosTemas.styles';
 import { useAuth } from '../../context/AuthContext';
@@ -22,8 +22,10 @@ const getMensagemErro = (fase, corEscolhida) => {
   return fase.feedbacks.verdeParaOutro;
 };
 
+const jogoId = 'semaforoDoCorpo';
+
 export default function SemaforoDoCorpoScreen({ navigation }) {
-  const { atualizarProgresso } = useAuth();
+  const { atualizarProgresso, user } = useAuth();
 
   const [fases, setFases] = useState([]);
   const [carregando, setCarregando] = useState(true);
@@ -45,6 +47,19 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
       .finally(() => setCarregando(false));
   }, []);
 
+  // Retoma da primeira fase ainda não concluída
+  useEffect(() => {
+    if (fases.length === 0) return;
+    const concluidos = user?.progresso?.[jogoId]?.concluidos || [];
+    if (concluidos.length === 0) return;
+    const primeiraFasePendente = fases.findIndex(f => !concluidos.includes(f.id));
+    if (primeiraFasePendente === -1) {
+      setConcluido(true);
+    } else {
+      setFaseAtual(primeiraFasePendente);
+    }
+  }, [fases]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const fase = fases[faseAtual];
 
   const animarCard = useCallback(() => {
@@ -63,7 +78,7 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
       if (correto) {
         setAcertou(true);
         setMensagem(fase.feedbacks.correto);
-        atualizarProgresso('semaforoDoCorpo', fase.id).then((resultado) => {
+        atualizarProgresso(jogoId, fase.id).then((resultado) => {
           novasMedalhasRef.current = resultado?.novasMedalhas || [];
         });
       } else {
@@ -86,8 +101,8 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
   const handleFecharModal = useCallback(() => {
     setModalVisible(false);
     if (acertou) {
-      const prata = novasMedalhasRef.current.includes('semaforoDoCorpo_prata');
-      const ouro  = novasMedalhasRef.current.includes('semaforoDoCorpo_ouro');
+      const prata = novasMedalhasRef.current.includes(`${jogoId}_prata`);
+      const ouro  = novasMedalhasRef.current.includes(`${jogoId}_ouro`);
       if (prata || ouro) {
         novasMedalhasRef.current = [];
         setMedalhaConquistada(prata ? 'prata' : 'ouro');
@@ -105,7 +120,7 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
   if (carregando) {
     return (
       <SafeAreaView style={styles.container}>
-        <ActivityIndicator size="large" color={COLORS.primary} style={{ flex: 1 }} />
+        <ActivityIndicator size="large" color={colors.primary} style={{ flex: 1 }} />
       </SafeAreaView>
     );
   }
@@ -114,10 +129,10 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.concluidoContainer}>
-          <Ionicons name="cloud-offline-outline" size={64} color={COLORS.textLight} />
+          <Ionicons name="cloud-offline-outline" size={64} color={colors.textLight} />
           <Text style={styles.concluidoTexto}>{erro}</Text>
           <TouchableOpacity style={styles.botaoVoltar} onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back" size={22} color={COLORS.textWhite} />
+            <Ionicons name="arrow-back" size={22} color={colors.textWhite} />
             <Text style={styles.botaoVoltarTexto}>Voltar</Text>
           </TouchableOpacity>
         </View>
@@ -130,7 +145,7 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
       <SafeAreaView style={styles.container}>
         <View style={styles.concluidoContainer}>
           <View style={styles.concluidoIcone}>
-            <Ionicons name="trophy-outline" size={80} color={COLORS.accent} />
+            <Ionicons name="trophy-outline" size={80} color={colors.accent} />
           </View>
           <Text style={styles.concluidoTitulo}>Parabéns!</Text>
           <Text style={styles.concluidoTexto}>
@@ -142,7 +157,7 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
             onPress={() => navigation.goBack()}
             activeOpacity={0.8}
           >
-            <Ionicons name="home-outline" size={22} color={COLORS.textWhite} />
+            <Ionicons name="home-outline" size={22} color={colors.textWhite} />
             <Text style={styles.botaoVoltarTexto}>Voltar ao início</Text>
           </TouchableOpacity>
         </View>
@@ -183,15 +198,15 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
       {/* Legenda */}
       <View style={styles.legendaContainer}>
         <View style={styles.legendaItem}>
-          <View style={[styles.legendaBola, { backgroundColor: COLORS.verde }]} />
+          <View style={[styles.legendaBola, { backgroundColor: colors.verde }]} />
           <Text style={styles.legendaTexto}>Seguro</Text>
         </View>
         <View style={styles.legendaItem}>
-          <View style={[styles.legendaBola, { backgroundColor: COLORS.amarelo }]} />
+          <View style={[styles.legendaBola, { backgroundColor: colors.amarelo }]} />
           <Text style={styles.legendaTexto}>Atenção</Text>
         </View>
         <View style={styles.legendaItem}>
-          <View style={[styles.legendaBola, { backgroundColor: COLORS.vermelho }]} />
+          <View style={[styles.legendaBola, { backgroundColor: colors.vermelho }]} />
           <Text style={styles.legendaTexto}>Privado</Text>
         </View>
       </View>
@@ -199,7 +214,7 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
       {/* Botões de resposta */}
       <View style={styles.botoesContainer}>
         <TouchableOpacity
-          style={[styles.botaoCor, { backgroundColor: COLORS.verde }]}
+          style={[styles.botaoCor, { backgroundColor: colors.verde }]}
           onPress={() => handleResposta('verde')}
           activeOpacity={0.8}
         >
@@ -208,7 +223,7 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.botaoCor, { backgroundColor: COLORS.amarelo }]}
+          style={[styles.botaoCor, { backgroundColor: colors.amarelo }]}
           onPress={() => handleResposta('amarelo')}
           activeOpacity={0.8}
         >
@@ -217,7 +232,7 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.botaoCor, { backgroundColor: COLORS.vermelho }]}
+          style={[styles.botaoCor, { backgroundColor: colors.vermelho }]}
           onPress={() => handleResposta('vermelho')}
           activeOpacity={0.8}
         >

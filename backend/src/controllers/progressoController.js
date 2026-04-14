@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const catalogoJogos = require('../data/catalogoJogos');
 
 exports.getProgresso = async (req, res) => {
   try {
@@ -27,9 +28,9 @@ exports.atualizarProgresso = async (req, res) => {
     }
 
     // Verificar medalhas (prata = 50%, ouro = 100%)
-    const totalFases = { semaforoDoCorpo: 10, toqueBomVsRuim: 11, poderDoNao: 12, adultoDeConfianca: 5 };
+    const jogoConfig = catalogoJogos.find(j => j.id === jogo);
     const concluidos = user.progresso[jogo].concluidos.length;
-    const total      = totalFases[jogo];
+    const total      = jogoConfig?.totalFases;
 
     const medalha_prata = `${jogo}_prata`;
     const medalha_ouro  = `${jogo}_ouro`;

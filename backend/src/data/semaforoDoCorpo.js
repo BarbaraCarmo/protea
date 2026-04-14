@@ -3,7 +3,7 @@ module.exports = {
   descricao: 'Classifique as partes do corpo como verde, amarelo ou vermelho, como um semáforo!',
   icone: 'traffic-light',
   categorias: {
-    verde: { cor: '#4CAF50', descricao: 'Áreas ok de serem tocadas por outras pessoas' },
+    verde: { cor: '#4CAF50', descricao: 'Áreas que podem ser tocadas por outras pessoas, com o seu consentimento' },
     amarelo: { cor: '#FFC107', descricao: 'Atenção ao contexto, tome cuidado' },
     vermelho: { cor: '#F44336', descricao: 'Áreas íntimas, outros não podem tocar' },
   },

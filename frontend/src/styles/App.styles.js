@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLORS, SIZES } from '../constants/colors';
+import { colors, sizes } from '../constants/colors';
 import { baseStyles, shadow } from './Base.styles';
 
 // Exporta os styles das abas já mesclados com a base.
@@ -17,10 +17,10 @@ export const appStyles = {
             marginVertical: 24,
         },
         erroTexto: {
-            color: COLORS.error,
+            color: colors.error,
             textAlign: 'center',
             marginBottom: 16,
-            fontSize: SIZES.md,
+            fontSize: sizes.md,
         },
 
         // ══════════════════════════════════════════════════════════════════════════
@@ -35,13 +35,13 @@ export const appStyles = {
             marginTop: 10,
         },
         saudacao: {
-            fontSize: SIZES.xxl,
+            fontSize: sizes.xxl,
             fontWeight: 'bold',
-            color: COLORS.text,
+            color: colors.text,
         },
         subtitulo: {
-            fontSize: SIZES.md,
-            color: COLORS.textLight,
+            fontSize: sizes.md,
+            color: colors.textLight,
             marginTop: 4,
         },
 
@@ -66,13 +66,13 @@ export const appStyles = {
             flex: 1,
         },
         progressoJogoTitulo: {
-            fontSize: SIZES.lg,
+            fontSize: sizes.lg,
             fontWeight: 'bold',
-            color: COLORS.text,
+            color: colors.text,
         },
         progressoJogoFases: {
-            fontSize: SIZES.sm,
-            color: COLORS.textLight,
+            fontSize: sizes.sm,
+            color: colors.textLight,
             marginTop: 2,
         },
         progressoMarcador50: {
@@ -81,7 +81,7 @@ export const appStyles = {
             top: -3,
             width: 2,
             height: 16,
-            backgroundColor: COLORS.border,
+            backgroundColor: colors.border,
             borderRadius: 1,
         },
         progressoMedalhasRow: {
@@ -98,7 +98,7 @@ export const appStyles = {
             gap: 5,
         },
         progressoMedalhaTexto: {
-            fontSize: SIZES.xs,
+            fontSize: sizes.xs,
             fontWeight: 'bold',
         },
 
@@ -107,8 +107,8 @@ export const appStyles = {
         // ══════════════════════════════════════════════════════════════════════════
 
         perfilCard: {
-            backgroundColor: COLORS.surface,
-            borderRadius: SIZES.radiusLg,
+            backgroundColor: colors.surface,
+            borderRadius: sizes.radiusLg,
             padding: 24,
             alignItems: 'center',
             marginBottom: 24,
@@ -122,23 +122,23 @@ export const appStyles = {
             alignItems: 'center',
             marginBottom: 14,
             borderWidth: 3,
-            borderColor: COLORS.primary,
+            borderColor: colors.primary,
         },
         nome: {
-            fontSize: SIZES.xxl,
+            fontSize: sizes.xxl,
             fontWeight: 'bold',
-            color: COLORS.text,
+            color: colors.text,
         },
         idade: {
-            fontSize: SIZES.lg,
-            color: COLORS.textLight,
+            fontSize: sizes.lg,
+            color: colors.textLight,
             marginTop: 4,
         },
         // ── Medalha por jogo (grid 2×2) — container usa baseStyles.grid2Col ────────
         medalhaJogoCard: {
             width: '49%',
-            backgroundColor: COLORS.surface,
-            borderRadius: SIZES.radiusLg,
+            backgroundColor: colors.surface,
+            borderRadius: sizes.radiusLg,
             paddingVertical: 16,
             paddingHorizontal: 12,
             alignItems: 'center',
@@ -147,9 +147,9 @@ export const appStyles = {
             ...shadow.sm,
         },
         medalhaJogoTitulo: {
-            fontSize: SIZES.sm,
+            fontSize: sizes.sm,
             fontWeight: 'bold',
-            color: COLORS.text,
+            color: colors.text,
             textAlign: 'center',
             marginBottom: 14,
         },
@@ -175,25 +175,25 @@ export const appStyles = {
             width: '23%',
             height: '23%',
             aspectRatio: 1,
-            backgroundColor: COLORS.surface,
+            backgroundColor: colors.surface,
             borderRadius: '50%',
             justifyContent: 'center',
             alignItems: 'center',
             marginBottom: 12,
             borderWidth: 2,
-            borderColor: COLORS.border,
+            borderColor: colors.border,
         },
         botaoSair: {
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: COLORS.warmDark,
-            borderRadius: SIZES.radius,
+            backgroundColor: colors.warmDark,
+            borderRadius: sizes.radius,
             paddingVertical: 16,
             ...shadow.md,
         },
         botaoSairTexto: {
-            color: COLORS.textWhite,
-            fontSize: SIZES.xl,
+            color: colors.textWhite,
+            fontSize: sizes.xl,
             fontWeight: 'bold',
             marginLeft: 8,
         },
@@ -204,8 +204,8 @@ export const appStyles = {
 
         // Disque 100
         disque100Card: {
-            backgroundColor: COLORS.warmDark,
-            borderRadius: SIZES.radiusLg,
+            backgroundColor: colors.warmDark,
+            borderRadius: sizes.radiusLg,
             padding: 20,
             marginBottom: 24,
         },
@@ -227,17 +227,17 @@ export const appStyles = {
             flex: 1,
         },
         disque100Titulo: {
-            fontSize: SIZES.xxl,
+            fontSize: sizes.xxl,
             fontWeight: 'bold',
-            color: COLORS.textWhite,
+            color: colors.textWhite,
         },
         disque100Subtitulo: {
-            fontSize: SIZES.md,
+            fontSize: sizes.md,
             color: 'rgba(255,255,255,0.8)',
         },
         disque100Texto: {
-            fontSize: SIZES.md,
-            color: COLORS.textWhite,
+            fontSize: sizes.md,
+            color: colors.textWhite,
             lineHeight: 22,
             marginBottom: 16,
         },
@@ -246,20 +246,20 @@ export const appStyles = {
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: 'rgba(255,255,255,0.25)',
-            borderRadius: SIZES.radius,
+            borderRadius: sizes.radius,
             paddingVertical: 14,
             gap: 8,
         },
         disque100BotaoTexto: {
-            color: COLORS.textWhite,
-            fontSize: SIZES.lg,
+            color: colors.textWhite,
+            fontSize: sizes.lg,
             fontWeight: 'bold',
         },
 
         // FAQ
         faqCard: {
-            backgroundColor: COLORS.surface,
-            borderRadius: SIZES.radius,
+            backgroundColor: colors.surface,
+            borderRadius: sizes.radius,
             padding: 16,
             marginBottom: 12,
         },
@@ -269,42 +269,42 @@ export const appStyles = {
             marginBottom: 8,
         },
         faqPergunta: {
-            fontSize: SIZES.lg,
+            fontSize: sizes.lg,
             fontWeight: 'bold',
-            color: COLORS.text,
+            color: colors.text,
             marginLeft: 10,
             flex: 1,
         },
         faqResposta: {
-            fontSize: SIZES.md,
-            color: COLORS.textLight,
+            fontSize: sizes.md,
+            color: colors.textLight,
             lineHeight: 22,
             paddingLeft: 32,
         },
 
         // Sobre
         sobreCard: {
-            backgroundColor: COLORS.surface,
-            borderRadius: SIZES.radiusLg,
+            backgroundColor: colors.surface,
+            borderRadius: sizes.radiusLg,
             padding: 24,
             alignItems: 'center',
             marginBottom: 24,
             ...shadow.sm,
         },
         sobreNome: {
-            fontSize: SIZES.xxl,
+            fontSize: sizes.xxl,
             fontWeight: 'bold',
-            color: COLORS.primary,
+            color: colors.primary,
             marginBottom: 5,
         },
         sobreVersao: {
-            fontSize: SIZES.sm,
-            color: COLORS.textLight,
+            fontSize: sizes.sm,
+            color: colors.textLight,
             marginBottom: 12,
         },
         sobreDescricao: {
-            fontSize: SIZES.md,
-            color: COLORS.text,
+            fontSize: sizes.md,
+            color: colors.text,
             textAlign: 'center',
             lineHeight: 22,
         },
@@ -319,14 +319,14 @@ export const appStyles = {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: COLORS.surface,
-            borderRadius: SIZES.radius,
+            backgroundColor: colors.surface,
+            borderRadius: sizes.radius,
             paddingVertical: 16,
             marginBottom: 20,
         },
         contatoTexto: {
-            fontSize: SIZES.md,
-            color: COLORS.text,
+            fontSize: sizes.md,
+            color: colors.text,
             marginLeft: 10,
         },
     }),

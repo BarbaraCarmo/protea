@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '../../constants/colors';
+import { colors } from '../../constants/colors';
 import { imagemPorChave } from '../../constants/imagemAssets';
 import { toqueBomVsRuimScreenStyles as styles } from '../../styles/jogos/JogosTemas.styles';
 import { useAuth } from '../../context/AuthContext';
@@ -17,8 +17,10 @@ import FeedbackModal from '../../components/FeedbackModal';
 import MedalhaModal from '../../components/MedalhaModal';
 import { jogosService } from '../../services/api';
 
+const jogoId = 'toqueBomVsRuim';
+
 export default function ToqueBomVsRuimScreen({ navigation }) {
-  const { atualizarProgresso } = useAuth();
+  const { atualizarProgresso, user } = useAuth();
 
   const [fases, setFases] = useState([]);
   const [carregando, setCarregando] = useState(true);
@@ -40,6 +42,19 @@ export default function ToqueBomVsRuimScreen({ navigation }) {
       .finally(() => setCarregando(false));
   }, []);
 
+  // Retoma da primeira fase ainda não concluída
+  useEffect(() => {
+    if (fases.length === 0) return;
+    const concluidos = user?.progresso?.[jogoId]?.concluidos || [];
+    if (concluidos.length === 0) return;
+    const primeiraFasePendente = fases.findIndex(f => !concluidos.includes(f.id));
+    if (primeiraFasePendente === -1) {
+      setConcluido(true);
+    } else {
+      setFaseAtual(primeiraFasePendente);
+    }
+  }, [fases]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const fase = fases[faseAtual];
 
   const animarEntrada = useCallback(() => {
@@ -60,7 +75,7 @@ export default function ToqueBomVsRuimScreen({ navigation }) {
       if (correto) {
         setAcertou(true);
         setMensagem(fase.feedbackCorreto);
-        atualizarProgresso('toqueBomVsRuim', fase.id).then((resultado) => {
+        atualizarProgresso(jogoId, fase.id).then((resultado) => {
           novasMedalhasRef.current = resultado?.novasMedalhas || [];
         });
       } else {
@@ -84,8 +99,8 @@ export default function ToqueBomVsRuimScreen({ navigation }) {
   const handleFecharModal = useCallback(() => {
     setModalVisible(false);
     if (acertou) {
-      const prata = novasMedalhasRef.current.includes('toqueBomVsRuim_prata');
-      const ouro  = novasMedalhasRef.current.includes('toqueBomVsRuim_ouro');
+      const prata = novasMedalhasRef.current.includes(`${jogoId}_prata`);
+      const ouro  = novasMedalhasRef.current.includes(`${jogoId}_ouro`);
       if (prata || ouro) {
         novasMedalhasRef.current = [];
         setMedalhaConquistada(prata ? 'prata' : 'ouro');
@@ -103,7 +118,7 @@ export default function ToqueBomVsRuimScreen({ navigation }) {
   if (carregando) {
     return (
       <SafeAreaView style={styles.container}>
-        <ActivityIndicator size="large" color={COLORS.primary} style={{ flex: 1 }} />
+        <ActivityIndicator size="large" color={colors.primary} style={{ flex: 1 }} />
       </SafeAreaView>
     );
   }
@@ -112,10 +127,10 @@ export default function ToqueBomVsRuimScreen({ navigation }) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.concluidoContainer}>
-          <Ionicons name="cloud-offline-outline" size={64} color={COLORS.textLight} />
+          <Ionicons name="cloud-offline-outline" size={64} color={colors.textLight} />
           <Text style={styles.concluidoTexto}>{erro}</Text>
           <TouchableOpacity style={styles.botaoAcao} onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back" size={22} color={COLORS.textWhite} />
+            <Ionicons name="arrow-back" size={22} color={colors.textWhite} />
             <Text style={styles.botaoAcaoTexto}>Voltar</Text>
           </TouchableOpacity>
         </View>
@@ -128,7 +143,7 @@ export default function ToqueBomVsRuimScreen({ navigation }) {
       <SafeAreaView style={styles.container}>
         <View style={styles.concluidoContainer}>
           <View style={styles.concluidoIcone}>
-            <Ionicons name="shield-checkmark-outline" size={80} color={COLORS.primary} />
+            <Ionicons name="shield-checkmark-outline" size={80} color={colors.primary} />
           </View>
           <Text style={styles.concluidoTitulo}>Parabéns!</Text>
           <Text style={styles.concluidoTexto}>
@@ -140,7 +155,7 @@ export default function ToqueBomVsRuimScreen({ navigation }) {
             onPress={() => navigation.goBack()}
             activeOpacity={0.8}
           >
-            <Ionicons name="home-outline" size={22} color={COLORS.textWhite} />
+            <Ionicons name="home-outline" size={22} color={colors.textWhite} />
             <Text style={styles.botaoVoltarTexto}>Voltar ao início</Text>
           </TouchableOpacity>
         </View>
@@ -171,7 +186,7 @@ export default function ToqueBomVsRuimScreen({ navigation }) {
               source={imagemPorChave[fase.ilustracao]}
               width={150}
               height={150}
-              cor={fase.respostaCorreta === 'bom' ? COLORS.toqueBom : COLORS.toqueRuim}
+              cor={fase.respostaCorreta === 'bom' ? colors.toqueBom : colors.toqueRuim}
             />
           </View>
         </Animated.View>
@@ -187,7 +202,7 @@ export default function ToqueBomVsRuimScreen({ navigation }) {
           onPress={() => handleResposta('bom')}
           activeOpacity={0.8}
         >
-          <Ionicons name="thumbs-up-outline" size={36} color={COLORS.textWhite} />
+          <Ionicons name="thumbs-up-outline" size={36} color={colors.textWhite} />
           <Text style={styles.botaoRespostaTexto}>Toque Bom</Text>
         </TouchableOpacity>
 
@@ -196,7 +211,7 @@ export default function ToqueBomVsRuimScreen({ navigation }) {
           onPress={() => handleResposta('ruim')}
           activeOpacity={0.8}
         >
-          <Ionicons name="thumbs-down-outline" size={36} color={COLORS.textWhite} />
+          <Ionicons name="thumbs-down-outline" size={36} color={colors.textWhite} />
           <Text style={styles.botaoRespostaTexto}>Toque Ruim</Text>
         </TouchableOpacity>
       </View>
