@@ -39,7 +39,7 @@ module.exports = [
     tela: 'AdultosDeConfianca',
     imagemKey: 'adultosDeConfiancaIlustracao',
     cor: '#E6A8A8',
-    totalFases: 5,
+    totalFases: 10,
     medalhaPrata: 'adultoDeConfianca_prata',
     medalhaOuro: 'adultoDeConfianca_ouro',
   },
