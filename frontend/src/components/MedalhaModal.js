@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from 'react';
-import { Modal, View, Text, TouchableOpacity, Animated, StyleSheet } from 'react-native';
+import { Modal, View, Text, TouchableOpacity, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors, sizes } from '../constants/colors';
 import { corPrata, corOuro } from '../constants/jogos';
+import { strings } from '../constants/strings';
+import { medalhaModalStyles as styles } from '../styles/Components.styles';
 
 export default function MedalhaModal({ visible, tipo, jogoTitulo, onClose }) {
   const scaleAnim = useRef(new Animated.Value(0)).current;
@@ -28,13 +29,13 @@ export default function MedalhaModal({ visible, tipo, jogoTitulo, onClose }) {
     }
   }, [visible, scaleAnim, starAnim]);
 
-  const isPrata = tipo === 'prata';
-  const cor     = isPrata ? corPrata : corOuro;
-  const titulo  = isPrata ? 'Medalha de Prata!' : 'Medalha de Ouro!';
-  const icone   = isPrata ? 'medal-outline' : 'trophy';
+  const isPrata  = tipo === 'prata';
+  const cor      = isPrata ? corPrata : corOuro;
+  const titulo   = isPrata ? strings.medalha.tituloPrata : strings.medalha.tituloOuro;
+  const icone    = isPrata ? 'medal-outline' : 'trophy';
   const mensagem = isPrata
-    ? `Você chegou na metade de "${jogoTitulo}"!\nContinue assim e conquiste o ouro!`
-    : `Incrível! Você completou "${jogoTitulo}" e conquistou a medalha de ouro!`;
+    ? strings.medalha.mensagemPrata(jogoTitulo)
+    : strings.medalha.mensagemOuro(jogoTitulo);
 
   return (
     <Modal visible={visible} transparent animationType="fade" statusBarTranslucent>
@@ -59,7 +60,7 @@ export default function MedalhaModal({ visible, tipo, jogoTitulo, onClose }) {
             activeOpacity={0.85}
           >
             <Text style={styles.botaoTexto}>
-              {isPrata ? 'Continuar jogando!' : 'Voltar ao início!'}
+              {isPrata ? strings.medalha.botaoContinuar : strings.medalha.botaoVoltar}
             </Text>
           </TouchableOpacity>
         </Animated.View>
@@ -67,61 +68,3 @@ export default function MedalhaModal({ visible, tipo, jogoTitulo, onClose }) {
     </Modal>
   );
 }
-
-const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.55)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 24,
-  },
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: 24,
-    padding: 24,
-    alignItems: 'center',
-    width: '100%',
-    maxWidth: 360,
-  },
-  iconeContainer: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  titulo: {
-    fontSize: sizes.xxl,
-    fontWeight: 'bold',
-    marginBottom: 4,
-    textAlign: 'center',
-  },
-  jogoNome: {
-    fontSize: sizes.md,
-    color: colors.textLight,
-    marginBottom: 12,
-    textAlign: 'center',
-  },
-  mensagem: {
-    fontSize: sizes.md,
-    color: colors.text,
-    textAlign: 'center',
-    lineHeight: 24,
-    marginTop: 24,
-    marginBottom: 24,
-  },
-  botao: {
-    borderRadius: 14,
-    paddingVertical: 14,
-    paddingHorizontal: 32,
-    alignItems: 'center',
-    width: '100%',
-  },
-  botaoTexto: {
-    color: '#fff',
-    fontSize: sizes.lg,
-    fontWeight: 'bold',
-  },
-});

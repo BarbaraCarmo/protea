@@ -10,13 +10,11 @@ import { jogosBaseStyles, shadow } from './JogosBase.styles';
 export const poderDoNaoScreenStyles = {
   ...jogosBaseStyles,
   ...StyleSheet.create({
-    // Destaque visual no botão selecionado
     opcaoSelecionada: {
       elevation: 4,
       shadowOpacity: 0.15,
     },
-    // Número da opção (círculo accent)
-    opcaoNumero: {
+    opcaoLetra: {
       width: 32,
       height: 32,
       borderRadius: 16,
@@ -25,10 +23,16 @@ export const poderDoNaoScreenStyles = {
       alignItems: 'center',
       marginRight: 14,
     },
-    opcaoNumeroTexto: {
+    opcaoLetraTexto: {
       fontSize: sizes.md,
       fontWeight: 'bold',
       color: colors.accent,
+    },
+    botaoPrimario: {
+      backgroundColor: colors.accent,
+    },
+    dicaPrimaria: {
+      backgroundColor: colors.accent + '15',
     },
   }),
 };
@@ -37,33 +41,38 @@ export const poderDoNaoScreenStyles = {
 export const adultosDeConfiancaScreenStyles = {
   ...jogosBaseStyles,
   ...StyleSheet.create({
-    // Barra de progresso na cor warm
     progressoPreenchidoWarm: {
       height: '100%',
       backgroundColor: colors.warm,
       borderRadius: 6,
     },
-    // Checkbox / radio ao lado de cada opção
+    opcaoLetra: {
+      width: 32,
+      height: 32,
+      borderRadius: 16,
+      backgroundColor: colors.warm + '25',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginRight: 14,
+    },
+    opcaoLetraTexto: {
+      fontSize: sizes.md,
+      fontWeight: 'bold',
+      color: colors.warm,
+    },
     opcaoCheckbox: {
       marginRight: 14,
     },
-    // Botão "Confirmar Resposta" (seleção múltipla)
+    // Espaçamento do botão "Confirmar Resposta" — compõe com jogoBotaoPrimario
     confirmarBotao: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: colors.primary,
-      paddingVertical: 16,
-      borderRadius: sizes.radius,
       marginTop: 4,
       marginBottom: 12,
-      gap: 10,
-      ...shadow.md,
     },
-    confirmarBotaoTexto: {
-      fontSize: sizes.lg,
-      fontWeight: 'bold',
-      color: colors.textWhite,
+    botaoPrimario: {
+      backgroundColor: colors.warm,
+    },
+    dicaPrimaria: {
+      backgroundColor: colors.warm + '15',
     },
   }),
 };
@@ -117,21 +126,9 @@ export const semaforoDoCorpoScreenStyles = {
       fontSize: sizes.sm,
       color: colors.textLight,
     },
-    // Botão de voltar (conclusão / erro)
-    botaoVoltar: {
-      flexDirection: 'row',
+    // Cor de destaque dos botões de conclusão neste jogo
+    botaoPrimario: {
       backgroundColor: colors.primary,
-      paddingVertical: 16,
-      paddingHorizontal: 32,
-      borderRadius: sizes.radius,
-      alignItems: 'center',
-      gap: 10,
-      ...shadow.md,
-    },
-    botaoVoltarTexto: {
-      color: colors.textWhite,
-      fontSize: sizes.lg,
-      fontWeight: 'bold',
     },
   }),
 };
@@ -168,21 +165,9 @@ export const toqueBomVsRuimScreenStyles = {
       fontSize: sizes.md,
       fontWeight: 'bold',
     },
-    // Botão de voltar ao início (conclusão)
-    botaoVoltarInicio: {
-      flexDirection: 'row',
+    // Cor de destaque dos botões de conclusão neste jogo
+    botaoPrimario: {
       backgroundColor: colors.primary,
-      paddingVertical: 16,
-      paddingHorizontal: 32,
-      borderRadius: sizes.radius,
-      alignItems: 'center',
-      gap: 10,
-      ...shadow.md,
-    },
-    botaoVoltarTexto: {
-      color: colors.textWhite,
-      fontSize: sizes.lg,
-      fontWeight: 'bold',
     },
   }),
 };

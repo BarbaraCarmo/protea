@@ -2,30 +2,54 @@ import { StyleSheet } from 'react-native';
 import { colors, sizes } from '../constants/colors';
 import { baseStyles, shadow } from './Base.styles';
 
-// Exporta os styles das abas já mesclados com a base.
-// HomeScreen, ProgressoScreen, PerfilScreen e AjudaScreen importam daqui.
 export const appStyles = {
     ...baseStyles,
     ...StyleSheet.create({
 
-        // Layout partilhado (ScrollView content)
         content: {
             padding: 20,
             paddingBottom: 40,
         },
-        loader: {
-            marginVertical: 24,
-        },
-        erroTexto: {
-            color: colors.error,
-            textAlign: 'center',
-            marginBottom: 16,
-            fontSize: sizes.md,
+        // Loading tela cheia
+        fullScreenCenter: {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: colors.background,
+            padding: 32,
+            gap: 12,
         },
 
-        // ══════════════════════════════════════════════════════════════════════════
-        // HOME
-        // ══════════════════════════════════════════════════════════════════════════
+        // Estado de erro
+        erroTitulo: {
+            fontSize: sizes.xl,
+            fontWeight: 'bold',
+            color: colors.text,
+            textAlign: 'center',
+            marginTop: 8,
+        },
+        erroTexto: {
+            fontSize: sizes.md,
+            color: colors.textLight,
+            textAlign: 'center',
+            lineHeight: 22,
+        },
+        erroBotao: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: colors.primary,
+            paddingVertical: 14,
+            paddingHorizontal: 28,
+            borderRadius: sizes.radius,
+            gap: 8,
+            marginTop: 8,
+            ...shadow.md,
+        },
+        erroBotaoTexto: {
+            color: colors.textWhite,
+            fontSize: sizes.md,
+            fontWeight: 'bold',
+        },
 
         header: {
             flexDirection: 'row',
@@ -44,10 +68,6 @@ export const appStyles = {
             color: colors.textLight,
             marginTop: 4,
         },
-
-        // ══════════════════════════════════════════════════════════════════════════
-        // PROGRESSO
-        // ══════════════════════════════════════════════════════════════════════════
 
         progressoCardHeader: {
             flexDirection: 'row',
@@ -102,10 +122,6 @@ export const appStyles = {
             fontWeight: 'bold',
         },
 
-        // ══════════════════════════════════════════════════════════════════════════
-        // PERFIL
-        // ══════════════════════════════════════════════════════════════════════════
-
         perfilCard: {
             backgroundColor: colors.surface,
             borderRadius: sizes.radiusLg,
@@ -134,7 +150,6 @@ export const appStyles = {
             color: colors.textLight,
             marginTop: 4,
         },
-        // ── Medalha por jogo (grid 2×2) — container usa baseStyles.grid2Col ────────
         medalhaJogoCard: {
             width: '49%',
             backgroundColor: colors.surface,
@@ -198,11 +213,6 @@ export const appStyles = {
             marginLeft: 8,
         },
 
-        // ══════════════════════════════════════════════════════════════════════════
-        // AJUDA
-        // ══════════════════════════════════════════════════════════════════════════
-
-        // Disque 100
         disque100Card: {
             backgroundColor: colors.warmDark,
             borderRadius: sizes.radiusLg,
@@ -256,7 +266,6 @@ export const appStyles = {
             fontWeight: 'bold',
         },
 
-        // FAQ
         faqCard: {
             backgroundColor: colors.surface,
             borderRadius: sizes.radius,

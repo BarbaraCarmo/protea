@@ -24,14 +24,14 @@ export default function PerfilScreen() {
     let idade = hoje.getFullYear() - nasc.getFullYear();
     const m = hoje.getMonth() - nasc.getMonth();
     if (m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())) idade--;
-    return `${idade} anos`;
+    return strings.perfil.idadeLabel(idade);
   }
 
   async function selecionarAvatar(avatarId) {
     setAvatarSelecionado(avatarId);
     try {
       await atualizarAvatar(avatarId);
-    } catch (e) {
+    } catch {
       console.log('Erro ao salvar avatar');
     }
   }
@@ -47,7 +47,6 @@ export default function PerfilScreen() {
 
   return (
     <ScrollView style={appStyles.container} contentContainerStyle={appStyles.content}>
-      {/* Avatar e info */}
       <View style={appStyles.perfilCard}>
         {avatarAtual ? (
           <Image source={avatarAtual.imagem} style={appStyles.avatarGrande} resizeMode="contain" />
@@ -60,7 +59,6 @@ export default function PerfilScreen() {
         <Text style={appStyles.idade}>{calcularIdade()}</Text>
       </View>
 
-      {/* Escolher Avatar */}
       <Text style={appStyles.secaoTitulo}>{strings.perfil.escolherAvatar}</Text>
       <View style={appStyles.grid2Col}>
         {AVATARES.map((avatar) => (
@@ -77,7 +75,6 @@ export default function PerfilScreen() {
         ))}
       </View>
 
-      {/* Medalhas */}
       <Text style={appStyles.secaoTitulo}>{strings.perfil.medalhas}</Text>
       <View style={appStyles.grid2Col}>
         {catalogo.map((jogo) => {
@@ -92,7 +89,7 @@ export default function PerfilScreen() {
               <View style={appStyles.medalhaSlots}>
                 {[
                   { conquistada: temPrata, cor: corPrata, icone: 'medal-outline' },
-                  { conquistada: temOuro,  cor: corOuro,  icone: 'trophy' },
+                  { conquistada: temOuro,  cor: corOuro,  icone: 'trophy-outline' },
                 ].map(({ conquistada, cor, icone }, i) => (
                   <View
                     key={i}
@@ -116,7 +113,6 @@ export default function PerfilScreen() {
         })}
       </View>
 
-      {/* Botão Sair */}
       <TouchableOpacity style={appStyles.botaoSair} onPress={handleLogout}>
         <Text style={appStyles.botaoSairTexto}>{strings.perfil.botaoSair}</Text>
       </TouchableOpacity>

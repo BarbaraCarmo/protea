@@ -29,10 +29,12 @@ O sistema adota uma arquitetura cliente-servidor com:
 
 ---
 
-### Modo 1 — Backend publicado no Railway (recomendado)
+### Modo 1 — Backend publicado no Render (recomendado)
 
-O backend já está publicado em `https://protea-production.up.railway.app`.
+O backend está publicado em `https://protea.onrender.com` (Render.com — plano gratuito sem prazo de expiração).
 Neste modo você só precisa rodar o frontend — sem instalar ou configurar o backend localmente.
+
+> **Cold start:** o servidor "dorme" após 15 minutos sem uso. Se o app demorar para responder na primeira abertura, aguarde cerca de 50 segundos. Para apresentações e demos, acesse `https://protea.onrender.com/api/health` no browser um minuto antes para acordar o servidor.
 
 **Passo 1: Instalar dependências do frontend**
 
@@ -46,7 +48,7 @@ npm install
 O arquivo `frontend/.env` já deve conter:
 
 ```env
-EXPO_PUBLIC_API_URL=https://protea-production.up.railway.app/api
+EXPO_PUBLIC_API_URL=https://protea.onrender.com/api
 ```
 
 Se o arquivo não existir, crie-o com esse conteúdo.

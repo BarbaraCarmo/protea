@@ -12,6 +12,11 @@ yarn-error.log*
 # Environment Variables (CRITICAL)
 .env
 .env.test
+scripts/.env
+
+# Expo local settings (gerados automaticamente, não devem ir para o Git)
+.expo/
+frontend/.expo/
 
 # Build/Cache/Output
 dist

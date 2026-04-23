@@ -48,7 +48,6 @@ export default function ProgressoScreen() {
 
             <View style={appStyles.progressoBarra}>
               <View style={[appStyles.progressoPreenchido, { width: `${pct}%`, backgroundColor: jogo.cor }]} />
-              {/* Marcador de 50% */}
               <View style={appStyles.progressoMarcador50} />
             </View>
             <Text style={[appStyles.progressoTexto, { color: jogo.cor }]}>{pct}%</Text>

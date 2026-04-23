@@ -9,12 +9,17 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../../constants/colors';
+import { strings } from '../../constants/strings';
 import { imagemJogo } from '../../constants/imagemAssets';
+import { audioSemaforo } from '../../constants/audioAssets';
+import IntroJogo from '../../components/IntroJogo';
 import { semaforoDoCorpoScreenStyles as styles } from '../../styles/jogos/JogosTemas.styles';
 import { useAuth } from '../../context/AuthContext';
 import CardImagem from '../../components/CardImagem';
 import FeedbackModal from '../../components/FeedbackModal';
 import MedalhaModal from '../../components/MedalhaModal';
+import BotaoAudio from '../../components/BotaoAudio';
+import { useAudio } from '../../hooks/useAudio';
 import { jogosService } from '../../services/api';
 
 const getMensagemErro = (fase, corEscolhida) => {
@@ -24,7 +29,8 @@ const getMensagemErro = (fase, corEscolhida) => {
 
 const jogoId = 'semaforoDoCorpo';
 
-export default function SemaforoDoCorpoScreen({ navigation }) {
+export default function SemaforoDoCorpoScreen({ navigation, route }) {
+  const jogoInfo = route.params?.jogo;
   const { atualizarProgresso, user } = useAuth();
 
   const [fases, setFases] = useState([]);
@@ -37,21 +43,27 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
   const [concluido, setConcluido] = useState(false);
   const [scaleAnim] = useState(new Animated.Value(1));
   const [medalhaConquistada, setMedalhaConquistada] = useState(null);
-  const novasMedalhasRef = useRef([]);
+  const [modoRepeticao, setModoRepeticao] = useState(false);
+  const [mostrarIntro, setMostrarIntro] = useState(false);
+  const novasMedalhasRef   = useRef([]);
+  const progressoPromiseRef = useRef(null);
 
   useEffect(() => {
     jogosService
       .getSemaforo()
       .then((res) => setFases(res.data.fases))
-      .catch(() => setErro('Não foi possível carregar o jogo. Tente novamente.'))
+      .catch(() => setErro(strings.jogos.erroCarregar))
       .finally(() => setCarregando(false));
   }, []);
 
-  // Retoma da primeira fase ainda não concluída
+  // Retoma da primeira fase ainda não concluída; mostra intro se for a primeira vez
   useEffect(() => {
     if (fases.length === 0) return;
     const concluidos = user?.progresso?.[jogoId]?.concluidos || [];
-    if (concluidos.length === 0) return;
+    if (concluidos.length === 0) {
+      setMostrarIntro(true);
+      return;
+    }
     const primeiraFasePendente = fases.findIndex(f => !concluidos.includes(f.id));
     if (primeiraFasePendente === -1) {
       setConcluido(true);
@@ -61,6 +73,8 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
   }, [fases]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fase = fases[faseAtual];
+
+  const { tocar, tocando } = useAudio(fase ? audioSemaforo[fase.id] : null);
 
   const animarCard = useCallback(() => {
     Animated.sequence([
@@ -78,16 +92,18 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
       if (correto) {
         setAcertou(true);
         setMensagem(fase.feedbacks.correto);
-        atualizarProgresso(jogoId, fase.id).then((resultado) => {
-          novasMedalhasRef.current = resultado?.novasMedalhas || [];
-        });
+        if (!modoRepeticao) {
+          progressoPromiseRef.current = atualizarProgresso(jogoId, fase.id).then((resultado) => {
+            novasMedalhasRef.current = resultado?.novasMedalhas || [];
+          });
+        }
       } else {
         setAcertou(false);
         setMensagem(getMensagemErro(fase, corEscolhida));
       }
       setModalVisible(true);
     },
-    [fase, animarCard, atualizarProgresso]
+    [fase, animarCard, atualizarProgresso, modoRepeticao]
   );
 
   const avancar = useCallback(() => {
@@ -98,19 +114,33 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
     }
   }, [faseAtual, fases.length]);
 
-  const handleFecharModal = useCallback(() => {
+  const handleFecharModal = useCallback(async () => {
     setModalVisible(false);
     if (acertou) {
+      if (progressoPromiseRef.current) {
+        await progressoPromiseRef.current;
+        progressoPromiseRef.current = null;
+      }
       const prata = novasMedalhasRef.current.includes(`${jogoId}_prata`);
-      const ouro  = novasMedalhasRef.current.includes(`${jogoId}_ouro`);
-      if (prata || ouro) {
+      const ouro = novasMedalhasRef.current.includes(`${jogoId}_ouro`);
+      const isUltimaFase = faseAtual >= fases.length - 1;
+      if ((prata || ouro) && !isUltimaFase && !modoRepeticao) {
         novasMedalhasRef.current = [];
         setMedalhaConquistada(prata ? 'prata' : 'ouro');
         return;
       }
+      novasMedalhasRef.current = [];
       avancar();
     }
-  }, [acertou, avancar]);
+  }, [acertou, avancar, faseAtual, fases.length, modoRepeticao]);
+
+  const reiniciarJogo = useCallback(() => {
+    setFaseAtual(0);
+    setConcluido(false);
+    setModoRepeticao(true);
+    setModalVisible(false);
+    setMedalhaConquistada(null);
+  }, []);
 
   const handleFecharMedalhaModal = useCallback(() => {
     setMedalhaConquistada(null);
@@ -131,13 +161,17 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
         <View style={styles.concluidoContainer}>
           <Ionicons name="cloud-offline-outline" size={64} color={colors.textLight} />
           <Text style={styles.concluidoTexto}>{erro}</Text>
-          <TouchableOpacity style={styles.botaoVoltar} onPress={() => navigation.goBack()}>
+          <TouchableOpacity style={[styles.botaoConclusao, styles.botaoPrimario]} onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back" size={22} color={colors.textWhite} />
-            <Text style={styles.botaoVoltarTexto}>Voltar</Text>
+            <Text style={styles.botaoConclusaoTexto}>{strings.jogos.botaoVoltar}</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
     );
+  }
+
+  if (mostrarIntro) {
+    return <IntroJogo jogoInfo={jogoInfo} onComecar={() => setMostrarIntro(false)} />;
   }
 
   if (concluido) {
@@ -147,18 +181,23 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
           <View style={styles.concluidoIcone}>
             <Ionicons name="trophy-outline" size={80} color={colors.accent} />
           </View>
-          <Text style={styles.concluidoTitulo}>Parabéns!</Text>
-          <Text style={styles.concluidoTexto}>
-            Você completou o Semáforo do Corpo! Agora você sabe identificar as
-            partes do corpo que precisam de mais cuidado.
-          </Text>
+          <Text style={styles.concluidoTitulo}>{strings.jogos.conclusaoTitulo}</Text>
+          <Text style={styles.concluidoTexto}>{strings.jogos.semaforo.conclusaoMensagem}</Text>
           <TouchableOpacity
-            style={styles.botaoVoltar}
+            style={[styles.botaoConclusao, styles.botaoRepetir]}
+            onPress={reiniciarJogo}
+            activeOpacity={0.8}
+          >
+            <Ionicons name="refresh-outline" size={22} color={colors.textWhite} />
+            <Text style={styles.botaoConclusaoTexto}>{strings.jogos.botaoJogarNovamente}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.botaoConclusao, styles.botaoPrimario]}
             onPress={() => navigation.goBack()}
             activeOpacity={0.8}
           >
             <Ionicons name="home-outline" size={22} color={colors.textWhite} />
-            <Text style={styles.botaoVoltarTexto}>Voltar ao início</Text>
+            <Text style={styles.botaoConclusaoTexto}>{strings.jogos.botaoVoltarInicio}</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -169,49 +208,44 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Barra de progresso */}
       <View style={styles.progressoContainerJogos}>
         <View style={styles.progressoBarra}>
           <View style={[styles.progressoPreenchido, { width: `${progresso}%` }]} />
         </View>
         <Text style={styles.progressoTexto}>
-          {faseAtual + 1} de {fases.length}
+          {strings.jogos.progressoLabel(faseAtual + 1, fases.length)}
         </Text>
       </View>
 
+      <View style={styles.botaoAudioContainer}>
+        <BotaoAudio onPress={tocar} tocando={tocando} />
+      </View>
 
-
-      {/* Área central: card + instrução abaixo */}
       <View style={styles.cardArea}>
-        {/* Instrução acima do card */}
-        <Text style={styles.situacaoDescricao}>
-          Qual cor combina com essa parte do corpo?
-        </Text>
+        <Text style={styles.situacaoDescricao}>{strings.jogos.semaforo.instrucao}</Text>
         <Animated.View style={[styles.card, { transform: [{ scale: scaleAnim }] }]}>
           <View style={styles.cardImagemArea}>
-            <CardImagem source={imagemJogo.semaforoDoCorpo} width={250} height={250} />
+            <CardImagem source={imagemJogo.semaforoDoCorpo} width="100%" height="100%" />
           </View>
           <Text style={styles.cardLabel}>{fase.parteDoCorpo}</Text>
         </Animated.View>
       </View>
 
-      {/* Legenda */}
       <View style={styles.legendaContainer}>
         <View style={styles.legendaItem}>
           <View style={[styles.legendaBola, { backgroundColor: colors.verde }]} />
-          <Text style={styles.legendaTexto}>Seguro</Text>
+          <Text style={styles.legendaTexto}>{strings.jogos.semaforo.legendaVerde}</Text>
         </View>
         <View style={styles.legendaItem}>
           <View style={[styles.legendaBola, { backgroundColor: colors.amarelo }]} />
-          <Text style={styles.legendaTexto}>Atenção</Text>
+          <Text style={styles.legendaTexto}>{strings.jogos.semaforo.legendaAmarelo}</Text>
         </View>
         <View style={styles.legendaItem}>
           <View style={[styles.legendaBola, { backgroundColor: colors.vermelho }]} />
-          <Text style={styles.legendaTexto}>Privado</Text>
+          <Text style={styles.legendaTexto}>{strings.jogos.semaforo.legendaVermelho}</Text>
         </View>
       </View>
 
-      {/* Botões de resposta */}
       <View style={styles.botoesContainer}>
         <TouchableOpacity
           style={[styles.botaoCor, { backgroundColor: colors.verde }]}
@@ -219,7 +253,7 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
           activeOpacity={0.8}
         >
           <Ionicons name="checkmark-circle-outline" size={28} color="#FFFFFF" />
-          <Text style={styles.botaoCorTexto}>Verde</Text>
+          <Text style={styles.botaoCorTexto}>{strings.jogos.semaforo.botaoVerde}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -228,7 +262,7 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
           activeOpacity={0.8}
         >
           <Ionicons name="warning-outline" size={28} color="#FFFFFF" />
-          <Text style={styles.botaoCorTexto}>Amarelo</Text>
+          <Text style={styles.botaoCorTexto}>{strings.jogos.semaforo.botaoAmarelo}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -237,7 +271,7 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
           activeOpacity={0.8}
         >
           <Ionicons name="close-circle-outline" size={28} color="#FFFFFF" />
-          <Text style={styles.botaoCorTexto}>Vermelho</Text>
+          <Text style={styles.botaoCorTexto}>{strings.jogos.semaforo.botaoVermelho}</Text>
         </TouchableOpacity>
       </View>
 
@@ -250,7 +284,7 @@ export default function SemaforoDoCorpoScreen({ navigation }) {
       <MedalhaModal
         visible={medalhaConquistada !== null}
         tipo={medalhaConquistada}
-        jogoTitulo="Semáforo do Corpo"
+        jogoTitulo={strings.nav.jogos.semaforoDoCorpo}
         onClose={handleFecharMedalhaModal}
       />
     </SafeAreaView>

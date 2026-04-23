@@ -9,17 +9,23 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../../constants/colors';
+import { strings } from '../../constants/strings';
 import { imagemPorChave } from '../../constants/imagemAssets';
+import IntroJogo from '../../components/IntroJogo';
+import { audioPoder } from '../../constants/audioAssets';
 import { poderDoNaoScreenStyles as styles } from '../../styles/jogos/JogosTemas.styles';
 import { useAuth } from '../../context/AuthContext';
 import CardImagem from '../../components/CardImagem';
 import FeedbackModal from '../../components/FeedbackModal';
 import MedalhaModal from '../../components/MedalhaModal';
+import BotaoAudio from '../../components/BotaoAudio';
+import { useAudio } from '../../hooks/useAudio';
 import { jogosService } from '../../services/api';
 
 const jogoId = 'poderDoNao';
 
-export default function PoderDoNaoScreen({ navigation }) {
+export default function PoderDoNaoScreen({ navigation, route }) {
+  const jogoInfo = route.params?.jogo;
   const { atualizarProgresso, user } = useAuth();
 
   const [fases, setFases] = useState([]);
@@ -32,21 +38,27 @@ export default function PoderDoNaoScreen({ navigation }) {
   const [opcaoSelecionada, setOpcaoSelecionada] = useState(null);
   const [concluido, setConcluido] = useState(false);
   const [medalhaConquistada, setMedalhaConquistada] = useState(null);
-  const novasMedalhasRef = useRef([]);
+  const [modoRepeticao, setModoRepeticao] = useState(false);
+  const [mostrarIntro, setMostrarIntro] = useState(false);
+  const novasMedalhasRef   = useRef([]);
+  const progressoPromiseRef = useRef(null);
 
   useEffect(() => {
     jogosService
       .getPoderDoNao()
       .then((res) => setFases(res.data.fases))
-      .catch(() => setErro('Não foi possível carregar o jogo. Tente novamente.'))
+      .catch(() => setErro(strings.jogos.erroCarregar))
       .finally(() => setCarregando(false));
   }, []);
 
-  // Retoma da primeira fase ainda não concluída
+  // Retoma da primeira fase ainda não concluída; mostra intro se for a primeira vez
   useEffect(() => {
     if (fases.length === 0) return;
     const concluidos = user?.progresso?.[jogoId]?.concluidos || [];
-    if (concluidos.length === 0) return;
+    if (concluidos.length === 0) {
+      setMostrarIntro(true);
+      return;
+    }
     const primeiraFasePendente = fases.findIndex(f => !concluidos.includes(f.id));
     if (primeiraFasePendente === -1) {
       setConcluido(true);
@@ -58,6 +70,8 @@ export default function PoderDoNaoScreen({ navigation }) {
   const fase = fases[faseAtual];
   const totalFases = fases.length;
   const progresso = totalFases > 0 ? (faseAtual / totalFases) * 100 : 0;
+
+  const { tocar, tocando } = useAudio(fase ? audioPoder[fase.id] : null);
 
   function selecionarOpcao(opcao, index) {
     if (!fase) return;
@@ -74,9 +88,9 @@ export default function PoderDoNaoScreen({ navigation }) {
     setMensagemFeedback(feedbackMap[opcao.tipo]);
     setModalVisible(true);
 
-    if (correto) {
+    if (correto && !modoRepeticao) {
       novasMedalhasRef.current = [];
-      atualizarProgresso(jogoId, fase.id).then((resultado) => {
+      progressoPromiseRef.current = atualizarProgresso(jogoId, fase.id).then((resultado) => {
         novasMedalhasRef.current = resultado?.novasMedalhas || [];
       });
     }
@@ -90,18 +104,33 @@ export default function PoderDoNaoScreen({ navigation }) {
     }
   }
 
-  function fecharModal() {
+  function reiniciarJogo() {
+    setFaseAtual(0);
+    setConcluido(false);
+    setModoRepeticao(true);
+    setModalVisible(false);
+    setMedalhaConquistada(null);
+    setOpcaoSelecionada(null);
+  }
+
+  async function fecharModal() {
     setModalVisible(false);
     setOpcaoSelecionada(null);
 
     if (acertou) {
+      if (progressoPromiseRef.current) {
+        await progressoPromiseRef.current;
+        progressoPromiseRef.current = null;
+      }
       const prata = novasMedalhasRef.current.includes(`${jogoId}_prata`);
       const ouro  = novasMedalhasRef.current.includes(`${jogoId}_ouro`);
-      if (prata || ouro) {
+      const isUltimaFase = faseAtual >= totalFases - 1;
+      if ((prata || ouro) && !isUltimaFase && !modoRepeticao) {
         novasMedalhasRef.current = [];
         setMedalhaConquistada(prata ? 'prata' : 'ouro');
         return;
       }
+      novasMedalhasRef.current = [];
       avancar();
     }
   }
@@ -126,37 +155,43 @@ export default function PoderDoNaoScreen({ navigation }) {
           <Ionicons name="cloud-offline-outline" size={64} color={colors.textLight} />
           <Text style={styles.concluidoTexto}>{erro}</Text>
           <TouchableOpacity
-            style={[styles.botaoConclusao, { backgroundColor: colors.accent }]}
+            style={[styles.botaoConclusao, styles.botaoPrimario]}
             onPress={() => navigation.goBack()}
           >
             <Ionicons name="arrow-back" size={22} color={colors.textWhite} />
-            <Text style={styles.botaoConclusaoTexto}>Voltar</Text>
+            <Text style={styles.botaoConclusaoTexto}>{strings.jogos.botaoVoltar}</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
     );
   }
 
+  if (mostrarIntro) {
+    return <IntroJogo jogoInfo={jogoInfo} onComecar={() => setMostrarIntro(false)} />;
+  }
+
   if (concluido) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.concluidoContainer}>
-          <View
-            style={[styles.concluidoIconContainer, { backgroundColor: colors.accent + '20' }]}
-          >
+          <View style={styles.concluidoIcone}>
             <Ionicons name="trophy-outline" size={80} color={colors.accent} />
           </View>
-          <Text style={styles.concluidoTitulo}>Parabéns!</Text>
-          <Text style={styles.concluidoTexto}>
-            Você completou todas as fases do Poder do Não! Agora você sabe como
-            dizer NÃO de forma firme e respeitosa.
-          </Text>
+          <Text style={styles.concluidoTitulo}>{strings.jogos.conclusaoTitulo}</Text>
+          <Text style={styles.concluidoTexto}>{strings.jogos.poderDoNao.conclusaoMensagem}</Text>
           <TouchableOpacity
-            style={[styles.botaoConclusao, { backgroundColor: colors.accent }]}
+            style={[styles.botaoConclusao, styles.botaoRepetir]}
+            onPress={reiniciarJogo}
+          >
+            <Ionicons name="refresh-outline" size={20} color={colors.textWhite} />
+            <Text style={styles.botaoConclusaoTexto}>{strings.jogos.botaoJogarNovamente}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.botaoConclusao, styles.botaoPrimario]}
             onPress={() => navigation.goBack()}
           >
             <Ionicons name="home-outline" size={20} color={colors.textWhite} />
-            <Text style={styles.botaoConclusaoTexto}>Voltar ao Início</Text>
+            <Text style={styles.botaoConclusaoTexto}>{strings.jogos.botaoVoltarInicio}</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -165,40 +200,36 @@ export default function PoderDoNaoScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.content}>
-        {/* Barra de progresso */}
+      <ScrollView contentContainerStyle={[styles.content, { paddingTop: 0 }]}>
         <View style={styles.progressoContainerJogos}>
           <View style={styles.progressoBarra}>
             <View style={[styles.progressoPreenchido, { width: `${progresso}%` }]} />
           </View>
           <View style={styles.progressoInfo}>
             <Text style={styles.progressoTexto}>
-              Fase {faseAtual + 1} de {totalFases}
+              {strings.jogos.faseLabel(faseAtual + 1, totalFases)}
             </Text>
           </View>
         </View>
 
-        {/* Card com imagem ilustrativa */}
+        <View style={styles.botaoAudioContainer}>
+          <BotaoAudio onPress={tocar} tocando={tocando} />
+        </View>
+
         <View style={styles.card}>
           <View style={styles.cardImagemArea}>
             <CardImagem
               source={imagemPorChave[fase.ilustracao]}
-              width={150}
-              height={150}
-              cor={colors.accent}
+              width="100%"
+              height="100%"
             />
           </View>
         </View>
 
-        {/* Situação — abaixo do card */}
         <Text style={styles.situacaoDescricao}>{fase.situacao}</Text>
 
-        {/* Instrução secundária */}
-        <Text style={styles.instrucaoSecundaria}>
-          Como você responderia? Escolha a melhor opção:
-        </Text>
+        <Text style={styles.instrucaoSecundaria}>{strings.jogos.poderDoNao.instrucao}</Text>
 
-        {/* Opções */}
         {fase.opcoes.map((opcao, index) => (
           <TouchableOpacity
             key={index}
@@ -211,20 +242,17 @@ export default function PoderDoNaoScreen({ navigation }) {
             activeOpacity={0.7}
           >
             <View style={styles.opcaoConteudo}>
-              <View style={styles.opcaoNumero}>
-                <Text style={styles.opcaoNumeroTexto}>{index + 1}</Text>
+              <View style={styles.opcaoLetra}>
+                <Text style={styles.opcaoLetraTexto}>{String.fromCharCode(65 + index)}</Text>
               </View>
               <Text style={styles.opcaoTexto}>{opcao.texto}</Text>
             </View>
           </TouchableOpacity>
         ))}
 
-        {/* Dica */}
-        <View style={[styles.dicaContainer, { backgroundColor: colors.accent + '15' }]}>
+        <View style={[styles.dicaContainer, styles.dicaPrimaria]}>
           <Ionicons name="bulb-outline" size={20} color={colors.accent} />
-          <Text style={styles.dicaTexto}>
-            Lembre-se: você pode dizer NÃO de forma firme e educada!
-          </Text>
+          <Text style={styles.dicaTexto}>{strings.jogos.poderDoNao.dica}</Text>
         </View>
       </ScrollView>
 
@@ -237,7 +265,7 @@ export default function PoderDoNaoScreen({ navigation }) {
       <MedalhaModal
         visible={medalhaConquistada !== null}
         tipo={medalhaConquistada}
-        jogoTitulo="O Poder do Não"
+        jogoTitulo={strings.nav.jogos.poderDoNao}
         onClose={fecharMedalhaModal}
       />
     </SafeAreaView>

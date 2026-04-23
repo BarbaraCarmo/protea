@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, Image,
+  View, Text, TextInput, TouchableOpacity,
   KeyboardAvoidingView, Platform, ScrollView, Alert, ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,8 +9,6 @@ import { colors } from '../constants/colors';
 import { strings } from '../constants/strings';
 import { useAuth } from '../context/AuthContext';
 import { authStyles } from '../styles/Auth.styles';
-import { imagemApp } from '../constants/imagemAssets';
-
 export default function CadastroScreen({ navigation }) {
   const { cadastrar } = useAuth();
   const [loading, setLoading] = useState(false);

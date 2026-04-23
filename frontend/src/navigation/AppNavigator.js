@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
 import { colors } from '../constants/colors';
+import { strings } from '../constants/strings';
 
 // Telas de autenticação
 import LoginScreen from '../screens/LoginScreen';
@@ -50,15 +51,15 @@ function TabNavigator() {
           paddingTop: 8,
         },
         tabBarLabelStyle: { fontSize: 11, fontWeight: '600' },
-        headerStyle: { backgroundColor: colors.primary, height: 120 },
+        headerStyle: { backgroundColor: colors.primary },
         headerTintColor: colors.textWhite,
         headerTitleStyle: { fontWeight: 'bold', fontSize: 24 },
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Início', headerTitle: 'Protea' }} />
-      <Tab.Screen name="Progresso" component={ProgressoScreen} />
-      <Tab.Screen name="Perfil" component={PerfilScreen} />
-      <Tab.Screen name="Ajuda" component={AjudaScreen} />
+      <Tab.Screen name="Home" component={HomeScreen} options={{ title: strings.nav.tabs.home, headerTitle: strings.nav.headerHome }} />
+      <Tab.Screen name="Progresso" component={ProgressoScreen} options={{ title: strings.nav.tabs.progresso }} />
+      <Tab.Screen name="Perfil" component={PerfilScreen} options={{ title: strings.nav.tabs.perfil }} />
+      <Tab.Screen name="Ajuda" component={AjudaScreen} options={{ title: strings.nav.tabs.ajuda }} />
     </Tab.Navigator>
   );
 }
@@ -89,10 +90,10 @@ export default function AppNavigator() {
         {user ? (
           <>
             <Stack.Screen name="Main" component={TabNavigator} options={{ headerShown: false }} />
-            <Stack.Screen name="SemaforoDoCorpo" component={SemaforoDoCorpoScreen} options={{ title: 'Semáforo do Corpo' }} />
-            <Stack.Screen name="ToqueBomVsRuim" component={ToqueBomVsRuimScreen} options={{ title: 'Toque Bom vs Ruim' }} />
-            <Stack.Screen name="PoderDoNao" component={PoderDoNaoScreen} options={{ title: 'O Poder do Não' }} />
-            <Stack.Screen name="AdultosDeConfianca" component={AdultosDeConfiancaScreen} options={{ title: 'Adultos de Confiança' }} />
+            <Stack.Screen name="SemaforoDoCorpo" component={SemaforoDoCorpoScreen} options={{ title: strings.nav.jogos.semaforoDoCorpo }} />
+            <Stack.Screen name="ToqueBomVsRuim" component={ToqueBomVsRuimScreen} options={{ title: strings.nav.jogos.toqueBomVsRuim }} />
+            <Stack.Screen name="PoderDoNao" component={PoderDoNaoScreen} options={{ title: strings.nav.jogos.poderDoNao }} />
+            <Stack.Screen name="AdultosDeConfianca" component={AdultosDeConfiancaScreen} options={{ title: strings.nav.jogos.adultoDeConfianca }} />
           </>
         ) : (
           <>

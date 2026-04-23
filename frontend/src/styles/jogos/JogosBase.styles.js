@@ -16,8 +16,15 @@ export const jogosBaseStyles = {
     // ── Barra de progresso (jogos) ─────────────────────────────────────────────
     progressoContainerJogos: {
       paddingHorizontal: 20,
-      paddingVertical: 10,
+      paddingTop: 4,
+      paddingBottom: 6,
       alignItems: 'center',
+    },
+    botaoAudioContainer: {
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      paddingHorizontal: 20,
+      paddingBottom: 4,
     },
     progressoBarra: {
       width: '100%',
@@ -62,13 +69,13 @@ export const jogosBaseStyles = {
       ...shadow.lg,
     },
 
-    // Área da imagem dentro do card — definir dimensões via width/height inline
-    // ou com aspectRatio. Garante espaço visual mesmo antes da imagem chegar.
+    // Área da imagem dentro do card — ocupa toda a largura do card.
+    // aspectRatio = largura/altura: 1 = quadrado, > 1 = mais baixo.
+    // Padding de 5 em todas as direções entre a borda e a imagem.
     cardImagemArea: {
       width: '100%',
-      minHeight: 200,
-      alignItems: 'center',
-      justifyContent: 'center',
+      aspectRatio: 1.5,
+      padding: 5,
       marginBottom: 8,
     },
 
@@ -85,7 +92,7 @@ export const jogosBaseStyles = {
     situacaoDescricao: {
       fontSize: sizes.lg,
       color: colors.text,
-      textAlign: 'center',
+      textAlign: 'left',
       lineHeight: 30,
       fontWeight: '300',
       marginTop: 16,
@@ -97,7 +104,7 @@ export const jogosBaseStyles = {
     instrucaoSecundaria: {
       fontSize: sizes.lg,
       color: colors.textLight,
-      textAlign: 'center',
+      textAlign: 'left',
       fontWeight: '500',
       marginBottom: 16,
     },
@@ -121,16 +128,9 @@ export const jogosBaseStyles = {
       fontWeight: '600',
     },
 
-    // ── Rodapé: linha de botões (semáforo, toque bom/ruim, etc.) ─────────────
-    botoesRodape: {
-      flexDirection: 'row',
-      gap: 12,
-      paddingHorizontal: 20,
-      paddingBottom: 30,
-      paddingTop: 8,
-    },
-
-    // ── Botão primário do jogo ────────────────────────────────────────────────
+    // ── Botão primário do jogo (sem stretch) ─────────────────────────────────
+    // Para botões de ação no meio do conteúdo (ex: confirmar resposta).
+    // Para botões de conclusão full-width use botaoConclusao.
     jogoBotaoPrimario: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -141,28 +141,6 @@ export const jogosBaseStyles = {
       borderRadius: sizes.radius,
       gap: 10,
       ...shadow.md,
-    },
-    jogoBotaoPrimarioTexto: {
-      color: colors.textWhite,
-      fontSize: sizes.lg,
-      fontWeight: 'bold',
-    },
-    // @deprecated — use jogoBotaoPrimario
-    botaoAcao: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: colors.primary,
-      paddingVertical: 16,
-      paddingHorizontal: 32,
-      borderRadius: sizes.radius,
-      gap: 10,
-      ...shadow.md,
-    },
-    botaoAcaoTexto: {
-      color: colors.textWhite,
-      fontSize: sizes.lg,
-      fontWeight: 'bold',
     },
 
     // ── Tela de conclusão / erro ─────────────────────────────────────────────
@@ -177,14 +155,6 @@ export const jogosBaseStyles = {
       height: 140,
       borderRadius: 70,
       backgroundColor: colors.primary + '20',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginBottom: 24,
-    },
-    concluidoIconContainer: {
-      width: 120,
-      height: 120,
-      borderRadius: 60,
       justifyContent: 'center',
       alignItems: 'center',
       marginBottom: 24,
@@ -209,6 +179,7 @@ export const jogosBaseStyles = {
       borderRadius: sizes.radius,
       alignItems: 'center',
       justifyContent: 'center',
+      alignSelf: 'stretch',
       gap: 10,
       ...shadow.md,
     },
@@ -216,6 +187,10 @@ export const jogosBaseStyles = {
       color: colors.textWhite,
       fontSize: sizes.lg,
       fontWeight: 'bold',
+    },
+    botaoRepetir: {
+      backgroundColor: colors.textLight,
+      marginVertical: 12,
     },
 
     // ── Opções de resposta ───────────────────────────────────────────────────

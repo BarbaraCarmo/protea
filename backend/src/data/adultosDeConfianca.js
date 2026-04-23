@@ -1,4 +1,3 @@
-// protea/backend/src/data/adultosDeConfianca.js
 module.exports = {
     titulo: 'Adultos de Confiança',
     descricao: 'Aprenda a identificar os adultos em quem você pode confiar. Pessoas de confiança podem ser diferentes para cada um, mas esses são adultos que podem te ajudar quando você precisar e por isso você pode contar a eles sobre o que te deixa desconfortável.',

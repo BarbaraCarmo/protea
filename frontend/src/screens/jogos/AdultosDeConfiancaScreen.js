@@ -9,17 +9,23 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../../constants/colors';
+import { strings } from '../../constants/strings';
 import { imagemJogo } from '../../constants/imagemAssets';
+import IntroJogo from '../../components/IntroJogo';
+import { audioAdultos } from '../../constants/audioAssets';
 import { adultosDeConfiancaScreenStyles as styles } from '../../styles/jogos/JogosTemas.styles';
 import { useAuth } from '../../context/AuthContext';
 import CardImagem from '../../components/CardImagem';
 import FeedbackModal from '../../components/FeedbackModal';
 import MedalhaModal from '../../components/MedalhaModal';
+import BotaoAudio from '../../components/BotaoAudio';
+import { useAudio } from '../../hooks/useAudio';
 import { jogosService } from '../../services/api';
 
 const jogoId = 'adultoDeConfianca';
 
-export default function AdultosDeConfiancaScreen({ navigation }) {
+export default function AdultosDeConfiancaScreen({ navigation, route }) {
+  const jogoInfo = route.params?.jogo;
   const { atualizarProgresso, user } = useAuth();
 
   const [fases, setFases] = useState([]);
@@ -33,21 +39,27 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
   const [respondido, setRespondido] = useState(false);
   const [concluido, setConcluido] = useState(false);
   const [medalhaConquistada, setMedalhaConquistada] = useState(null);
-  const novasMedalhasRef = useRef([]);
+  const [modoRepeticao, setModoRepeticao] = useState(false);
+  const [mostrarIntro, setMostrarIntro] = useState(false);
+  const novasMedalhasRef   = useRef([]);
+  const progressoPromiseRef = useRef(null);
 
   useEffect(() => {
     jogosService
       .getAdultosConfianca()
       .then((res) => setFases(res.data.fases))
-      .catch(() => setErro('Não foi possível carregar o jogo. Tente novamente.'))
+      .catch(() => setErro(strings.jogos.erroCarregar))
       .finally(() => setCarregando(false));
   }, []);
 
-  // Retoma da primeira fase ainda não concluída
+  // Retoma da primeira fase ainda não concluída; mostra intro se for a primeira vez
   useEffect(() => {
     if (fases.length === 0) return;
     const concluidos = user?.progresso?.[jogoId]?.concluidos || [];
-    if (concluidos.length === 0) return;
+    if (concluidos.length === 0) {
+      setMostrarIntro(true);
+      return;
+    }
     const primeiraFasePendente = fases.findIndex(f => !concluidos.includes(f.id));
     if (primeiraFasePendente === -1) {
       setConcluido(true);
@@ -59,6 +71,8 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
   const fase = fases[faseAtual];
   const totalFases = fases.length;
   const progresso = totalFases > 0 ? (faseAtual / totalFases) * 100 : 0;
+
+  const { tocar, tocando } = useAudio(fase ? audioAdultos[fase.id] : null);
 
   function toggleSelecao(index) {
     if (respondido || !fase) return;
@@ -92,9 +106,9 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
     setMensagemFeedback(correto ? fase.feedbackCorreto : fase.feedbackIncorreto);
     setModalVisible(true);
 
-    if (correto) {
+    if (correto && !modoRepeticao) {
       novasMedalhasRef.current = [];
-      atualizarProgresso(jogoId, fase.id).then((resultado) => {
+      progressoPromiseRef.current = atualizarProgresso(jogoId, fase.id).then((resultado) => {
         novasMedalhasRef.current = resultado?.novasMedalhas || [];
       });
     }
@@ -110,16 +124,32 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
     }
   }
 
-  function fecharModal() {
+  function reiniciarJogo() {
+    setFaseAtual(0);
+    setConcluido(false);
+    setModoRepeticao(true);
+    setModalVisible(false);
+    setMedalhaConquistada(null);
+    setSelecionados([]);
+    setRespondido(false);
+  }
+
+  async function fecharModal() {
     setModalVisible(false);
     if (acertou) {
+      if (progressoPromiseRef.current) {
+        await progressoPromiseRef.current;
+        progressoPromiseRef.current = null;
+      }
       const prata = novasMedalhasRef.current.includes(`${jogoId}_prata`);
       const ouro  = novasMedalhasRef.current.includes(`${jogoId}_ouro`);
-      if (prata || ouro) {
+      const isUltimaFase = faseAtual >= totalFases - 1;
+      if ((prata || ouro) && !isUltimaFase && !modoRepeticao) {
         novasMedalhasRef.current = [];
         setMedalhaConquistada(prata ? 'prata' : 'ouro');
         return;
       }
+      novasMedalhasRef.current = [];
       avancar();
     } else {
       setSelecionados([]);
@@ -151,20 +181,29 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
 
   function getOpcaoIcone(index) {
     const isMultipla = fase.tipo === 'selecao_multipla';
+
+    if (!isMultipla) {
+      const letra = String.fromCharCode(65 + index);
+      return (
+        <View style={styles.opcaoLetra}>
+          <Text style={styles.opcaoLetraTexto}>{letra}</Text>
+        </View>
+      );
+    }
+
     if (!respondido) {
-      if (selecionados.includes(index)) {
-        return <Ionicons name={isMultipla ? 'checkbox' : 'radio-button-on'} size={24} color={colors.primary} />;
-      }
-      return <Ionicons name={isMultipla ? 'square-outline' : 'radio-button-off'} size={24} color={colors.border} />;
+      return selecionados.includes(index)
+        ? <Ionicons name="checkbox" size={24} color={colors.primary} />
+        : <Ionicons name="square-outline" size={24} color={colors.border} />;
     }
     const opcao = fase.opcoes[index];
     if (opcao.correto) {
-      return <Ionicons name={isMultipla ? 'checkbox' : 'radio-button-on'} size={24} color={colors.success} />;
+      return <Ionicons name="checkbox" size={24} color={colors.success} />;
     }
     if (selecionados.includes(index)) {
-      return <Ionicons name={isMultipla ? 'checkbox-outline' : 'radio-button-on'} size={24} color={colors.error} />;
+      return <Ionicons name="checkbox-outline" size={24} color={colors.error} />;
     }
-    return <Ionicons name={isMultipla ? 'square-outline' : 'radio-button-off'} size={24} color={colors.border} />;
+    return <Ionicons name="square-outline" size={24} color={colors.border} />;
   }
 
   if (carregando) {
@@ -182,37 +221,43 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
           <Ionicons name="cloud-offline-outline" size={64} color={colors.textLight} />
           <Text style={styles.concluidoTexto}>{erro}</Text>
           <TouchableOpacity
-            style={[styles.botaoConclusao, { backgroundColor: colors.warm }]}
+            style={[styles.botaoConclusao, styles.botaoPrimario]}
             onPress={() => navigation.goBack()}
           >
             <Ionicons name="arrow-back" size={22} color={colors.textWhite} />
-            <Text style={styles.botaoConclusaoTexto}>Voltar</Text>
+            <Text style={styles.botaoConclusaoTexto}>{strings.jogos.botaoVoltar}</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
     );
   }
 
+  if (mostrarIntro) {
+    return <IntroJogo jogoInfo={jogoInfo} onComecar={() => setMostrarIntro(false)} />;
+  }
+
   if (concluido) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.concluidoContainer}>
-          <View
-            style={[styles.concluidoIconContainer, { backgroundColor: colors.warm + '20' }]}
-          >
-            <Ionicons name="people-outline" size={80} color={colors.warm} />
+          <View style={styles.concluidoIcone}>
+            <Ionicons name="trophy-outline" size={80} color={colors.accent} />
           </View>
-          <Text style={styles.concluidoTitulo}>Parabéns!</Text>
-          <Text style={styles.concluidoTexto}>
-            Você completou todas as fases! Agora você sabe identificar os
-            adultos de confiança e como pedir ajuda quando precisar.
-          </Text>
+          <Text style={styles.concluidoTitulo}>{strings.jogos.conclusaoTitulo}</Text>
+          <Text style={styles.concluidoTexto}>{strings.jogos.adultos.conclusaoMensagem}</Text>
           <TouchableOpacity
-            style={[styles.botaoConclusao, { backgroundColor: colors.warm }]}
+            style={[styles.botaoConclusao, styles.botaoRepetir]}
+            onPress={reiniciarJogo}
+          >
+            <Ionicons name="refresh-outline" size={20} color={colors.textWhite} />
+            <Text style={styles.botaoConclusaoTexto}>{strings.jogos.botaoJogarNovamente}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.botaoConclusao, styles.botaoPrimario]}
             onPress={() => navigation.goBack()}
           >
             <Ionicons name="home-outline" size={20} color={colors.textWhite} />
-            <Text style={styles.botaoConclusaoTexto}>Voltar ao Início</Text>
+            <Text style={styles.botaoConclusaoTexto}>{strings.jogos.botaoVoltarInicio}</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -221,8 +266,7 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.content}>
-        {/* Barra de progresso */}
+      <ScrollView contentContainerStyle={[styles.content, { paddingTop: 0 }]}>
         <View style={styles.progressoContainerJogos}>
           <View style={styles.progressoBarra}>
             <View
@@ -231,35 +275,34 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
           </View>
           <View style={styles.progressoInfo}>
             <Text style={styles.progressoTexto}>
-              Fase {faseAtual + 1} de {totalFases}
+              {strings.jogos.faseLabel(faseAtual + 1, totalFases)}
             </Text>
           </View>
         </View>
 
-        {/* Card com imagem ilustrativa — mesma para todas as fases deste jogo */}
+        <View style={styles.botaoAudioContainer}>
+          <BotaoAudio onPress={tocar} tocando={tocando} />
+        </View>
+
         <View style={styles.card}>
           <View style={styles.cardImagemArea}>
             <CardImagem
               source={imagemJogo.adultoDeConfianca}
-              width={150}
-              height={150}
-              cor={colors.warm}
+              width="100%"
+              height="100%"
             />
           </View>
         </View>
 
-        {/* Pergunta — abaixo do card */}
         <Text style={styles.situacaoDescricao}>{fase.pergunta}</Text>
 
-        {/* Tag de seleção múltipla — abaixo do texto */}
         {fase.tipo === 'selecao_multipla' && (
           <View style={styles.multiplaTag}>
             <Ionicons name="layers-outline" size={16} color={colors.primary} />
-            <Text style={styles.multiplaTagTexto}>Selecione todas as corretas</Text>
+            <Text style={styles.multiplaTagTexto}>{strings.jogos.adultos.tagMultipla}</Text>
           </View>
         )}
 
-        {/* Opções */}
         {fase.opcoes.map((opcao, index) => (
           <TouchableOpacity
             key={index}
@@ -277,24 +320,20 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
           </TouchableOpacity>
         ))}
 
-        {/* Botão confirmar (seleção múltipla) */}
         {fase.tipo === 'selecao_multipla' && !respondido && selecionados.length > 0 && (
           <TouchableOpacity
-            style={styles.confirmarBotao}
+            style={[styles.jogoBotaoPrimario, styles.confirmarBotao]}
             onPress={() => verificarResposta()}
             activeOpacity={0.7}
           >
             <Ionicons name="checkmark-done-outline" size={22} color={colors.textWhite} />
-            <Text style={styles.confirmarBotaoTexto}>Confirmar Resposta</Text>
+            <Text style={styles.botaoConclusaoTexto}>{strings.jogos.adultos.botaoConfirmar}</Text>
           </TouchableOpacity>
         )}
 
-        {/* Dica */}
-        <View style={[styles.dicaContainer, { backgroundColor: colors.warm + '15' }]}>
+        <View style={[styles.dicaContainer, styles.dicaPrimaria]}>
           <Ionicons name="shield-checkmark-outline" size={20} color={colors.warm} />
-          <Text style={styles.dicaTexto}>
-            Adultos de confiança são pessoas que cuidam de você, te ouvem e te protegem!
-          </Text>
+          <Text style={styles.dicaTexto}>{strings.jogos.adultos.dica}</Text>
         </View>
       </ScrollView>
 
@@ -307,7 +346,7 @@ export default function AdultosDeConfiancaScreen({ navigation }) {
       <MedalhaModal
         visible={medalhaConquistada !== null}
         tipo={medalhaConquistada}
-        jogoTitulo="Adultos de Confiança"
+        jogoTitulo={strings.nav.jogos.adultoDeConfianca}
         onClose={fecharMedalhaModal}
       />
     </SafeAreaView>

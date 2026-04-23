@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Linking, Alert, Image } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Linking, Alert, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../constants/colors';
 import { strings } from '../constants/strings';
@@ -22,7 +22,6 @@ export default function AjudaScreen() {
 
   return (
     <ScrollView style={appStyles.container} contentContainerStyle={appStyles.content}>
-      {/* Disque 100 - Destaque */}
       <TouchableOpacity style={appStyles.disque100Card} onPress={ligarDisque100}>
         <View style={appStyles.disque100Header}>
           <View style={appStyles.disque100Icone}>
@@ -40,7 +39,6 @@ export default function AjudaScreen() {
         </View>
       </TouchableOpacity>
 
-      {/* FAQ */}
       <Text style={appStyles.secaoTitulo}>{strings.ajuda.secaoFaq}</Text>
       {FAQ.map((item, index) => (
         <View key={index} style={appStyles.faqCard}>
@@ -52,7 +50,6 @@ export default function AjudaScreen() {
         </View>
       ))}
 
-      {/* Sobre o app */}
       <Text style={appStyles.secaoTitulo}>{strings.ajuda.secaoSobre}</Text>
       <View style={appStyles.sobreCard}>
         <View style={appStyles.sobreIcone}>
@@ -63,7 +60,6 @@ export default function AjudaScreen() {
         <Text style={appStyles.sobreDescricao}>{strings.app.descricao}</Text>
       </View>
 
-      {/* Contato */}
       <View style={appStyles.contatoCard}>
         <Ionicons name="mail-outline" size={22} color={colors.primary} />
         <Text style={appStyles.contatoTexto}>{strings.app.contato}</Text>

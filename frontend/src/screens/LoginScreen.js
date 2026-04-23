@@ -39,7 +39,6 @@ export default function LoginScreen({ navigation }) {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView contentContainerStyle={authStyles.scrollCentralizado} keyboardShouldPersistTaps="handled">
-        {/* Logo */}
         <View style={authStyles.logoContainer}>
           <View style={authStyles.logoIcone}>
           <Image source={imagemApp.logo} style={authStyles.logoIcone} />
@@ -48,7 +47,6 @@ export default function LoginScreen({ navigation }) {
           <Text style={authStyles.subtitle}>{strings.app.tagline}</Text>
         </View>
 
-        {/* Formulário */}
         <View style={authStyles.form}>
           <View style={authStyles.inputContainer}>
             <Ionicons name="mail-outline" size={20} color={colors.textLight} style={authStyles.inputIcone} />

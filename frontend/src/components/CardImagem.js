@@ -6,6 +6,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { colors } from '../constants/colors';
+import { cardImagemStyles as styles } from '../styles/Components.styles';
 
 /**
  * Exibe uma imagem com ActivityIndicator enquanto carrega e
@@ -13,16 +14,14 @@ import { colors } from '../constants/colors';
  * O loading é reativado automaticamente sempre que `source` mudar.
  *
  * Props:
- *   source   — require(...) ou { uri: '...' }
- *   width    — largura da imagem (padrão 150)
- *   height   — altura da imagem (padrão 150)
- *   cor      — cor do indicador (padrão colors.primary)
+ *   source  — require(...) ou { uri: '...' }
+ *   width   — largura (padrão 150, aceita número ou '100%')
+ *   height  — altura  (padrão 150, aceita número ou '100%')
  */
-export default function CardImagem({ source, width = 150, height = 150, cor }) {
+export default function CardImagem({ source, width = 150, height = 150 }) {
   const [carregando, setCarregando] = useState(true);
   const opacidade = useRef(new Animated.Value(0)).current;
 
-  // Sempre que a imagem mudar (nova fase), reseta o estado de carregamento
   useEffect(() => {
     if (!source) return;
     opacidade.stopAnimation();
@@ -46,7 +45,7 @@ export default function CardImagem({ source, width = 150, height = 150, cor }) {
       {carregando && (
         <ActivityIndicator
           style={StyleSheet.absoluteFill}
-          color={cor ?? colors.primary}
+          color={colors.primary}
           size="large"
         />
       )}
@@ -60,14 +59,3 @@ export default function CardImagem({ source, width = 150, height = 150, cor }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  imagem: {
-    width: '100%',
-    height: '100%',
-  },
-});

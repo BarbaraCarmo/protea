@@ -1,7 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Em produção: EXPO_PUBLIC_API_URL é definida em frontend/.env apontando para o Railway.
+// Em produção: EXPO_PUBLIC_API_URL é definida em frontend/.env apontando para o Render.
 // Em desenvolvimento local: substitua pelo IP da sua máquina na rede Wi-Fi.
 const API_URL =
   process.env.EXPO_PUBLIC_API_URL ??

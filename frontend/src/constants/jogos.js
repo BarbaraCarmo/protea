@@ -1,25 +1,11 @@
 export const corPrata = '#A8A9AD';
-export const corOuro  = '#FFD700';
-
-// Mapeamento de nomes legados (formato antigo do backend) para os novos IDs de medalha de ouro.
-// Permite que usuários que já tinham medalhas no banco continuem vendo-as corretamente.
-const LEGADO_PARA_OURO = {
-  'Mestre do Semáforo':    'semaforoDoCorpo_ouro',
-  'Guardião dos Toques':   'toqueBomVsRuim_ouro',
-  'Poder do Não':          'poderDoNao_ouro',
-  'Rede de Confiança':     'adultoDeConfianca_ouro',
-};
+export const corOuro  = '#E8C87A';
 
 /**
- * Normaliza a lista de medalhas do usuário:
- * 1. Converte nomes legados para os novos IDs.
- * 2. Garante que quem tem ouro também tem prata (50% vem antes de 100%).
- *
- * @param {string[]} medalhas - medalhas do usuário vindas do backend
- * @param {object[]} catalogo - catálogo de jogos com medalhaPrata e medalhaOuro
+ * Garante que quem tem medalha de ouro também tem prata (50% vem antes de 100%).
  */
 export function normalizarMedalhas(medalhas = [], catalogo = []) {
-  const normalizadas = new Set(medalhas.map((m) => LEGADO_PARA_OURO[m] ?? m));
+  const normalizadas = new Set(medalhas);
 
   catalogo.forEach(({ medalhaPrata, medalhaOuro }) => {
     if (normalizadas.has(medalhaOuro)) {

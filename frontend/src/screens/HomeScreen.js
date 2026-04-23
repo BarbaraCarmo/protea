@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { View, Text, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../constants/colors';
 import { strings } from '../constants/strings';
 import { useAuth } from '../context/AuthContext';
@@ -13,9 +14,12 @@ export default function HomeScreen({ navigation }) {
   const [jogos, setJogos] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(null);
+  const [tentativa, setTentativa] = useState(0);
 
   useEffect(() => {
     let cancelado = false;
+    setCarregando(true);
+    setErro(null);
     jogosService
       .getCatalogoJogos()
       .then((res) => {
@@ -39,7 +43,7 @@ export default function HomeScreen({ navigation }) {
     return () => {
       cancelado = true;
     };
-  }, []);
+  }, [tentativa]);
 
   const jogosComVisual = useMemo(
     () =>
@@ -51,9 +55,34 @@ export default function HomeScreen({ navigation }) {
     [jogos]
   );
 
+  if (carregando) {
+    return (
+      <View style={appStyles.fullScreenCenter}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+  }
+
+  if (erro) {
+    return (
+      <View style={appStyles.fullScreenCenter}>
+        <Ionicons name="cloud-offline-outline" size={72} color={colors.textLightest} />
+        <Text style={appStyles.erroTitulo}>{strings.home.erroTitulo}</Text>
+        <Text style={appStyles.erroTexto}>{erro}</Text>
+        <TouchableOpacity
+          style={appStyles.erroBotao}
+          onPress={() => setTentativa((t) => t + 1)}
+          activeOpacity={0.8}
+        >
+          <Ionicons name="refresh-outline" size={20} color={colors.textWhite} />
+          <Text style={appStyles.erroBotaoTexto}>{strings.home.erroBotaoTentar}</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   return (
     <ScrollView style={appStyles.container} contentContainerStyle={appStyles.content}>
-      {/* Header */}
       <View style={appStyles.header}>
         <View>
           <Text style={appStyles.saudacao}>{strings.home.saudacao(user?.crianca?.nome || strings.home.nomePadrao)}</Text>
@@ -61,17 +90,14 @@ export default function HomeScreen({ navigation }) {
         </View>
       </View>
 
-      {/* Cards dos jogos */}
-      {carregando ? <ActivityIndicator size="large" color={colors.primary} style={appStyles.loader} /> : null}
-      {!carregando && erro ? <Text style={appStyles.erroTexto}>{erro}</Text> : null}
-      {!carregando && !erro && jogosComVisual.map((jogo) => (
+      {jogosComVisual.map((jogo) => (
         <GameCard
           key={jogo.id}
           titulo={jogo.titulo}
           descricao={jogo.descricao}
           imagem={jogo.imagem}
           cor={jogo.cor}
-          onPress={() => navigation.navigate(jogo.tela)}
+          onPress={() => navigation.navigate(jogo.tela, { jogo })}
         />
       ))}
     </ScrollView>

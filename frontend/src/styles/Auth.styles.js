@@ -2,13 +2,10 @@ import { StyleSheet } from 'react-native';
 import { colors, sizes } from '../constants/colors';
 import { baseStyles, shadow } from './Base.styles';
 
-// Exporta os styles de Auth já mesclados com a base.
-// LoginScreen e CadastroScreen importam daqui diretamente.
 export const authStyles = {
     ...baseStyles,
     ...StyleSheet.create({
 
-        // ── Scroll (Login = centralizado; Cadastro = padding contínuo) ────────────
         scrollCentralizado: {
             flexGrow: 1,
             justifyContent: 'center',

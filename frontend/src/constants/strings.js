@@ -1,22 +1,5 @@
-/**
- * Centralização de todas as strings visíveis ao usuário no app Protea.
- *
- * Organização por contexto:
- *   app        — nome, tagline e textos globais
- *   nav        — títulos de abas e telas da navegação
- *   auth       — login e cadastro
- *   home       — tela inicial
- *   perfil     — tela de perfil
- *   progresso  — tela de progresso
- *   ajuda      — FAQ, Disque 100 e sobre o app
- *   jogos      — textos comuns a todos os jogos
- *   feedback   — modal de feedback de resposta
- *   erros      — mensagens de erro e alertas genéricos
- */
-
 export const strings = {
 
-  // ─── App ────────────────────────────────────────────────────────────────────
   app: {
     nome: 'Protea',
     tagline: 'Aprender brincando, proteger amando',
@@ -27,7 +10,6 @@ export const strings = {
     contato: 'Contato: babi.carmo@outlook.com',
   },
 
-  // ─── Navegação ──────────────────────────────────────────────────────────────
   nav: {
     tabs: {
       home: 'Início',
@@ -35,15 +17,15 @@ export const strings = {
       perfil: 'Perfil',
       ajuda: 'Ajuda',
     },
+    headerHome: 'Protea',
     jogos: {
-      semaforo: 'Semáforo do Corpo',
-      toque: 'Toque Bom vs Ruim',
+      semaforoDoCorpo: 'Semáforo do Corpo',
+      toqueBomVsRuim: 'Toque Bom vs Toque Ruim',
       poderDoNao: 'O Poder do Não',
-      adultos: 'Adultos de Confiança',
+      adultoDeConfianca: 'Adultos de Confiança',
     },
   },
 
-  // ─── Autenticação ───────────────────────────────────────────────────────────
   auth: {
     login: {
       placeholderEmail: 'Email do responsável',
@@ -81,15 +63,15 @@ export const strings = {
     },
   },
 
-  // ─── Home ───────────────────────────────────────────────────────────────────
   home: {
     saudacao: (nome) => `Olá, ${nome}!`,
     subtitulo: 'Vamos aprender brincando?',
     nomePadrao: 'Amiguinho',
     erroCarregarJogos: 'Não foi possível carregar os jogos agora.',
+    erroTitulo: 'Não foi possível carregar',
+    erroBotaoTentar: 'Tentar novamente',
   },
 
-  // ─── Perfil ─────────────────────────────────────────────────────────────────
   perfil: {
     escolherAvatar: 'Escolha seu avatar',
     medalhas: 'Medalhas conquistadas',
@@ -99,16 +81,15 @@ export const strings = {
     alertaSairCancelar: 'Cancelar',
     alertaSairConfirmar: 'Sair',
     nomePadrao: 'Amiguinho',
+    idadeLabel: (idade) => `${idade} anos`,
   },
 
-  // ─── Progresso ──────────────────────────────────────────────────────────────
   progresso: {
     fasesConcluidas: (concluidos, total) => `${concluidos} de ${total} fases concluídas`,
     medalhaPrata: 'Prata — 50%',
     medalhaOuro: 'Ouro — 100%',
   },
 
-  // ─── Ajuda ──────────────────────────────────────────────────────────────────
   ajuda: {
     disque100: {
       titulo: 'Disque 100',
@@ -157,17 +138,6 @@ export const strings = {
     ],
   },
 
-  // ─── Jogos (textos comuns a todos os módulos) ────────────────────────────────
-  jogos: {
-    botaoProximo: 'Próxima fase',
-    botaoReiniciar: 'Jogar novamente',
-    botaoFinalizar: 'Concluir',
-    faseLabel: (atual, total) => `Fase ${atual} de ${total}`,
-    conclusaoTitulo: 'Parabéns!',
-    conclusaoMensagem: 'Você concluiu todas as fases deste jogo!',
-  },
-
-  // ─── Modal de Feedback ───────────────────────────────────────────────────────
   feedback: {
     tituloAcerto: 'Muito bem!',
     tituloErro: 'Ops!',
@@ -175,9 +145,58 @@ export const strings = {
     botaoTentarNovamente: 'Tentar de novo',
   },
 
-  // ─── Erros genéricos ─────────────────────────────────────────────────────────
-  erros: {
-    generico: 'Algo deu errado. Tente novamente.',
-    semConexao: 'Sem conexão com o servidor. Verifique sua internet.',
+  medalha: {
+    tituloPrata: 'Medalha de Prata!',
+    tituloOuro: 'Medalha de Ouro!',
+    mensagemPrata: (titulo) => `Você chegou na metade de "${titulo}"!\nContinue assim e conquiste o ouro!`,
+    mensagemOuro: (titulo) => `Incrível! Você completou "${titulo}" e conquistou a medalha de ouro!`,
+    botaoContinuar: 'Continuar jogando!',
+    botaoVoltar: 'Voltar ao início!',
   },
+
+  jogos: {
+    erroCarregar: 'Não foi possível carregar o jogo. Tente novamente.',
+    botaoVoltar: 'Voltar',
+    botaoJogarNovamente: 'Jogar novamente',
+    botaoVoltarInicio: 'Voltar ao início',
+    botaoComecar: 'Começar',
+    conclusaoTitulo: 'Parabéns!',
+    progressoLabel: (atual, total) => `${atual} de ${total}`,
+    faseLabel: (atual, total) => `Fase ${atual} de ${total}`,
+
+    semaforo: {
+      conclusaoMensagem:
+        'Você completou o Semáforo do Corpo! Agora você sabe identificar as partes do corpo que precisam de mais cuidado.',
+      instrucao: 'Qual cor combina com essa parte do corpo?',
+      legendaVerde: 'Seguro',
+      legendaAmarelo: 'Atenção',
+      legendaVermelho: 'Privado',
+      botaoVerde: 'Verde',
+      botaoAmarelo: 'Amarelo',
+      botaoVermelho: 'Vermelho',
+    },
+
+    toque: {
+      conclusaoMensagem:
+        'Você completou o jogo Toque Bom vs Toque Ruim! Agora você sabe identificar toques seguros e perigosos. Lembre-se: seu corpo é seu!',
+      botaoToqueBom: 'Toque Bom',
+      botaoToqueRuim: 'Toque Ruim',
+    },
+
+    poderDoNao: {
+      conclusaoMensagem:
+        'Você completou todas as fases do Poder do Não! Agora você sabe como dizer NÃO de forma firme e respeitosa.',
+      instrucao: 'Como você responderia? Escolha a melhor opção:',
+      dica: 'Lembre-se: você pode dizer NÃO de forma firme e educada!',
+    },
+
+    adultos: {
+      conclusaoMensagem:
+        'Você completou todas as fases! Agora você sabe identificar os adultos de confiança e como pedir ajuda quando precisar.',
+      tagMultipla: 'Selecione todas as corretas',
+      botaoConfirmar: 'Confirmar Resposta',
+      dica: 'Adultos de confiança são pessoas que cuidam de você, te ouvem e te protegem!',
+    },
+  },
+
 };
