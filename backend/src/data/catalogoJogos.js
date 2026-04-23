@@ -3,6 +3,7 @@ module.exports = [
     id: 'semaforoDoCorpo',
     titulo: 'Semáforo do Corpo',
     descricao: 'Classifique as partes do corpo como um semáforo!',
+    intro: 'Classifique as partes do corpo como verde, amarelo ou vermelho, como um semáforo! Mas lembre-se, seu corpo é seu e só pode ser tocado quando você deixar. Se tiver dúvidas, procure um adulto de confiança.',
     tela: 'SemaforoDoCorpo',
     imagemKey: 'semaforoIlustracao',
     cor: '#7BC88E',
@@ -14,6 +15,7 @@ module.exports = [
     id: 'toqueBomVsRuim',
     titulo: 'Toque Bom vs Toque Ruim',
     descricao: 'Aprenda a diferença entre toques seguros e perigosos!',
+    intro: 'Aprenda a diferença entre toques seguros e toques perigosos! Mas lembre-se, seu corpo é seu e só pode ser tocado quando você deixar. Se tiver dúvidas, procure um adulto de confiança.',
     tela: 'ToqueBomVsRuim',
     imagemKey: 'toqueBomToqueRuimIlustracao',
     cor: '#A8D4E6',
@@ -25,6 +27,7 @@ module.exports = [
     id: 'poderDoNao',
     titulo: 'O Poder do Não',
     descricao: 'Aprenda a dizer NÃO de forma firme e segura!',
+    intro: 'Aprenda a dizer NÃO de forma firme e segura! Nem sempre queremos fazer algumas coisas, mas existem formas de ser firme sem brigar, vamos aprender?',
     tela: 'PoderDoNao',
     imagemKey: 'poderDoNaoIlustracao',
     cor: '#E8C87A',
@@ -36,6 +39,7 @@ module.exports = [
     id: 'adultoDeConfianca',
     titulo: 'Adultos de Confiança',
     descricao: 'Identifique os adultos em quem você pode confiar!',
+    intro: 'Aprenda a identificar os adultos em quem você pode confiar. Pessoas de confiança podem ser diferentes para cada um, mas esses são adultos que podem te ajudar quando você precisar e por isso você pode contar a eles sobre o que te deixa desconfortável.',
     tela: 'AdultosDeConfianca',
     imagemKey: 'adultosDeConfiancaIlustracao',
     cor: '#E6A8A8',
@@ -44,4 +48,3 @@ module.exports = [
     medalhaOuro: 'adultoDeConfianca_ouro',
   },
 ];
-
