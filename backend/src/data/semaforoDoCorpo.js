@@ -1,6 +1,6 @@
 module.exports = {
   titulo: 'Semáforo do Corpo',
-  descricao: 'Classifique as partes do corpo como verde, amarelo ou vermelho, como um semáforo!',
+  descricao: 'Classifique as partes do corpo como verde, amarelo ou vermelho, como um semáforo! Mas lembre-se, seu corpo é seu e só pode ser tocado quando você deixar. Se tiver dúvidas, procure um adulto de confiança.',
   icone: 'traffic-light',
   categorias: {
     verde: { cor: '#4CAF50', descricao: 'Áreas que podem ser tocadas por outras pessoas, com o seu consentimento' },

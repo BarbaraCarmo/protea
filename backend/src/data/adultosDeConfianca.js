@@ -1,7 +1,7 @@
 // protea/backend/src/data/adultosDeConfianca.js
 module.exports = {
     titulo: 'Adultos de Confiança',
-    descricao: 'Aprenda a identificar os adultos em quem você pode confiar e pedir ajuda.',
+    descricao: 'Aprenda a identificar os adultos em quem você pode confiar. Pessoas de confiança podem ser diferentes para cada um, mas esses são adultos que podem te ajudar quando você precisar e por isso você pode contar a eles sobre o que te deixa desconfortável.',
     icone: 'people-outline',
     fases: [
         {
@@ -48,7 +48,7 @@ module.exports = {
             opcoes: [
                 { id: 'a', texto: 'Alguém te tocou de um jeito que você não gostou', correto: true },
                 { id: 'b', texto: 'Alguém te ameaçou', correto: true },
-                { id: 'c', texto: 'Você ganhou um presente na escola', correto: false },
+                { id: 'c', texto: 'Você abraçou um colega na escola porque era aniversário dele', correto: false },
                 { id: 'd', texto: 'Alguém pediu para guardar um segredo que te deixou com medo', correto: true },
             ],
             feedbackCorreto: 'Muito bem! Sempre que você sentir medo, ameaça ou toque ruim, um adulto de confiança precisa saber.',
@@ -68,12 +68,12 @@ module.exports = {
         },
         {
             id: 7,
-            pergunta: 'Um amigo da sua família que você conhece há muitos anos pode ser um adulto de confiança?',
+            pergunta: 'Uma amiga da sua família que você conhece há muitos anos pode ser um adulto de confiança?',
             tipo: 'escolha_unica',
             opcoes: [
                 { id: 'a', texto: 'Sim, qualquer adulto que você conhece é de confiança', correto: false },
                 { id: 'b', texto: 'Não, só família pode ser de confiança', correto: false },
-                { id: 'c', texto: 'Sim, se ele te ouve, te protege e você se sente seguro com ele', correto: true },
+                { id: 'c', texto: 'Sim, se ela te ouve, te protege e você se sente seguro com ela', correto: true },
             ],
             feedbackCorreto: 'Certo! O que faz um adulto ser de confiança não é só ser família. É te ouvir, te proteger e te fazer sentir seguro.',
             feedbackIncorreto: 'Adultos de confiança podem ser família ou não. O que importa é que eles te ouvem, te protegem e te fazem sentir seguro.',
@@ -83,7 +83,7 @@ module.exports = {
             pergunta: 'Você pode ter mais de um adulto de confiança?',
             tipo: 'escolha_unica',
             opcoes: [
-                { id: 'a', texto: 'Sim! Quanto mais, melhor!', correto: true },
+                { id: 'a', texto: 'Sim! Contanto que seja alguém que te ouve, te protege e te faz sentir seguro', correto: true },
                 { id: 'b', texto: 'Não, só pode ter um', correto: false },
             ],
             feedbackCorreto: 'Isso aí! Você pode ter vários adultos de confiança: mãe, pai, avós, professores...',
@@ -94,8 +94,8 @@ module.exports = {
             pergunta: 'Você tentou contar algo para um adulto, mas ele não acreditou em você. O que fazer?',
             tipo: 'escolha_unica',
             opcoes: [
-                { id: 'a', texto: 'Desistir, pois ninguém vai acreditar', correto: false },
-                { id: 'b', texto: 'Fingir que não aconteceu nada', correto: false },
+                { id: 'a', texto: 'Desistir, porque ninguém vai acreditar', correto: false },
+                { id: 'b', texto: 'Ficar bravo e brigar com o adulto', correto: false },
                 { id: 'c', texto: 'Contar para outro adulto de confiança até alguém te ouvir', correto: true },
             ],
             feedbackCorreto: 'Isso mesmo! Nunca desista. Se um adulto não acreditou, procure outro. Você merece ser ouvido!',

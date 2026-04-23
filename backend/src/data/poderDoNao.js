@@ -1,6 +1,6 @@
 module.exports = {
   titulo: 'O Poder do Não',
-  descricao: 'Aprenda a dizer NÃO de forma firme e segura!',
+  descricao: 'Aprenda a dizer NÃO de forma firme e segura! Nem sempre queremos fazer algumas coisas, mas existem formas de ser firme sem brigar, vamos aprender?',
   icone: 'hand-right-outline',
   fases: [
     {

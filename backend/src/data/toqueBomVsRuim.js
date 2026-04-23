@@ -1,6 +1,6 @@
 module.exports = {
   titulo: 'Toque Bom vs Toque Ruim',
-  descricao: 'Aprenda a diferença entre toques seguros e toques perigosos!',
+  descricao: 'Aprenda a diferença entre toques seguros e toques perigosos! Mas lembre-se, seu corpo é seu e só pode ser tocado quando você deixar. Se tiver dúvidas, procure um adulto de confiança.',
   icone: 'hand-left-outline',
   fases: [
     {
