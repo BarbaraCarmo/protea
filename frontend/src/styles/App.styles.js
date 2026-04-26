@@ -117,6 +117,10 @@ export const appStyles = {
             borderRadius: 20,
             gap: 5,
         },
+        progressoMedalhaImagem: {
+            width: 18,
+            height: 18,
+        },
         progressoMedalhaTexto: {
             fontSize: sizes.xs,
             fontWeight: 'bold',
@@ -175,16 +179,12 @@ export const appStyles = {
         medalhaCirculo: {
             width: 60,
             height: 60,
-            borderRadius: 30,
             justifyContent: 'center',
             alignItems: 'center',
-            borderWidth: 2,
-            borderColor: '#FFFFFF',
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.18,
-            shadowRadius: 4,
-            elevation: 4,
+        },
+        medalhaCirculoImagem: {
+            width: 60,
+            height: 60,
         },
         avatarItem: {
             width: '23%',

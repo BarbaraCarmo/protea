@@ -1,13 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { Asset } from 'expo-asset';
 import { colors } from '../constants/colors';
 import { strings } from '../constants/strings';
 import { useAuth } from '../context/AuthContext';
 import GameCard from '../components/GameCard';
 import { jogosService } from '../services/api';
 import { appStyles } from '../styles/App.styles';
-import { imagemCard, imagemApp } from '../constants/imagemAssets';
+import { imagemApp, imagemCard, imagemMedalha } from '../constants/imagemAssets';
 
 export default function HomeScreen({ navigation }) {
   const { user } = useAuth();
@@ -20,9 +21,14 @@ export default function HomeScreen({ navigation }) {
     let cancelado = false;
     setCarregando(true);
     setErro(null);
-    jogosService
-      .getCatalogoJogos()
-      .then((res) => {
+
+    const medalhaAssets = Object.values(imagemMedalha).flatMap((g) => [g.prata, g.ouro]);
+
+    Promise.all([
+      jogosService.getCatalogoJogos(),
+      Asset.loadAsync([...Object.values(imagemCard), ...medalhaAssets]),
+    ])
+      .then(([res]) => {
         const lista = res?.data?.jogos ?? res?.data;
         const listaOk = Array.isArray(lista) ? lista : [];
         if (!cancelado) setJogos(listaOk);

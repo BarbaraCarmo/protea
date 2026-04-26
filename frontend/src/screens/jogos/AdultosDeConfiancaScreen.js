@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
+  Image,
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
@@ -10,7 +11,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../../constants/colors';
 import { strings } from '../../constants/strings';
-import { imagemJogo } from '../../constants/imagemAssets';
+import { imagemJogo, imagemMedalha } from '../../constants/imagemAssets';
 import IntroJogo from '../../components/IntroJogo';
 import { audioAdultos } from '../../constants/audioAssets';
 import { adultosDeConfiancaScreenStyles as styles } from '../../styles/jogos/JogosTemas.styles';
@@ -163,18 +164,9 @@ export default function AdultosDeConfiancaScreen({ navigation, route }) {
   }
 
   function getOpcaoEstilo(index) {
-    if (!respondido) {
-      if (selecionados.includes(index)) {
-        return { borderColor: colors.primary, borderWidth: 3, backgroundColor: colors.primary + '10' };
-      }
-      return {};
-    }
-    const opcao = fase.opcoes[index];
-    if (opcao.correto) {
-      return { borderColor: colors.success, borderWidth: 3, backgroundColor: colors.success + '10' };
-    }
-    if (selecionados.includes(index) && !opcao.correto) {
-      return { borderColor: colors.error, borderWidth: 3, backgroundColor: colors.error + '10' };
+    if (respondido) return {};
+    if (selecionados.includes(index)) {
+      return { borderColor: colors.primary, borderWidth: 3, backgroundColor: colors.primary + '10' };
     }
     return {};
   }
@@ -191,19 +183,9 @@ export default function AdultosDeConfiancaScreen({ navigation, route }) {
       );
     }
 
-    if (!respondido) {
-      return selecionados.includes(index)
-        ? <Ionicons name="checkbox" size={24} color={colors.primary} />
-        : <Ionicons name="square-outline" size={24} color={colors.border} />;
-    }
-    const opcao = fase.opcoes[index];
-    if (opcao.correto) {
-      return <Ionicons name="checkbox" size={24} color={colors.success} />;
-    }
-    if (selecionados.includes(index)) {
-      return <Ionicons name="checkbox-outline" size={24} color={colors.error} />;
-    }
-    return <Ionicons name="square-outline" size={24} color={colors.border} />;
+    return selecionados.includes(index)
+      ? <Ionicons name="checkbox" size={24} color={colors.primary} />
+      : <Ionicons name="square-outline" size={24} color={colors.border} />;
   }
 
   if (carregando) {
@@ -240,9 +222,11 @@ export default function AdultosDeConfiancaScreen({ navigation, route }) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.concluidoContainer}>
-          <View style={styles.concluidoIcone}>
-            <Ionicons name="trophy-outline" size={80} color={colors.accent} />
-          </View>
+          <Image
+            source={imagemMedalha[jogoId]?.ouro}
+            style={styles.concluidoMedalhaImagem}
+            resizeMode="contain"
+          />
           <Text style={styles.concluidoTitulo}>{strings.jogos.conclusaoTitulo}</Text>
           <Text style={styles.concluidoTexto}>{strings.jogos.adultos.conclusaoMensagem}</Text>
           <TouchableOpacity
@@ -346,6 +330,7 @@ export default function AdultosDeConfiancaScreen({ navigation, route }) {
       <MedalhaModal
         visible={medalhaConquistada !== null}
         tipo={medalhaConquistada}
+        jogoId={jogoId}
         jogoTitulo={strings.nav.jogos.adultoDeConfianca}
         onClose={fecharMedalhaModal}
       />

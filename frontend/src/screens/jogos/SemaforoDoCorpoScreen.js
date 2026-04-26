@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import {
   View,
   Text,
+  Image,
   TouchableOpacity,
   Animated,
   ActivityIndicator,
@@ -10,7 +11,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../../constants/colors';
 import { strings } from '../../constants/strings';
-import { imagemJogo } from '../../constants/imagemAssets';
+import { imagemSemaforo, imagemMedalha } from '../../constants/imagemAssets';
 import { audioSemaforo } from '../../constants/audioAssets';
 import IntroJogo from '../../components/IntroJogo';
 import { semaforoDoCorpoScreenStyles as styles } from '../../styles/jogos/JogosTemas.styles';
@@ -178,9 +179,11 @@ export default function SemaforoDoCorpoScreen({ navigation, route }) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.concluidoContainer}>
-          <View style={styles.concluidoIcone}>
-            <Ionicons name="trophy-outline" size={80} color={colors.accent} />
-          </View>
+          <Image
+            source={imagemMedalha[jogoId]?.ouro}
+            style={styles.concluidoMedalhaImagem}
+            resizeMode="contain"
+          />
           <Text style={styles.concluidoTitulo}>{strings.jogos.conclusaoTitulo}</Text>
           <Text style={styles.concluidoTexto}>{strings.jogos.semaforo.conclusaoMensagem}</Text>
           <TouchableOpacity
@@ -225,7 +228,7 @@ export default function SemaforoDoCorpoScreen({ navigation, route }) {
         <Text style={styles.situacaoDescricao}>{strings.jogos.semaforo.instrucao}</Text>
         <Animated.View style={[styles.card, { transform: [{ scale: scaleAnim }] }]}>
           <View style={styles.cardImagemArea}>
-            <CardImagem source={imagemJogo.semaforoDoCorpo} width="100%" height="100%" />
+            <CardImagem source={imagemSemaforo[fase.imagem]} width="100%" height="100%" />
           </View>
           <Text style={styles.cardLabel}>{fase.parteDoCorpo}</Text>
         </Animated.View>
@@ -284,6 +287,7 @@ export default function SemaforoDoCorpoScreen({ navigation, route }) {
       <MedalhaModal
         visible={medalhaConquistada !== null}
         tipo={medalhaConquistada}
+        jogoId={jogoId}
         jogoTitulo={strings.nav.jogos.semaforoDoCorpo}
         onClose={handleFecharMedalhaModal}
       />

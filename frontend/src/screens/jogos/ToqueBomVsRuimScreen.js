@@ -2,6 +2,7 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import {
   View,
   Text,
+  Image,
   TouchableOpacity,
   Animated,
   ActivityIndicator,
@@ -10,7 +11,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../../constants/colors';
 import { strings } from '../../constants/strings';
-import { imagemPorChave } from '../../constants/imagemAssets';
+import { imagemPorChave, imagemMedalha } from '../../constants/imagemAssets';
 import IntroJogo from '../../components/IntroJogo';
 import { audioToque } from '../../constants/audioAssets';
 import { toqueBomVsRuimScreenStyles as styles } from '../../styles/jogos/JogosTemas.styles';
@@ -176,9 +177,11 @@ export default function ToqueBomVsRuimScreen({ navigation, route }) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.concluidoContainer}>
-          <View style={styles.concluidoIcone}>
-            <Ionicons name="trophy-outline" size={80} color={colors.accent} />
-          </View>
+          <Image
+            source={imagemMedalha[jogoId]?.ouro}
+            style={styles.concluidoMedalhaImagem}
+            resizeMode="contain"
+          />
           <Text style={styles.concluidoTitulo}>{strings.jogos.conclusaoTitulo}</Text>
           <Text style={styles.concluidoTexto}>{strings.jogos.toque.conclusaoMensagem}</Text>
           <TouchableOpacity
@@ -262,6 +265,7 @@ export default function ToqueBomVsRuimScreen({ navigation, route }) {
       <MedalhaModal
         visible={medalhaConquistada !== null}
         tipo={medalhaConquistada}
+        jogoId={jogoId}
         jogoTitulo={strings.nav.jogos.toqueBomVsRuim}
         onClose={handleFecharMedalhaModal}
       />

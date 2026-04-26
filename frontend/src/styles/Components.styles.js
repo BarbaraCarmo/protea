@@ -172,10 +172,13 @@ export const medalhaModalStyles = StyleSheet.create({
   iconeContainer: {
     width: 120,
     height: 120,
-    borderRadius: 60,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
+  },
+  medalhaImagem: {
+    width: 120,
+    height: 120,
   },
   titulo: {
     fontSize: sizes.xxl,

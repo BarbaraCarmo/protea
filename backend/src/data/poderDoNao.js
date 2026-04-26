@@ -5,10 +5,10 @@ module.exports = {
   fases: [
     {
       id: 3,
-      situacao: 'Seu amigo diz: "Vem cá, me dar um abraço!"',
+      situacao: 'Seu amigo diz: "Vem cá, me dar um abraço!", mas você não está afim de abraço hoje.',
       ilustracao: 'amigo_abraco',
       opcoes: [
-        { id: 'b', texto: 'Ah, tá bem então...', tipo: 'passivo' },
+        { id: 'b', texto: 'Ah, tá bem então... (abraça mesmo sem querer)', tipo: 'passivo' },
         { id: 'a', texto: 'Hoje não estou afim de abraço, mas obrigado!', tipo: 'firme' },
         { id: 'c', texto: 'Não me toca!', tipo: 'agressivo' },
       ],
@@ -47,7 +47,7 @@ module.exports = {
       situacao: 'Um adulto que você não conhece diz: "Oi, você quer ganhar um doce? Se me deixar te fazer um carinho, te dou um doce."',
       ilustracao: 'adulto_doce',
       opcoes: [
-        { id: 'c', texto: 'Não! Eu não quero!', tipo: 'agressivo' },
+        { id: 'c', texto: 'Não! (e chuta o adulto)', tipo: 'agressivo' },
         { id: 'a', texto: 'Não, obrigado. Vou ficar aqui.', tipo:  'firme' },
         { id: 'b', texto: 'Tá bom... (se aproxima sem querer)', tipo: 'passivo' },
       ],
@@ -61,7 +61,7 @@ module.exports = {
       ilustracao: 'adulto_sozinho',
       opcoes: [
         { id: 'b', texto: 'Tá bom... o que é?', tipo: 'passivo' },
-        { id: 'c', texto: 'Não vou não!', tipo: 'agressivo' },
+        { id: 'c', texto: 'Não vou não, você é estranho!', tipo: 'agressivo' },
         { id: 'a', texto: 'Eu prefiro esperar minha mãe chegar. Vou ficar aqui.', tipo: 'firme' },
       ],
       feedbackCorreto: 'Muito bem! Você se protegeu!',
@@ -70,12 +70,12 @@ module.exports = {
     },
     {
       id: 1,
-      situacao: 'Sua tia diz: "Vem cá dar um beijo! Que saudade!"',
+      situacao: 'Sua tia diz: "Vem cá dar um beijo! Que saudade!", mas você não está afim de beijo hoje.',
       ilustracao: 'tia_beijo',
       opcoes: [
-        { id: 'c', texto: 'Não! Você é estranha!', tipo: 'agressivo' },
+        { id: 'c', texto: 'Não! Eu não gosto de você!', tipo: 'agressivo' },
         { id: 'a', texto: 'Que tal um abraço? Não estou muito afim de beijo hoje.', tipo: 'firme' },
-        { id: 'b', texto: 'Tá bom... (se aproxima sem querer)', tipo: 'passivo' },
+        { id: 'b', texto: 'Tá bom... (se aproxima mesmo sem querer)', tipo: 'passivo' },
       ],
       feedbackCorreto: 'Perfeito! Você foi firme e educado ao mesmo tempo!',
       feedbackPassivo: 'Você merece ter sua vontade respeitada. Vamos tentar de novo?',
@@ -83,12 +83,12 @@ module.exports = {
     },
     {
       id: 8,
-      situacao: 'Um familiar diz: "Vem sentar no meu colo, como quando você era pequeno!"',
+      situacao: 'Um familiar diz: "Vem sentar no meu colo, como quando você era pequeno!", mas você não se sente bem com isso',
       ilustracao: 'familiar_colo',
       opcoes: [
         { id: 'a', texto: 'Não quero, obrigado.', tipo: 'firme' },
-        { id: 'c', texto: 'Que nada!', tipo: 'agressivo' },
-        { id: 'b', texto: 'Hmm, tá bom...', tipo: 'passivo' },
+        { id: 'c', texto: 'Que nada! (bate no familiar)', tipo: 'agressivo' },
+        { id: 'b', texto: 'Hmm, tá bom... (senta mesmo sem querer)', tipo: 'passivo' },
       ],
       feedbackCorreto: 'Ótimo! Você foi educado e firme!',
       feedbackPassivo: 'Você merece ter sua vontade respeitada. Vamos tentar de novo?',
@@ -109,12 +109,12 @@ module.exports = {
     },
     {
       id: 4,
-      situacao: 'Um adulto conhecido pede: "Me dá um abraço!"',
+      situacao: 'Um adulto conhecido pede: "Me dá um abraço!", mas você não está afim de abraço hoje.',
       ilustracao: 'adulto_abraco',
       opcoes: [
-        { id: 'b', texto: 'Hmm... acho que não...', tipo: 'passivo' },
+        { id: 'b', texto: 'Hmm... acho que não... mas ok', tipo: 'passivo' },
         { id: 'a', texto: 'Agora não, não estou afim.', tipo: 'firme' },
-        { id: 'c', texto: 'Nunca!', tipo: 'agressivo' },
+        { id: 'c', texto: 'Nunca! Odeio abraços!', tipo: 'agressivo' },
       ],
       feedbackCorreto: 'Muito bem! Você foi direto e educado!',
       feedbackPassivo: 'Você merece ter sua vontade respeitada. Vamos tentar de novo?',

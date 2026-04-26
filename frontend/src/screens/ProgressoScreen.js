@@ -54,9 +54,9 @@ export default function ProgressoScreen() {
 
             <View style={appStyles.progressoMedalhasRow}>
               {[
-                { conquistada: temPrata, cor: corPrata, icone: 'medal-outline', label: strings.progresso.medalhaPrata },
-                { conquistada: temOuro,  cor: corOuro,  icone: 'trophy',        label: strings.progresso.medalhaOuro },
-              ].map(({ conquistada, cor, icone, label }) => (
+                { conquistada: temPrata, cor: corPrata, label: strings.progresso.medalhaPrata },
+                { conquistada: temOuro,  cor: corOuro,  label: strings.progresso.medalhaOuro },
+              ].map(({ conquistada, cor, label }) => (
                 <View
                   key={label}
                   style={[
@@ -65,7 +65,7 @@ export default function ProgressoScreen() {
                   ]}
                 >
                   <Ionicons
-                    name={conquistada ? icone : 'lock-closed-outline'}
+                    name={conquistada ? 'medal' : 'medal-outline'}
                     size={14}
                     color={conquistada ? cor : colors.textLightest}
                   />

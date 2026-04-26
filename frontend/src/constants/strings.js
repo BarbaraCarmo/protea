@@ -186,7 +186,7 @@ export const strings = {
     poderDoNao: {
       conclusaoMensagem:
         'Você completou todas as fases do Poder do Não! Agora você sabe como dizer NÃO de forma firme e respeitosa.',
-      instrucao: 'Como você responderia? Escolha a melhor opção:',
+      instrucao: 'Como você responde? Escolha a melhor opção:',
       dica: 'Lembre-se: você pode dizer NÃO de forma firme e educada!',
     },
 

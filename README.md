@@ -14,7 +14,7 @@ Trata-se de uma pesquisa aplicada, de natureza qualitativa, com abordagem de des
 O sistema adota uma arquitetura cliente-servidor com:
 
 - **Frontend (Cliente)**: React Native com Expo, permitindo execução multiplataforma (Android/iOS) via Expo Go
-- **Backend (Servidor)**: Node.js com Express.js, fornecendo API RESTful — publicado no Railway
+- **Backend (Servidor)**: Node.js com Express.js, fornecendo API RESTful — publicado no Render.com
 - **Banco de Dados**: MongoDB Atlas (cloud) — banco de dados NoSQL orientado a documentos
 - **Autenticação**: JSON Web Tokens (JWT) para gerenciamento de sessões
 
@@ -66,11 +66,11 @@ npx expo start --clear
 - Escaneie o QR Code com o Expo Go (Android) ou com a câmera (iOS)
 - O celular precisa estar na **mesma rede Wi-Fi** que o computador
 
-> Para testar sem precisar da mesma rede Wi-Fi, use o modo tunnel (requer ngrok authtoken):
+> Para testar sem precisar da mesma rede Wi-Fi, use o modo tunnel (requer ngrok configurado):
 > ```bash
-> NGROK_AUTHTOKEN=SEU_TOKEN npx expo start --tunnel --clear
+> npx expo start --tunnel --clear
 > ```
-> Consulte `EXPO_COMPARTILHAR_APP.md` para o passo a passo completo de configuração do tunnel.
+> O `NGROK_AUTHTOKEN` já está configurado no `frontend/.env`. Consulte `EXPO_COMPARTILHAR_APP.md` para o passo a passo completo de configuração do ngrok e do tunnel.
 
 ---
 

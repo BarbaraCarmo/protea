@@ -150,13 +150,9 @@ export const jogosBaseStyles = {
       alignItems: 'center',
       padding: 30,
     },
-    concluidoIcone: {
-      width: 140,
-      height: 140,
-      borderRadius: 70,
-      backgroundColor: colors.primary + '20',
-      justifyContent: 'center',
-      alignItems: 'center',
+    concluidoMedalhaImagem: {
+      width: 160,
+      height: 160,
       marginBottom: 24,
     },
     concluidoTitulo: {

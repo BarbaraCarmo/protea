@@ -27,10 +27,24 @@ export const imagemCard = {
 
 // ── Arte estática por jogo (usada quando não há ilustração por fase) ───────────
 export const imagemJogo = {
-  semaforoDoCorpo:   require('../../assets/jogos/semaforo/boneco.png'),
   adultoDeConfianca: require('../../assets/cards/adultosDeConfiancaIlustracao.png'),
   // toqueBomVsRuim  — usa imagemPorChave por fase, sem arte estática
   // poderDoNao      — usa imagemPorChave por fase, sem arte estática
+  // semaforoDoCorpo — usa imagemSemaforo por fase
+};
+
+// ── Ilustrações por fase — Semáforo do Corpo (chave = fase.imagem do backend) ─
+export const imagemSemaforo = {
+  ombros:        require('../../assets/jogos/semaforo/ombros.png'),
+  bumbum:        require('../../assets/jogos/semaforo/bumbum.png'),
+  joelhos:       require('../../assets/jogos/semaforo/joelhosEcoxas.png'),
+  bracos:        require('../../assets/jogos/semaforo/bracos.png'),
+  boca:          require('../../assets/jogos/semaforo/boca.png'),
+  barriga:       require('../../assets/jogos/semaforo/barriga.png'),
+  cabeca:        require('../../assets/jogos/semaforo/cabeca.png'),
+  partes_intimas: require('../../assets/jogos/semaforo/partesIntimas.png'),
+  pes_maos:      require('../../assets/jogos/semaforo/pesEmaos.png'),
+  costas:        require('../../assets/jogos/semaforo/costas.png'),
 };
 
 // ── Avatares do perfil da criança ─────────────────────────────────────────────
@@ -49,6 +63,26 @@ export const imagemAvatar = {
   pardoMorenoLiso:     require('../../assets/avatares/pardo-moreno-liso.png'),
 };
 
+// ── Medalhas por jogo ─────────────────────────────────────────────────────────
+export const imagemMedalha = {
+  semaforoDoCorpo:   {
+    prata: require('../../assets/medalhas/medalhaPrataSemaforo.png'),
+    ouro:  require('../../assets/medalhas/medalhaOuroSemaforo.png'),
+  },
+  toqueBomVsRuim:    {
+    prata: require('../../assets/medalhas/medalhaPrataToque.png'),
+    ouro:  require('../../assets/medalhas/medalhaOuroToque.png'),
+  },
+  poderDoNao:        {
+    prata: require('../../assets/medalhas/medalhaPrataPoderDoNao.png'),
+    ouro:  require('../../assets/medalhas/medalhaOuroPoderDoNao.png'),
+  },
+  adultoDeConfianca: {
+    prata: require('../../assets/medalhas/medalhaPrataAdultos.png'),
+    ouro:  require('../../assets/medalhas/medalhaOuroAdultos.png'),
+  },
+};
+
 // ── Ilustrações por fase (fase.ilustracao / fase.imagem vindo do backend) ─────
 export const imagemPorChave = {
   // ── Toque Bom vs Toque Ruim ────────────────────────────────────────────────
@@ -64,17 +98,17 @@ export const imagemPorChave = {
   banheiro:        require('../../assets/jogos/toque/adulto-banheiro.png'),
   beijo_forcado:   require('../../assets/jogos/toque/beijo.png'),
 
-  // ── Poder do Não ──────────────────────────────────────────────────────────
-  tia_beijo:          require('../../assets/jogos/poderDoNao/adulto-pedindo-beijo.png'),
-  primo_brincadeira:  require('../../assets/jogos/poderDoNao/brincadeira-mal-gosto.png'),
+  // ── Poder do Não (assets em jogos/poderDoNao/) ───────────────────────────────
+  tia_beijo:          require('../../assets/jogos/poderDoNao/tiaPedindoBeijo.png'),
   amigo_abraco:       require('../../assets/jogos/poderDoNao/crianças-abraço.png'),
-  adulto_abraco:      require('../../assets/jogos/toque/abraco-vovo.png'),
-  // adulto_insiste    — imagem pendente
-  colega_brincadeira: require('../../assets/jogos/poderDoNao/criança-implicando.png'),
-  colega_insiste:     require('../../assets/jogos/poderDoNao/criança-caçoando-da-outra.png'),
-  // familiar_colo     — imagem pendente
-  // familiar_insiste  — imagem pendente
-  adulto_presente:    require('../../assets/jogos/toque/presente.png'),
-  adulto_ameaca:      require('../../assets/jogos/toque/silencio.png'),
-  // adulto_sozinho    — imagem pendente
+  adulto_abraco:      require('../../assets/jogos/poderDoNao/pedindoAbraco.png'),
+  adulto_insiste:     require('../../assets/jogos/poderDoNao/insistirPedindoAbraco.png'),
+  adulto_presente:    require('../../assets/jogos/poderDoNao/presente.png'),
+  adulto_doce:        require('../../assets/jogos/poderDoNao/oferecendoDoces.png'),
+  familiar_colo:      require('../../assets/jogos/poderDoNao/sentarNoColo.png'),
+  familiar_insiste:   require('../../assets/jogos/poderDoNao/insistirSentarNoColo.png'),
+  colega_brincadeira: require('../../assets/jogos/poderDoNao/brincadeira-mal-gosto.png'),
+  colega_insiste:     require('../../assets/jogos/poderDoNao/criança-implicando.png'),
+  adulto_ameaca:      require('../../assets/jogos/poderDoNao/silencio.png'),
+  adulto_sozinho:     require('../../assets/jogos/poderDoNao/sozinhoComAdulto.png'),
 };

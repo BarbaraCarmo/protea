@@ -42,7 +42,7 @@ module.exports = {
         },
         {
             id: 6,
-            pergunta: 'Quais dessas situações você deve contar para um adulto de confiança?',
+            pergunta: 'Quais dessas situações são perigosas e você deve contar para um adulto de confiança?',
             tipo: 'selecao_multipla',
             opcoes: [
                 { id: 'a', texto: 'Alguém te tocou de um jeito que você não gostou', correto: true },

@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react';
-import { Modal, View, Text, TouchableOpacity, Animated } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Modal, View, Text, TouchableOpacity, Animated, Image } from 'react-native';
 import { corPrata, corOuro } from '../constants/jogos';
+import { imagemMedalha } from '../constants/imagemAssets';
 import { strings } from '../constants/strings';
 import { medalhaModalStyles as styles } from '../styles/Components.styles';
 
-export default function MedalhaModal({ visible, tipo, jogoTitulo, onClose }) {
+export default function MedalhaModal({ visible, tipo, jogoId, jogoTitulo, onClose }) {
   const scaleAnim = useRef(new Animated.Value(0)).current;
   const starAnim  = useRef(new Animated.Value(0)).current;
 
@@ -32,7 +32,7 @@ export default function MedalhaModal({ visible, tipo, jogoTitulo, onClose }) {
   const isPrata  = tipo === 'prata';
   const cor      = isPrata ? corPrata : corOuro;
   const titulo   = isPrata ? strings.medalha.tituloPrata : strings.medalha.tituloOuro;
-  const icone    = isPrata ? 'medal-outline' : 'trophy';
+  const imagemSrc = imagemMedalha[jogoId]?.[isPrata ? 'prata' : 'ouro'];
   const mensagem = isPrata
     ? strings.medalha.mensagemPrata(jogoTitulo)
     : strings.medalha.mensagemOuro(jogoTitulo);
@@ -41,13 +41,8 @@ export default function MedalhaModal({ visible, tipo, jogoTitulo, onClose }) {
     <Modal visible={visible} transparent animationType="fade" statusBarTranslucent>
       <View style={styles.overlay}>
         <Animated.View style={[styles.card, { transform: [{ scale: scaleAnim }] }]}>
-          <Animated.View
-            style={[
-              styles.iconeContainer,
-              { backgroundColor: cor + '20', opacity: starAnim },
-            ]}
-          >
-            <Ionicons name={icone} size={72} color={cor} />
+          <Animated.View style={[styles.iconeContainer, { opacity: starAnim }]}>
+            <Image source={imagemSrc} style={styles.medalhaImagem} resizeMode="contain" />
           </Animated.View>
 
           <Text style={[styles.titulo, { color: cor }]}>{titulo}</Text>

@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, Image, Alert, ActivityIndicator } from 'react-native';
+import { Asset } from 'expo-asset';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../constants/colors';
 import { useAuth } from '../context/AuthContext';
 import { appStyles } from '../styles/App.styles';
-import { imagemAvatar } from '../constants/imagemAssets';
-import { jogosUI, corPrata, corOuro, normalizarMedalhas } from '../constants/jogos';
+import { imagemAvatar, imagemMedalha } from '../constants/imagemAssets';
+import { jogosUI, normalizarMedalhas } from '../constants/jogos';
 import { strings } from '../constants/strings';
 
 const AVATARES = Object.entries(imagemAvatar).map(([id, imagem]) => ({ id, imagem }));
@@ -15,7 +16,14 @@ export default function PerfilScreen() {
   const avatarSalvo = user?.crianca?.avatar;
   const avatarInicial = AVATARES.find((a) => a.id === avatarSalvo) ? avatarSalvo : null;
   const [avatarSelecionado, setAvatarSelecionado] = useState(avatarInicial);
+  const [carregando, setCarregando] = useState(true);
   const medalhas = normalizarMedalhas(user?.medalhas, catalogo);
+
+  useEffect(() => {
+    const avatarAssets = AVATARES.map((a) => a.imagem);
+    const medalhaAssets = Object.values(imagemMedalha).flatMap((g) => [g.prata, g.ouro]);
+    Asset.loadAsync([...avatarAssets, ...medalhaAssets]).finally(() => setCarregando(false));
+  }, []);
 
   function calcularIdade() {
     if (!user?.crianca?.dataNascimento) return '';
@@ -44,6 +52,14 @@ export default function PerfilScreen() {
   }
 
   const avatarAtual = AVATARES.find((a) => a.id === avatarSelecionado);
+
+  if (carregando) {
+    return (
+      <View style={appStyles.fullScreenCenter}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+  }
 
   return (
     <ScrollView style={appStyles.container} contentContainerStyle={appStyles.content}>
@@ -88,22 +104,14 @@ export default function PerfilScreen() {
 
               <View style={appStyles.medalhaSlots}>
                 {[
-                  { conquistada: temPrata, cor: corPrata, icone: 'medal-outline' },
-                  { conquistada: temOuro,  cor: corOuro,  icone: 'trophy-outline' },
-                ].map(({ conquistada, cor, icone }, i) => (
-                  <View
-                    key={i}
-                    style={[
-                      appStyles.medalhaCirculo,
-                      {
-                        backgroundColor: conquistada ? jogo.cor + '30' : colors.border + '60'
-                      },
-                    ]}
-                  >
-                    <Ionicons
-                      name={conquistada ? icone : 'lock-closed'}
-                      size={24}
-                      color={conquistada ? cor : colors.textLightest}
+                  { conquistada: temPrata, tipo: 'prata' },
+                  { conquistada: temOuro,  tipo: 'ouro' },
+                ].map(({ conquistada, tipo }) => (
+                  <View key={tipo} style={appStyles.medalhaCirculo}>
+                    <Image
+                      source={imagemMedalha[jogo.id]?.[tipo]}
+                      style={[appStyles.medalhaCirculoImagem, { opacity: conquistada ? 1 : 0.2 }]}
+                      resizeMode="contain"
                     />
                   </View>
                 ))}
