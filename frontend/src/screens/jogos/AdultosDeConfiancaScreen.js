@@ -11,7 +11,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../../constants/colors';
 import { strings } from '../../constants/strings';
-import { imagemJogo, imagemMedalha } from '../../constants/imagemAssets';
+import {
+  imagemJogo,
+  imagemMedalha,
+  imagemAdultosConfiancaPorFase,
+} from '../../constants/imagemAssets';
 import IntroJogo from '../../components/IntroJogo';
 import { audioAdultos } from '../../constants/audioAssets';
 import { adultosDeConfiancaScreenStyles as styles } from '../../styles/jogos/JogosTemas.styles';
@@ -271,7 +275,9 @@ export default function AdultosDeConfiancaScreen({ navigation, route }) {
         <View style={styles.card}>
           <View style={styles.cardImagemArea}>
             <CardImagem
-              source={imagemJogo.adultoDeConfianca}
+              source={
+                imagemAdultosConfiancaPorFase[fase.id] ?? imagemJogo.adultoDeConfianca
+              }
               width="100%"
               height="100%"
             />

@@ -33,6 +33,20 @@ export const imagemJogo = {
   // semaforoDoCorpo — usa imagemSemaforo por fase
 };
 
+// Adultos de Confiança — ilustração por fase (chave = fase.id do backend)
+export const imagemAdultosConfiancaPorFase = {
+  1: require('../../assets/jogos/adultos/criancaCercadaDaFamilia.png'),
+  2: require('../../assets/jogos/adultos/criancaIrritada.png'),
+  3: require('../../assets/jogos/adultos/falandoComAdulto.png'),
+  4: require('../../assets/jogos/adultos/criancaCercadaDaFamilia.png'),
+  5: require('../../assets/jogos/adultos/conversandoComProfessora.png'),
+  6: require('../../assets/jogos/adultos/carinhoNaCabeca.png'),
+  7: require('../../assets/jogos/adultos/falandoComAdulto.png'),
+  8: require('../../assets/jogos/adultos/duvida.png'),
+  9: require('../../assets/jogos/adultos/falandoComAdulto.png'),
+  10: require('../../assets/jogos/adultos/criancaHeroi.png'),
+};
+
 // ── Ilustrações por fase — Semáforo do Corpo (chave = fase.imagem do backend) ─
 export const imagemSemaforo = {
   ombros:        require('../../assets/jogos/semaforo/ombros.png'),
@@ -100,7 +114,7 @@ export const imagemPorChave = {
 
   // ── Poder do Não (assets em jogos/poderDoNao/) ───────────────────────────────
   tia_beijo:          require('../../assets/jogos/poderDoNao/tiaPedindoBeijo.png'),
-  amigo_abraco:       require('../../assets/jogos/poderDoNao/crianças-abraço.png'),
+  amigo_abraco:       require('../../assets/jogos/poderDoNao/criancas-abraco.png'),
   adulto_abraco:      require('../../assets/jogos/poderDoNao/pedindoAbraco.png'),
   adulto_insiste:     require('../../assets/jogos/poderDoNao/insistirPedindoAbraco.png'),
   adulto_presente:    require('../../assets/jogos/poderDoNao/presente.png'),
@@ -108,7 +122,7 @@ export const imagemPorChave = {
   familiar_colo:      require('../../assets/jogos/poderDoNao/sentarNoColo.png'),
   familiar_insiste:   require('../../assets/jogos/poderDoNao/insistirSentarNoColo.png'),
   colega_brincadeira: require('../../assets/jogos/poderDoNao/brincadeira-mal-gosto.png'),
-  colega_insiste:     require('../../assets/jogos/poderDoNao/criança-implicando.png'),
+  colega_insiste:     require('../../assets/jogos/poderDoNao/crianca-implicando.png'),
   adulto_ameaca:      require('../../assets/jogos/poderDoNao/silencio.png'),
   adulto_sozinho:     require('../../assets/jogos/poderDoNao/sozinhoComAdulto.png'),
 };
