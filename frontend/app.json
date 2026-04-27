@@ -4,7 +4,7 @@
     "slug": "protea",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/logo.png",
+    "icon": "./assets/logo-icon-1024.png",
     "userInterfaceStyle": "light",
     "splash": {
       "backgroundColor": "#7BB3A0"
@@ -18,10 +18,9 @@
       }
     },
     "android": {
-      "usesCleartextTraffic": true,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.png",
-        "backgroundColor": "#7BB3A0"
+        "foregroundImage": "./assets/logo-icon-1024.png",
+        "backgroundColor": "#FFFFFF"
       },
       "permissions": [
         "android.permission.RECORD_AUDIO",
@@ -31,7 +30,16 @@
     },
     "plugins": [
       "expo-asset",
-      "expo-audio"
+      "expo-audio",
+      "expo-font",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
     ],
     "extra": {
       "eas": {

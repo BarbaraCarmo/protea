@@ -40,7 +40,7 @@ Os textos e estrutura das fases vêm do backend (`backend/src/data/`); imagens e
 
 ---
 
-### Modo 1 — Backend publicado no Render (recomendado)
+### Backend publicado no Render
 
 O backend está publicado em `https://protea.onrender.com` (Render.com — plano gratuito sem prazo de expiração).
 Neste modo você só precisa rodar o frontend — sem instalar ou configurar o backend localmente.
@@ -85,59 +85,6 @@ npx expo start --clear
 
 ---
 
-### Modo 2 — Backend local (desenvolvimento)
-
-Use este modo se precisar modificar o backend e testar as alterações localmente.
-
-**Passo 1: Configurar o backend**
-
-```bash
-cd backend
-npm install
-```
-
-Certifique-se de que o arquivo `backend/.env` existe com o conteúdo:
-
-```env
-PORT=3000
-MONGODB_URI=mongodb+srv://Cluster50150:clusterProtea@cluster50150.9wqlals.mongodb.net/protea?retryWrites=true&w=majority
-JWT_SECRET=protea_jwt_2026_chave_segura_tcc
-```
-
-**Passo 2: Iniciar o backend**
-
-```bash
-npm run dev
-```
-
-Você verá:
-```
-MongoDB conectado: cluster50150.9wqlals.mongodb.net
-Servidor rodando na porta 3000
-```
-
-**Passo 3: Apontar o frontend para o backend local**
-
-Descubra o IP do seu computador na rede local:
-- **Mac**: `ifconfig | grep "inet "` (procure o IP que começa com `192.168.x.x`)
-- **Windows**: `ipconfig` (procure IPv4 Address)
-
-Edite `frontend/.env`:
-
-```env
-EXPO_PUBLIC_API_URL=http://192.168.x.x:3000/api
-```
-
-**Passo 4: Iniciar o frontend**
-
-```bash
-cd frontend
-npm install
-npx expo start
-```
-
----
-
 ## Build nativo com EAS (Android / iOS)
 
 Para gerar instalável fora do Expo Go (por exemplo APK ou AAB para testes internos), use o [EAS Build](https://docs.expo.dev/build/introduction/) a partir da pasta do app:
@@ -145,9 +92,11 @@ Para gerar instalável fora do Expo Go (por exemplo APK ou AAB para testes inter
 ```bash
 cd frontend
 npm install
-# eas-cli instalado globalmente ou: npx eas-cli build ...
 eas login
+# Com eas-cli global (npm install -g eas-cli):
 eas build --profile preview --platform android
+# Ou, sem instalar globalmente (pacote correto é eas-cli, não "eas"):
+# npx eas-cli build --profile preview --platform android
 ```
 
 Os perfis estão em `frontend/eas.json` (`development`, `preview`, `production`). O **application id** Android configurado no projeto é `com.barbaracarmo.protea`. Consulte a documentação da Expo para credenciais, fila de build e assinatura.
@@ -166,5 +115,3 @@ protea/
 │   └── eas.json      # Perfis de build EAS
 └── README.md
 ```
-
-Documentação complementar no repositório (quando aplicável): compartilhamento e túnel Expo (`EXPO_COMPARTILHAR_APP.md`), deploy do backend (`DEPLOY_RENDER.md`).
