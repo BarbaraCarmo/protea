@@ -74,14 +74,16 @@ npx expo start --clear
 
 **Passo 4: Abrir no celular**
 
-- Escaneie o QR Code com o Expo Go (Android) ou com a câmera (iOS)
-- O celular precisa estar na **mesma rede Wi-Fi** que o computador
+- **Mesma rede Wi-Fi que o PC:** escaneie o QR code no terminal — no **Android** use o app **Expo Go** (Play Store) e o leitor de QR dentro dele; no **iOS** pode usar a **Câmera** do sistema ou o Expo Go (**Scan QR code**).
+- Os dois precisam estar na **mesma rede Wi-Fi** que o computador.
 
-> Para testar sem precisar da mesma rede Wi-Fi, use o modo tunnel (requer ngrok configurado):
-> ```bash
-> npx expo start --tunnel --clear
-> ```
-> O `NGROK_AUTHTOKEN` já está configurado no `frontend/.env`. Consulte `EXPO_COMPARTILHAR_APP.md` para o passo a passo completo de configuração do ngrok e do tunnel.
+**Testes com participantes em outra rede ou sem Wi-Fi compartilhado (Android ou iOS)** — recomendado para avaliações de usabilidade e demos remotas:
+
+```bash
+npx expo start --tunnel --clear
+```
+
+Com o **tunnel** ativo, o QR code funciona **no Android e no iPhone**: instale o **Expo Go**, abra no Android **Scan QR code** / **Projects** conforme a versão do app, e escaneie o código do terminal (também é possível enviar o link `exp://...` por mensagem — ver `EXPO_COMPARTILHAR_APP.md`). Configure `NGROK_AUTHTOKEN` no `frontend/.env`.
 
 ---
 

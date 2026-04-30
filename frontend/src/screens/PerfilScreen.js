@@ -110,7 +110,7 @@ export default function PerfilScreen() {
                   <View key={tipo} style={appStyles.medalhaCirculo}>
                     <Image
                       source={imagemMedalha[jogo.id]?.[tipo]}
-                      style={[appStyles.medalhaCirculoImagem, { opacity: conquistada ? 1 : 0.2 }]}
+                      style={[appStyles.medalhaCirculoImagem, { opacity: conquistada ? 1 : 0.1 }]}
                       resizeMode="contain"
                     />
                   </View>

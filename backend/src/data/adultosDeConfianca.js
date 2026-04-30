@@ -67,12 +67,12 @@ module.exports = {
         },
         {
             id: 7,
-            pergunta: 'Uma amiga da sua família que você conhece há muitos anos pode ser um adulto de confiança?',
+            pergunta: 'Um amigo da sua família que você conhece há muitos anos pode ser um adulto de confiança?',
             tipo: 'escolha_unica',
             opcoes: [
                 { id: 'a', texto: 'Sim, qualquer adulto que você conhece é de confiança', correto: false },
                 { id: 'b', texto: 'Não, só família pode ser de confiança', correto: false },
-                { id: 'c', texto: 'Sim, se ela te ouve, te protege e você se sente seguro com ela', correto: true },
+                { id: 'c', texto: 'Sim, se ele te ouve, te protege e você se sente seguro com ele', correto: true },
             ],
             feedbackCorreto: 'Certo! O que faz um adulto ser de confiança não é só ser família. É te ouvir, te proteger e te fazer sentir seguro.',
             feedbackIncorreto: 'Adultos de confiança podem ser família ou não. O que importa é que eles te ouvem, te protegem e te fazem sentir seguro.',
